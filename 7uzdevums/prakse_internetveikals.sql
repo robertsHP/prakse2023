@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 25, 2023 at 01:25 PM
+-- Generation Time: Sep 25, 2023 at 01:41 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `prakse_internetveikals`
 --
+CREATE DATABASE IF NOT EXISTS `prakse_internetveikals` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `prakse_internetveikals`;
 
 -- --------------------------------------------------------
 
@@ -27,12 +29,14 @@ SET time_zone = "+00:00";
 -- Table structure for table `client`
 --
 
-CREATE TABLE `client` (
+DROP TABLE IF EXISTS `client`;
+CREATE TABLE IF NOT EXISTS `client` (
   `client_id` int(11) NOT NULL,
   `name` varchar(45) NOT NULL,
   `email` varchar(40) NOT NULL,
   `phone_number` varchar(20) NOT NULL,
-  `adress` varchar(60) NOT NULL
+  `adress` varchar(60) NOT NULL,
+  PRIMARY KEY (`client_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -41,13 +45,17 @@ CREATE TABLE `client` (
 -- Table structure for table `orders`
 --
 
-CREATE TABLE `orders` (
+DROP TABLE IF EXISTS `orders`;
+CREATE TABLE IF NOT EXISTS `orders` (
   `order_id` int(11) NOT NULL,
   `number` varchar(45) DEFAULT NULL,
   `client_id` int(11) NOT NULL,
   `date` datetime DEFAULT NULL,
   `total_price` decimal(5,2) DEFAULT NULL,
-  `state_id` int(11) NOT NULL
+  `state_id` int(11) NOT NULL,
+  PRIMARY KEY (`order_id`),
+  KEY `fk_client_id` (`client_id`),
+  KEY `fk_state_id` (`state_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -56,9 +64,11 @@ CREATE TABLE `orders` (
 -- Table structure for table `order_state`
 --
 
-CREATE TABLE `order_state` (
+DROP TABLE IF EXISTS `order_state`;
+CREATE TABLE IF NOT EXISTS `order_state` (
   `state_id` int(11) NOT NULL,
-  `name` varchar(45) NOT NULL
+  `name` varchar(45) NOT NULL,
+  PRIMARY KEY (`state_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -67,14 +77,17 @@ CREATE TABLE `order_state` (
 -- Table structure for table `product`
 --
 
-CREATE TABLE `product` (
+DROP TABLE IF EXISTS `product`;
+CREATE TABLE IF NOT EXISTS `product` (
   `product_id` int(11) NOT NULL,
   `name` varchar(45) DEFAULT NULL,
   `description` mediumtext DEFAULT NULL,
   `photo_file_loc` varchar(150) DEFAULT NULL,
   `price` decimal(5,2) DEFAULT NULL,
   `available_amount` int(11) DEFAULT NULL,
-  `category_id` int(11) NOT NULL
+  `category_id` int(11) NOT NULL,
+  PRIMARY KEY (`product_id`),
+  KEY `fk_category_id` (`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -83,9 +96,11 @@ CREATE TABLE `product` (
 -- Table structure for table `product_category`
 --
 
-CREATE TABLE `product_category` (
+DROP TABLE IF EXISTS `product_category`;
+CREATE TABLE IF NOT EXISTS `product_category` (
   `category_id` int(11) NOT NULL,
-  `name` varchar(45) NOT NULL
+  `name` varchar(45) NOT NULL,
+  PRIMARY KEY (`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -94,12 +109,16 @@ CREATE TABLE `product_category` (
 -- Table structure for table `purchased_goods`
 --
 
-CREATE TABLE `purchased_goods` (
+DROP TABLE IF EXISTS `purchased_goods`;
+CREATE TABLE IF NOT EXISTS `purchased_goods` (
   `purch_goods_id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `amount` int(11) DEFAULT NULL,
-  `total_price` decimal(5,2) DEFAULT NULL
+  `total_price` decimal(5,2) DEFAULT NULL,
+  PRIMARY KEY (`purch_goods_id`),
+  KEY `fk_order_id` (`order_id`),
+  KEY `fk_product_id` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -108,63 +127,14 @@ CREATE TABLE `purchased_goods` (
 -- Table structure for table `user`
 --
 
-CREATE TABLE `user` (
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE IF NOT EXISTS `user` (
   `user_id` int(11) NOT NULL,
   `name` varchar(45) NOT NULL,
   `surname` varchar(45) NOT NULL,
-  `email` varchar(40) NOT NULL
+  `email` varchar(40) NOT NULL,
+  PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `client`
---
-ALTER TABLE `client`
-  ADD PRIMARY KEY (`client_id`);
-
---
--- Indexes for table `orders`
---
-ALTER TABLE `orders`
-  ADD PRIMARY KEY (`order_id`),
-  ADD KEY `fk_client_id` (`client_id`),
-  ADD KEY `fk_state_id` (`state_id`);
-
---
--- Indexes for table `order_state`
---
-ALTER TABLE `order_state`
-  ADD PRIMARY KEY (`state_id`);
-
---
--- Indexes for table `product`
---
-ALTER TABLE `product`
-  ADD PRIMARY KEY (`product_id`),
-  ADD KEY `fk_category_id` (`category_id`);
-
---
--- Indexes for table `product_category`
---
-ALTER TABLE `product_category`
-  ADD PRIMARY KEY (`category_id`);
-
---
--- Indexes for table `purchased_goods`
---
-ALTER TABLE `purchased_goods`
-  ADD PRIMARY KEY (`purch_goods_id`),
-  ADD KEY `fk_order_id` (`order_id`),
-  ADD KEY `fk_product_id` (`product_id`);
-
---
--- Indexes for table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`user_id`);
 
 --
 -- Constraints for dumped tables
