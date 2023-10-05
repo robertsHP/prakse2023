@@ -9,3 +9,8 @@
     <script src="/prakse/veikals/assets/script.js"></script>
     <link rel="stylesheet" type="text/css" href="/prakse/veikals/assets/style.css">
 </head>
+
+<?php
+    require_once 'Database.php';
+    require_once 'Google.php';
+?>
