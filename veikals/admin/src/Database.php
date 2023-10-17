@@ -11,7 +11,6 @@
         public static $clientSecret;
         public static $redirectUri;
 
-        // The connection object to be used and returned until disconnect() is calledgoog
         private static $connection = null;
 
         // returns the database connection object
@@ -45,22 +44,6 @@
                 self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             }
             return self::$connection;
-        }
-        public static function getUser ($email) {
-            $stmt = self::$connection->prepare(
-                "SELECT * FROM user WHERE email=:email"
-            );
-            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-            $stmt->execute();
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-            // if (count($user) > 0) {
-            //     echo $user["user_id"]." ";
-            //     echo $user["name"]." ";
-            //     echo $user["surname"]." ";
-            //     echo $user["email"];
-            // } else {
-            //     echo "No results found.";
-            // }
         }
     }
     Database::getConnection();
