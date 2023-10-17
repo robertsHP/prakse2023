@@ -7,5 +7,5 @@
     // destroy the session
     session_destroy();
 
-    header('Location: /prakse/veikals/admin/index.php');
+    header('Location: /veikals/admin/index.php');
 ?>

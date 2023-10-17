@@ -1,10 +1,10 @@
 
 <?php
-    require_once $_SERVER['DOCUMENT_ROOT'].'/prakse/veikals/include/googleApiClient/vendor/autoload.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/include/googleApiClient/vendor/autoload.php';
     require_once 'Database.php';
 
     if (!isset($_POST['credential']))
-        header('Location: /prakse/veikals/admin/index.php');
+        header('Location: /veikals/admin/index.php');
 
     $client = new Google_Client();
     $client->setClientId(Database::$clientID);
@@ -16,7 +16,7 @@
     $payload = $client->verifyIdToken($_POST['credential']);
 
     if (!$payload)
-        header('Location: /prakse/veikals/admin/index.php');
+        header('Location: /veikals/admin/index.php');
 
     $conn = Database::getConnection();
 
@@ -26,7 +26,7 @@
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if(empty($user))
-        header('Location: /prakse/veikals/admin/index.php');
+        header('Location: /veikals/admin/index.php');
 
     session_start();
 

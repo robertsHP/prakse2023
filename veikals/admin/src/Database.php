@@ -18,7 +18,7 @@
             // One connection through whole application
             if(self::$connection == null) {
                 $ini_array = parse_ini_file(
-                    $_SERVER['DOCUMENT_ROOT']."/prakse/veikals/config/config.ini", 
+                    $_SERVER['DOCUMENT_ROOT']."/veikals/config/config.ini", 
                     true
                 );
                 
