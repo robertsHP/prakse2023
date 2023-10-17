@@ -31,9 +31,9 @@ USE `prakse_internetveikals`;
 
 DROP TABLE IF EXISTS `client`;
 CREATE TABLE IF NOT EXISTS `client` (
-  `client_id` int(11) NOT NULL,
+  `client_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
-  `email` varchar(40) NOT NULL,
+  `email` varchar(60) NOT NULL,
   `phone_number` varchar(20) NOT NULL,
   `adress` varchar(60) NOT NULL,
   PRIMARY KEY (`client_id`)
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `client` (
 
 DROP TABLE IF EXISTS `orders`;
 CREATE TABLE IF NOT EXISTS `orders` (
-  `order_id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL AUTO_INCREMENT,
   `number` varchar(45) DEFAULT NULL,
   `client_id` int(11) NOT NULL,
   `date` datetime DEFAULT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
 
 DROP TABLE IF EXISTS `order_state`;
 CREATE TABLE IF NOT EXISTS `order_state` (
-  `state_id` int(11) NOT NULL,
+  `state_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`state_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `order_state` (
 
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE IF NOT EXISTS `product` (
-  `product_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) DEFAULT NULL,
   `description` mediumtext DEFAULT NULL,
   `photo_file_loc` varchar(150) DEFAULT NULL,
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `product` (
 
 DROP TABLE IF EXISTS `product_category`;
 CREATE TABLE IF NOT EXISTS `product_category` (
-  `category_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `product_category` (
 
 DROP TABLE IF EXISTS `purchased_goods`;
 CREATE TABLE IF NOT EXISTS `purchased_goods` (
-  `purch_goods_id` int(11) NOT NULL,
+  `purch_goods_id` int(11) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `amount` int(11) DEFAULT NULL,
@@ -129,10 +129,10 @@ CREATE TABLE IF NOT EXISTS `purchased_goods` (
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
-  `user_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `surname` varchar(45) NOT NULL,
-  `email` varchar(40) NOT NULL,
+  `email` varchar(60) NOT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
