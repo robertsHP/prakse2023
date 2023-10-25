@@ -2,7 +2,7 @@
     session_start();
 
     if(!isset($_SESSION["id"])) {
-        header('Location: '.$_SERVER['DOCUMENT_ROOT'].'/veikals/admin/index.php');
+        header('Location: /veikals/admin/index.php');
         exit();
     }
 ?>
