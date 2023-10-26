@@ -29,9 +29,10 @@
                 $stmt->execute();
 
                 Database::closeConnection($conn);
+
+                header('Location: index.php');
+                exit();
             }
-            header('Location: index.php');
-            exit();
         } else if (isset($_POST['back'])) {
             header('Location: index.php');
             exit();
@@ -44,13 +45,14 @@
     <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/head.php'; ?>
     <body>
         <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/header.php'; ?>
-        <div class="container">
-            <h4 id="page-title">Izveidot jaunu lietotāju</h4>
+
+        <div class="main-container">
+            <h4>Izveidot jaunu lietotāju</h4>
 
             <form method="post" action="">
                 <?php include 'form.php'; ?>
+                <input type="submit" name="back" value="Atpakaļ" class="btn btn-outline-primary execution-button">
                 <input type="submit" name="save" value="Saglabāt" class="btn btn-primary execution-button">
-                <input type="submit" name="back" value="Atpakaļ" class="btn btn-primary execution-button">
             </form>
         </div>
     </body>

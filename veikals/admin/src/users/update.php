@@ -70,14 +70,14 @@
     <body>
         <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/header.php'; ?>
 
-        <div class="container">
-            <h4 id="page-title">Rediģēt lietotāja informāciju</h4>
+        <div class="main-container">
+            <h4>Rediģēt lietotāja informāciju</h4>
 
             <form method="post" action="">
                 <?php include 'form.php'; ?>
+                <input type="submit" name="back" value="Atpakaļ" class="btn btn-outline-primary execution-button">
                 <input type="submit" name="save" value="Saglabāt" class="btn btn-primary execution-button">
-                <input type="submit" name="delete" value="Dzēst" class="btn btn-primary execution-button">
-                <input type="submit" name="back" value="Atpakaļ" class="btn btn-primary execution-button">
+                <input type="submit" name="delete" value="Dzēst" class="btn btn-danger execution-button">
             </form>
         </div>
     </body>

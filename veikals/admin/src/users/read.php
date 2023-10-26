@@ -36,20 +36,12 @@
     <body>
         <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/header.php'; ?>
 
-        <div class="container">
-            <h4 id="page-title">Lietotāja informācija</h4>
-            <div>
-                ID: <?php echo $_SESSION["id"] ?>
-            </div>
-            <div>
-                Name: <?php echo $_SESSION["name"] ?>
-            </div>
-            <div>
-                Surname: <?php echo $_SESSION["surname"] ?>
-            </div>
-            <div>
-                Email: <?php echo $_SESSION["email"] ?>
-            </div>
+        <div class="main-container">
+            <h4>Lietotāja informācija</h4>
+            <p><b>ID:</b> <?php echo $_SESSION["id"] ?></p>
+            <p><b>Vārds:</b> <?php echo $_SESSION["name"] ?></p>
+            <p><b>Uzvārds:</b> <?php echo $_SESSION["surname"] ?></p>
+            <p><b>E-pasts:</b> <?php echo $_SESSION["email"] ?></p>
         </div>
     </body>
 </html>

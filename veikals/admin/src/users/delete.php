@@ -53,12 +53,13 @@
     <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/head.php'; ?>
     <body>
         <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/header.php'; ?>
-        <div class="container">
-            <h4 id="page-title">Vai tiešām vēlaties dzēst ierakstu?</h4>
+        
+        <div class="main-container">
+            <h4>Vai tiešām vēlaties dzēst ierakstu?</h4>
 
             <form method="post" action="">
-                <input type="submit" name="delete" value="Dzēst" class="btn btn-primary execution-button">
-                <input type="submit" name="back" value="Atpakaļ" class="btn btn-primary execution-button">
+                <input type="submit" name="back" value="Atpakaļ" class="btn btn-outline-primary execution-button">
+                <input type="submit" name="delete" value="Dzēst" class="btn btn-danger execution-button">
             </form>
         </div>
     </body>
