@@ -2,12 +2,27 @@
 #header {
     display: flex;
     flex-wrap: wrap;
-    justify-content: end;
+    justify-content: space-between;
+    background-color: lightskyblue;
+}
+#header div {
+    display: flex;
+    flex-wrap: wrap;
 
     gap: 10px;
-    margin: 10px 10px 10px 10px;
+    margin: 15px;
     align-items: center;
 }
+#header a {
+    border-color: #dadada;
+    border-width: thin;
+    border-style: solid;
+    background-color: #EEEEEE;
+    color: #484C4F;
+    padding: 10px;
+    box-shadow: 0 20px 30px rgba(0,0,0,.1);
+}
+
 #username {
     margin-top: 5px;
     margin-bottom: 5px;
@@ -15,7 +30,11 @@
 #logout {
     margin-top: 5px;
     margin-bottom: 5px;
-    /* margin: 10px 10px 10px 10px; */
+}
+
+#page-title {
+    margin-right: 15px;
+    margin-bottom: 15px;
 }
 
 .container {
@@ -26,7 +45,6 @@
     border-style: solid;
     box-shadow: 0 30px 40px rgba(0,0,0,.1);
 }
-
 .sub-container {
     padding: 10px;
     margin: 0px;
@@ -36,13 +54,13 @@
     border-style: solid;
     border-color: #d8d8d8;
 }
-
-/* .search-container {
+.option-container {
     display: flex;
     justify-content: start;
     gap: 10px;
-    padding: 10px 0;
-} */
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
 
 .panel-select {
     margin-top: 5px;
@@ -63,11 +81,20 @@
     color: #484C4F;
     text-decoration: none;
     margin: 10px;
-    padding: 30px;
+    padding: 20px;
     transition: color 0.3s ease;
+    transition: 0.3s;
 }
 .quicklink:hover {
+    text-decoration: none;
     background-color: white;
     color: #484C4F;
+    transform: scale(1.1);
+}
+
+.execution-button {
+    transition: 0.3s;
+}
+.execution-button:hover {
     transform: scale(1.1);
 }

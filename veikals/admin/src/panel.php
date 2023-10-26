@@ -15,15 +15,8 @@
             include 'header.php';
         ?>
         <div class="container">
-            <h4>Your dashboard</h4>
-            <!-- <div class="search-container">
-                <select class="panel-select">
-                    <option selected disabled> * Super Users</option>
-                </select>
-                <button type="button" class="panel-button btn btn-primary">Manage</button>
-            </div> -->
+            <h4 id="page-title">Panelis</h4>
             <div class="sub-container">
-                <h4>Quicklinks</h4>
                 <div id="quicklinks">
                     <a class="quicklink" href="/veikals/admin/src/users/index.php">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
