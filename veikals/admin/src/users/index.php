@@ -32,7 +32,7 @@
                         <th></th>
                     </tr>
                     <?php
-                        $conn = Database::getConnection();
+                        $conn = Database::openConnection();
 
                         $stmt = $conn->prepare("SELECT * FROM user");
                         $stmt->execute();
@@ -54,7 +54,7 @@
                             echo '</tr>';
                         }
 
-                        $conn = Database::closeConnection();
+                        Database::closeConnection($conn);
                     ?>
                 </table>
             </div>

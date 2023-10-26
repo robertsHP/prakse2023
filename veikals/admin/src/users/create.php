@@ -10,26 +10,20 @@
 ?>
 
 <?php
+    function outputAlert ($strMsg) {
+        echo "<div class='alert alert-danger'>";
+            echo $strMsg;
+        echo "</div>";
+    }
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['save'])) {
-            $errors = array();
-
             $name = $_POST['name'];
             $surname = $_POST['surname'];
             $email = $_POST['email'];
-            
-            if (empty($name))
-                $errors[] = "Name is required.";
-            if (empty($surname))
-                $errors[] = "Surname is required.";
-            
-            // Pārbauda e-pastu
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors[] = "Email is not valid.";
-            }
 
-            if (empty($errors)) {
-                $conn = Database::getConnection();
+            if (!empty($surname) && !empty($surname) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $conn = Database::openConnection();
 
                 //Sagatavo SQL
                 $stmt = $conn->prepare("INSERT INTO user (name, surname, email) VALUES (:name, :surname, :email)");
@@ -45,7 +39,7 @@
                     echo "Error inserting data: " . $stmt->errorInfo()[2];
                 }
             
-                $conn = Database::closeConnection();
+                Database::closeConnection($conn);
 
                 header('Location: index.php');
                 exit();
@@ -68,27 +62,34 @@
             <form method="post" id="logout" action="">
                 <div class="form-group">
                     <label for="name">Vārds</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Ievadi vārdu">
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Ievadi vārdu" 
+                        value="<?php if(isset($name)) echo $name; ?>">
+                    <?php
+                        if(isset($name))
+                            if (empty($name))
+                                outputAlert("Name is required");
+                    ?>
                 </div>
                 <div class="form-group">
                     <label for="surname">Uzvārds</label>
-                    <input type="text" class="form-control" name="surname" id="surname" placeholder="Ievadi uzvārdu">
+                    <input type="text" class="form-control" name="surname" id="surname" placeholder="Ievadi uzvārdu" 
+                        value="<?php if(isset($surname)) echo $surname; ?>">
+                    <?php
+                        if(isset($surname))
+                            if (empty($surname))
+                                outputAlert("Surname is required");
+                    ?>
                 </div>
                 <div class="form-group">
                     <label for="email">E-pasts</label>
-                    <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="name@example.com">
+                    <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" 
+                        placeholder="name@example.com" formnovalidate="formnovalidate" value="<?php if(isset($email)) echo $email; ?>">
+                    <?php
+                        if(isset($email))
+                            if (empty($email))
+                                outputAlert("Email is not valid");
+                    ?>
                 </div>
-
-                <?php
-                    // Display errors if any
-                    if (!empty($errors)) {
-                        echo "<div class='alert alert-danger'>";
-                        foreach ($errors as $error) {
-                            echo $error . "<br>";
-                        }
-                        echo "</div>";
-                    }
-                ?>
             
                 <input type="submit" name="save" value="Saglabāt" class="btn btn-primary execution-button">
                 <input type="submit" name="back" value="Atpakaļ" class="btn btn-primary execution-button">

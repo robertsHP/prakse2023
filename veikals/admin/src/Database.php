@@ -1,32 +1,29 @@
 
 <?php
     class Database {
-        private static $connection = null;
+        public static function openConnection() {
+            try {
+                require_once 'Config.php';
 
-        public static function getConnection() {
-            if(self::$connection == null) {
-                try {
-                    require_once 'Config.php';
+                $dbHost = Config::getValue('config', 'database', 'db_host');
+                $dbName = Config::getValue('config', 'database', 'db_name');
+                $dbUsername = Config::getValue('config', 'database', 'db_username');
+                $dbPassword = Config::getValue('config', 'database', 'db_password');
 
-                    $dbHost = Config::getValue('config', 'database', 'db_host');
-                    $dbName = Config::getValue('config', 'database', 'db_name');
-                    $dbUsername = Config::getValue('config', 'database', 'db_username');
-                    $dbPassword = Config::getValue('config', 'database', 'db_password');
-
-                    self::$connection = new PDO(
-                        "mysql:host=".$dbHost.";"."dbname=".$dbName,
-                        $dbUsername, 
-                        $dbPassword
-                    );
-                } catch(PDOException $e) {
-                    die($e->getMessage());
-                }
-                self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $con = new PDO(
+                    "mysql:host=".$dbHost.";"."dbname=".$dbName,
+                    $dbUsername, 
+                    $dbPassword
+                );
+                $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                return $con;
+            } catch(PDOException $e) {
+                die($e->getMessage());
             }
-            return self::$connection;
+            return null;
         }
-        public static function closeConnection () {
-            self::$connection = null;
+        public static function closeConnection ($con) {
+            $con = null;
         }
     }
 ?>

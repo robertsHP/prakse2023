@@ -24,14 +24,14 @@
         exit();
     }
 
-    $conn = Database::getConnection();
+    $conn = Database::openConnection();
 
     $stmt = $conn->prepare("SELECT * FROM user WHERE email=:email");
     $stmt->bindParam(':email', $payload['email'], PDO::PARAM_STR);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $conn = Database::closeConnection();
+    Database::closeConnection($conn);
 
     if(empty($user)) {
         header('Location: /veikals/admin/index.php');
