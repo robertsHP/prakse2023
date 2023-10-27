@@ -1,6 +1,7 @@
 <header>
     <ul>
         <li><a href="/veikals/admin/src/panel.php">Panelis</a></li>
+        <li><a href="/veikals/admin/src/users/read.php">Konts</a></li>
     </ul>
     <div>
         <p><?php echo $_SESSION["name"]; ?></p>
