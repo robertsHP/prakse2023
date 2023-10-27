@@ -101,45 +101,17 @@ header p {
     grid-template-rows: 100px 200px;
 }
 
-.pencil-button {
+.pencil-icon-button {
     text-decoration: none;
     color: #484C4F;
-} 
-
-/* 
-
-.section {
-    margin: 15px;
-    padding: 20px;
-    border-color: #ECECEC;
-    border-width: thin;
-    border-style: solid;
-    box-shadow: 0 30px 40px rgba(0,0,0,.1);
 }
-.sub-section {
-    padding: 10px;
-    margin: 0px;
-
-    background-color: #EEEEEE;
-    border-width: thin;
-    border-style: solid;
-    border-color: #d8d8d8;
+.pencil-icon-button:hover {
+    text-decoration: none;
 }
-.option-section {
-    display: flex;
-    justify-content: start;
-    gap: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+.trash-icon-button {
+    text-decoration: none;
+    color: #484C4F;
 }
-
-.panel-select {
-    margin-top: 5px;
-    margin-bottom: 5px;
+.trash-icon-button:hover {
+    text-decoration: none;
 }
-.panel-button {
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-*/

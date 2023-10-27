@@ -38,10 +38,24 @@
 
         <div class="main-container">
             <h4>Lietotāja informācija</h4>
-            <p><b>ID:</b> <?php echo $_SESSION["id"] ?></p>
-            <p><b>Vārds:</b> <?php echo $_SESSION["name"] ?></p>
-            <p><b>Uzvārds:</b> <?php echo $_SESSION["surname"] ?></p>
-            <p><b>E-pasts:</b> <?php echo $_SESSION["email"] ?></p>
+            <table class="table table-hover">
+                <tr>
+                    <th>ID: </th>
+                    <th><?php echo $_SESSION["id"] ?></th>
+                </tr>
+                <tr>
+                    <th>Vārds: </th>
+                    <th><?php echo $_SESSION["name"] ?></th>
+                </tr>
+                <tr>
+                    <th>Uzvārds: </th>
+                    <th><?php echo $_SESSION["surname"] ?></th>
+                </tr>
+                <tr>
+                    <th>E-pasts: </th>
+                    <th><?php echo $_SESSION["email"] ?></th>
+                </tr>
+            </table>
         </div>
     </body>
 </html>
