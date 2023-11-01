@@ -1,7 +1,7 @@
 <header>
     <ul>
         <li><a href="/veikals/admin/src/panel.php">Panelis</a></li>
-        <li><a href="/veikals/admin/src/users/readCurrent.php">Konts</a></li>
+        <li><a href="/veikals/admin/src/users/read.php">Konts</a></li>
     </ul>
     <div>
         <p><?php if(isset($_SESSION["name"])) echo $_SESSION["name"]; ?></p>

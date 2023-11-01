@@ -101,17 +101,10 @@ header p {
     grid-template-rows: 100px 200px;
 }
 
-.pencil-icon-button {
+.icon-button {
     text-decoration: none;
     color: #484C4F;
 }
-.pencil-icon-button:hover {
-    text-decoration: none;
-}
-.trash-icon-button {
-    text-decoration: none;
-    color: #484C4F;
-}
-.trash-icon-button:hover {
+.icon-button:hover {
     text-decoration: none;
 }
