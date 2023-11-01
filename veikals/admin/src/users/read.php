@@ -1,47 +1,66 @@
-<?php
-    function outputAlert ($strMsg) {
-        echo "<div class='alert alert-danger'>";
-            echo $strMsg;
-        echo "</div>";
-    }
+<?php 
+    $redirect = '/veikals/admin/index.php';
+    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
+    
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
 ?>
 
-<div class="row">
-    <div class="col-sm-6">
-        <div class="form-group">
-            <label for="name">
-                Vārds<span class="required-star">*</span>
-            </label>
-            <input type="text" class="form-control" name="name" id="name" placeholder="Ievadi vārdu" 
-                value="<?php if(isset($name)) echo $name; ?>">
-            <?php
-                if(isset($name) && empty($name))
-                    outputAlert("Vārds ir nepieciešams");
-            ?>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="form-group">
-            <label for="surname">
-                Uzvārds<span class="required-star">*</span>
-            </label>
-            <input type="text" class="form-control" name="surname" id="surname" placeholder="Ievadi uzvārdu" 
-                value="<?php if(isset($surname)) echo $surname; ?>">
-            <?php
-                if(isset($surname) && empty($surname))
-                    outputAlert("Uzvārds ir nepieciešams");
-            ?>
-        </div>
-    </div>
-</div>
-<div class="form-group">
-    <label for="email">
-        E-pasts<span class="required-star">*</span>
-    </label>
-    <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" 
-        placeholder="name@example.com" formnovalidate="formnovalidate" value="<?php if(isset($email)) echo $email; ?>">
-    <?php
-        if(isset($email) && empty($email))
-            outputAlert("E-pasts ir nepieciešams");
-    ?>
-</div>
+<?php
+    $id = null;
+    if (isset($_GET['id'])) {
+        $id = $_GET['id'];
+    } else if (isset($_SESSION["id"])) {
+        $id = $_SESSION["id"];
+    } else {
+        header('Location: index.php');
+        exit();
+    }
+
+    if(isset($id)) {
+        $conn = Database::openConnection();
+
+        $stmt = $conn->prepare("SELECT * FROM user WHERE user_id=:id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        Database::closeConnection($conn);
+        
+        if(empty($result)) {
+            header('Location: index.php');
+            exit();
+        }
+
+        ?>
+            <!DOCTYPE html>
+            <html lang="en">  
+                <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/head.php'; ?>
+                <body>
+                    <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/header.php'; ?>
+
+                    <div class="main-container">
+                        <h4>Lietotāja informācija</h4>
+                        <table class="table table-hover">
+                            <tr>
+                                <th>ID: </th>
+                                <th><?php echo $result['user_id'] ?></th>
+                            </tr>
+                            <tr>
+                                <th>Vārds: </th>
+                                <th><?php echo $result['name'] ?></th>
+                            </tr>
+                            <tr>
+                                <th>Uzvārds: </th>
+                                <th><?php echo $result['surname'] ?></th>
+                            </tr>
+                            <tr>
+                                <th>E-pasts: </th>
+                                <th><?php echo $result['email'] ?></th>
+                            </tr>
+                        </table>
+                    </div>
+                </body>
+            </html>
+        <?php
+    }
+?>

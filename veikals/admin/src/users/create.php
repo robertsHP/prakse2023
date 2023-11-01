@@ -36,20 +36,25 @@
     }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">  
-    <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/head.php'; ?>
-    <body>
-        <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/header.php'; ?>
-
-        <div class="main-container">
-            <h4>Izveidot jaunu lietotāju</h4>
-
-            <form method="post" action="">
-                <?php include 'read.php'; ?>
-                <input type="submit" name="back" value="Atpakaļ" class="btn btn-outline-primary execution-button">
-                <input type="submit" name="save" value="Saglabāt" class="btn btn-primary execution-button">
-            </form>
-        </div>
-    </body>
-</html>
+<?php 
+    $dataArray = [
+        'page' => [
+            'title' => 'Izveidot jaunu lietotāju',
+            'buttons' => [
+                [
+                    'type' => 'submit',
+                    'name' => 'back',
+                    'value' => 'Atpakaļ',
+                    'class' => 'btn btn-outline-primary execution-button'
+                ],
+                [
+                    'type' => 'submit',
+                    'name' => 'save',
+                    'value' => 'Saglabāt',
+                    'class' => 'btn btn-primary execution-button'
+                ]
+            ]
+        ]
+    ];
+    include 'inputForm.php'; 
+?>

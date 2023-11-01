@@ -15,7 +15,7 @@
     $conn = Database::openConnection();
 
     $stmt = $conn->prepare("SELECT * FROM user WHERE user_id=:id");
-    $stmt->bindParam(':id', $id, PDO::PARAM_STR);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -60,21 +60,36 @@
     }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">  
-    <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/head.php'; ?>
-    <body>
-        <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/header.php'; ?>
-
-        <div class="main-container">
-            <h4>Rediģēt lietotāja informāciju</h4>
-
-            <form method="post" action="">
-                <?php include 'read.php'; ?>
-                <input type="submit" name="back" value="Atpakaļ" class="btn btn-outline-primary execution-button">
-                <input type="submit" name="save" value="Saglabāt" class="btn btn-primary execution-button">
-                <input type="submit" name="delete" value="Dzēst" class="btn btn-danger execution-button">
-            </form>
-        </div>
-    </body>
-</html>
+<?php 
+    $dataArray = [
+        'userData' => [
+            'name' => $name,
+            'surname' => $surname,
+            'email' => $email,
+        ],
+        'page' => [
+            'title' => 'Rediģēt lietotāja informāciju',
+            'buttons' => [
+                [
+                    'type' => 'submit',
+                    'name' => 'back',
+                    'value' => 'Atpakaļ',
+                    'class' => 'btn btn-outline-primary execution-button'
+                ],
+                [
+                    'type' => 'submit',
+                    'name' => 'save',
+                    'value' => 'Saglabāt',
+                    'class' => 'btn btn-primary execution-button'
+                ],
+                [
+                    'type' => 'submit',
+                    'name' => 'delete',
+                    'value' => 'Dzēst',
+                    'class' => 'btn btn-danger execution-button'
+                ]
+            ]
+        ]
+    ];
+    include 'inputForm.php'; 
+?>
