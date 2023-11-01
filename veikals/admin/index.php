@@ -5,8 +5,8 @@
         header('Location: /veikals/admin/src/panel.php');
         exit();
     }
-
-    require_once 'src/Config.php';
+    
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Config.php';
 ?>
 
 <!DOCTYPE html>

@@ -1,61 +1,47 @@
-<?php 
-    session_start();
-
-    if(!isset($_SESSION["id"])) {
-        header('Location: /veikals/admin/index.php');
-        exit();
-    }
-
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
-?>
-
 <?php
-    if (!isset($_SESSION["id"])) {
-        header('Location: index.php');
-        exit();
-    }
-
-    $conn = Database::openConnection();
-
-    $stmt = $conn->prepare("SELECT * FROM user WHERE user_id=:id");
-    $stmt->bindParam(':id', $_SESSION["id"], PDO::PARAM_INT);
-    $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    Database::closeConnection($conn);
-    
-    if(empty($result)) {
-        header('Location: index.php');
-        exit();
+    function outputAlert ($strMsg) {
+        echo "<div class='alert alert-danger'>";
+            echo $strMsg;
+        echo "</div>";
     }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">  
-    <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/head.php'; ?>
-    <body>
-        <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/header.php'; ?>
-
-        <div class="main-container">
-            <h4>Lietotāja informācija</h4>
-            <table class="table table-hover">
-                <tr>
-                    <th>ID: </th>
-                    <th><?php echo $_SESSION["id"] ?></th>
-                </tr>
-                <tr>
-                    <th>Vārds: </th>
-                    <th><?php echo $_SESSION["name"] ?></th>
-                </tr>
-                <tr>
-                    <th>Uzvārds: </th>
-                    <th><?php echo $_SESSION["surname"] ?></th>
-                </tr>
-                <tr>
-                    <th>E-pasts: </th>
-                    <th><?php echo $_SESSION["email"] ?></th>
-                </tr>
-            </table>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label for="name">
+                Vārds<span class="required-star">*</span>
+            </label>
+            <input type="text" class="form-control" name="name" id="name" placeholder="Ievadi vārdu" 
+                value="<?php if(isset($name)) echo $name; ?>">
+            <?php
+                if(isset($name) && empty($name))
+                    outputAlert("Vārds ir nepieciešams");
+            ?>
         </div>
-    </body>
-</html>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label for="surname">
+                Uzvārds<span class="required-star">*</span>
+            </label>
+            <input type="text" class="form-control" name="surname" id="surname" placeholder="Ievadi uzvārdu" 
+                value="<?php if(isset($surname)) echo $surname; ?>">
+            <?php
+                if(isset($surname) && empty($surname))
+                    outputAlert("Uzvārds ir nepieciešams");
+            ?>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="email">
+        E-pasts<span class="required-star">*</span>
+    </label>
+    <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" 
+        placeholder="name@example.com" formnovalidate="formnovalidate" value="<?php if(isset($email)) echo $email; ?>">
+    <?php
+        if(isset($email) && empty($email))
+            outputAlert("E-pasts ir nepieciešams");
+    ?>
+</div>

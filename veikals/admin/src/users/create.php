@@ -1,11 +1,7 @@
 <?php 
-    session_start();
-
-    if(!isset($_SESSION["id"])) {
-        header('Location: /veikals/admin/index.php');
-        exit();
-    }
-
+    $redirect = '/veikals/admin/index.php';
+    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
+    
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
 ?>
 
@@ -50,7 +46,7 @@
             <h4>Izveidot jaunu lietotāju</h4>
 
             <form method="post" action="">
-                <?php include 'form.php'; ?>
+                <?php include 'read.php'; ?>
                 <input type="submit" name="back" value="Atpakaļ" class="btn btn-outline-primary execution-button">
                 <input type="submit" name="save" value="Saglabāt" class="btn btn-primary execution-button">
             </form>

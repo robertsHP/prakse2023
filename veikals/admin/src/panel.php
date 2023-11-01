@@ -1,10 +1,6 @@
 <?php 
-    session_start();
-
-    if(!isset($_SESSION["id"])) {
-        header('Location: /veikals/admin/index.php');
-        exit();
-    }
+    $redirect = '/veikals/admin/index.php';
+    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
 ?>
 
 <!DOCTYPE html>
