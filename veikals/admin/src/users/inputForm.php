@@ -1,4 +1,30 @@
 <?php 
+    /*
+        !!!!!PADOTIE DATI!!!!!
+
+        $dataArray = [
+            'userData' => [
+                'name' => ...,
+                'surname' => ...,
+                'email' => ...,
+            ],
+            'page' => [
+                'title' => ...,
+                'buttons' => [
+                    [
+                        'type' => ...,
+                        'name' => ...,
+                        'value' => ...,
+                        'class' => ...
+                    ],
+                    ....
+                ]
+            ]
+        ];
+    */
+?>
+
+<?php 
     $redirect = '/veikals/admin/index.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
 ?>
@@ -94,8 +120,13 @@
                                 echo $dataArray['userData']['email']; 
                     ?>">
                     <?php
-                        if(isset($dataArray['page']['email']) && empty($dataArray['page']['email']))
-                            outputAlert("E-pasts ir nepieciešams");
+                        if(isset($dataArray['userData']['email'])) {
+                            if(empty($dataArray['userData']['email'])) {
+                                outputAlert("E-pasts ir nepieciešams");
+                            } else if (!filter_var($dataArray['userData']['email'], FILTER_VALIDATE_EMAIL)) {
+                                outputAlert("E-pasts nav pareizi ievadīts");
+                            }
+                        }
                     ?>
                 </div>
                 <?php 

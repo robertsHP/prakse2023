@@ -6,6 +6,13 @@
 ?>
 
 <?php
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['back'])) {
+            header('Location: index.php');
+            exit();
+        }
+    }
+
     $id = null;
     if (isset($_GET['id'])) {
         $id = $_GET['id'];
@@ -58,6 +65,9 @@
                                 <th><?php echo $result['email'] ?></th>
                             </tr>
                         </table>
+                        <form method="post" action="">
+                            <input type="submit" name="back" value="Atpakaļ" class="btn btn-primary execution-button">
+                        </form>
                     </div>
                 </body>
             </html>

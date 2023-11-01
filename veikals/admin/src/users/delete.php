@@ -6,12 +6,14 @@
 ?>
 
 <?php
+    //Pārbauda vai tika padots ID
     if (!isset($_GET['id'])) {
         header('Location: index.php');
         exit();
     }
     $id = $_GET['id'];
 
+    //Atrod lietotāju datubāzē
     $conn = Database::openConnection();
 
     $stmt = $conn->prepare("SELECT * FROM user WHERE user_id=:id");
@@ -21,6 +23,7 @@
 
     Database::closeConnection($conn);
     
+    //Ja nav nekas tad veic redirect uz index
     if(empty($result)) {
         header('Location: index.php');
         exit();

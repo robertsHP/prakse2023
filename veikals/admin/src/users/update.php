@@ -6,6 +6,7 @@
 ?>
 
 <?php
+    //pārbauda vai ID ir padots
     if (!isset($_GET['id'])) {
         header('Location: index.php');
         exit();
@@ -14,6 +15,7 @@
 
     $conn = Database::openConnection();
 
+    //pārbauda vai šāds lietotājs ir datubāzē
     $stmt = $conn->prepare("SELECT * FROM user WHERE user_id=:id");
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
@@ -33,11 +35,11 @@
             $surname = $_POST['surname'];
             $email = $_POST['email'];
 
-            if (!empty($surname) && !empty($surname) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            ///Pārbauda vai viss ir ievadīts
+            if (!empty($name) && !empty($surname) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $conn = Database::openConnection();
 
                 $stmt = $conn->prepare("UPDATE user SET name = :name, surname = :surname, email = :email WHERE user_id = :id");
-
                 $stmt->bindParam(':name', $name, PDO::PARAM_STR);
                 $stmt->bindParam(':surname', $surname, PDO::PARAM_STR);
                 $stmt->bindParam(':email', $email, PDO::PARAM_STR);
@@ -45,14 +47,16 @@
                 $stmt->execute();
 
                 Database::closeConnection($conn);
+                header('Location: index.php');
+                exit();
             }
-            header('Location: index.php');
         } else if (isset($_POST['delete'])) {
             header('Location: delete.php?id='.$id);
+            exit();
         } else if (isset($_POST['back'])) {
             header('Location: index.php');
+            exit();
         }
-        exit();
     } else {
         $name = $result[0]["name"];
         $surname = $result[0]["surname"];
@@ -61,6 +65,7 @@
 ?>
 
 <?php 
+    //dati priekš inputForm.php
     $dataArray = [
         'userData' => [
             'name' => $name,

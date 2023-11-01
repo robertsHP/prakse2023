@@ -13,12 +13,11 @@
             $surname = $_POST['surname'];
             $email = $_POST['email'];
 
-            if (!empty($surname) && !empty($surname) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            ///Pārbauda vai viss ir ievadīts
+            if (!empty($name) && !empty($surname) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $conn = Database::openConnection();
 
-                //Sagatavo SQL
                 $stmt = $conn->prepare("INSERT INTO user (name, surname, email) VALUES (:name, :surname, :email)");
-
                 $stmt->bindParam(':name', $name, PDO::PARAM_STR);
                 $stmt->bindParam(':surname', $surname, PDO::PARAM_STR);
                 $stmt->bindParam(':email', $email, PDO::PARAM_STR);
@@ -37,7 +36,13 @@
 ?>
 
 <?php 
+    //dati priekš inputForm.php
     $dataArray = [
+        'userData' => [
+            'name' => isset($name) ? $name : null,
+            'surname' => isset($surname) ? $surname : null,
+            'email' => isset($email) ? $email : null,
+        ],
         'page' => [
             'title' => 'Izveidot jaunu lietotāju',
             'buttons' => [
