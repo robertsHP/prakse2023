@@ -76,7 +76,7 @@
                                 value="<?php 
                                     if(isset($dataArray['userData']['name']))
                                         echo $dataArray['userData']['name']
-                            ?>">
+                                ?>">
                             <?php
                                 if(isset($dataArray['userData']['name']) && empty($dataArray['userData']['name']))
                                     outputAlert("Vārds ir nepieciešams");
@@ -97,7 +97,7 @@
                                 value="<?php 
                                     if(isset($dataArray['userData']['surname']))
                                         echo $dataArray['userData']['surname']; 
-                            ?>">
+                                ?>">
                             <?php
                                 if(isset($dataArray['userData']['surname']) && empty($dataArray['userData']['surname']))
                                     outputAlert("Uzvārds ir nepieciešams");
@@ -118,7 +118,7 @@
                         value="<?php 
                             if(isset($dataArray['userData']['email']))
                                 echo $dataArray['userData']['email']; 
-                    ?>">
+                        ?>">
                     <?php
                         if(isset($dataArray['userData']['email'])) {
                             if(empty($dataArray['userData']['email'])) {

@@ -6,49 +6,58 @@
 ?>
 
 <?php
-    $name = null;
-    $surname = null;
-    $email = null;
+    //pārbauda vai ID ir padots
+    if (!isset($_GET['id'])) {
+        header('Location: index.php');
+        exit();
+    }
+
+    $id = $_GET['id'];
+    $row = Database::getRowFromTable('product_category', 'category_id', $id, PDO::PARAM_INT);
+    
+    if(empty($row)) {
+        header('Location: index.php');
+        exit();
+    }
 
     //Apstrādā formā ievadīto informāciju
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['save'])) {
             $name = $_POST['name'];
-            $surname = $_POST['surname'];
-            $email = $_POST['email'];
 
             ///Pārbauda vai viss ir ievadīts
-            if (!empty($name) && !empty($surname) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            if (!empty($name)) {
                 $conn = Database::openConnection();
 
-                $stmt = $conn->prepare("INSERT INTO user (name, surname, email) VALUES (:name, :surname, :email)");
+                $stmt = $conn->prepare("UPDATE product_category SET name = :name WHERE category_id = :id");
                 $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-                $stmt->bindParam(':surname', $surname, PDO::PARAM_STR);
-                $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $stmt->execute();
 
                 Database::closeConnection($conn);
-
                 header('Location: index.php');
                 exit();
             }
+        } else if (isset($_POST['delete'])) {
+            header('Location: delete.php?id='.$id);
+            exit();
         } else if (isset($_POST['back'])) {
             header('Location: index.php');
             exit();
         }
+    } else {
+        $name = $row["name"];
     }
 ?>
 
 <?php 
     //dati priekš inputForm.php
     $dataArray = [
-        'userData' => [
-            'name' => $name,
-            'surname' => $surname,
-            'email' => $email,
+        'categoryData' => [
+            'name' => $name
         ],
         'page' => [
-            'title' => 'Izveidot jaunu lietotāju',
+            'title' => 'Rediģēt kategorijas informāciju',
             'buttons' => [
                 [
                     'type' => 'submit',
@@ -61,6 +70,12 @@
                     'name' => 'save',
                     'value' => 'Saglabāt',
                     'class' => 'btn btn-primary execution-button'
+                ],
+                [
+                    'type' => 'submit',
+                    'name' => 'delete',
+                    'value' => 'Dzēst',
+                    'class' => 'btn btn-danger execution-button'
                 ]
             ]
         ]

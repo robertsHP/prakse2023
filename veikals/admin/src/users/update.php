@@ -11,19 +11,11 @@
         header('Location: index.php');
         exit();
     }
-    $id = $_GET['id'];
-
-    $conn = Database::openConnection();
-
-    //pārbauda vai šāds lietotājs ir datubāzē
-    $stmt = $conn->prepare("SELECT * FROM user WHERE user_id=:id");
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    Database::closeConnection($conn);
     
-    if(empty($result)) {
+    $id = $_GET['id'];
+    $row = Database::getRowFromTable('user', 'user_id', $id, PDO::PARAM_INT);
+    
+    if(empty($row)) {
         header('Location: index.php');
         exit();
     }
@@ -58,9 +50,9 @@
             exit();
         }
     } else {
-        $name = $result[0]["name"];
-        $surname = $result[0]["surname"];
-        $email = $result[0]["email"];
+        $name = $row["name"];
+        $surname = $row["surname"];
+        $email = $row["email"];
     }
 ?>
 
