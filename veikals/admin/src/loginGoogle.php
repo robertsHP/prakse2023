@@ -24,24 +24,21 @@
         exit();
     }
 
-    $conn = Database::openConnection();
+    $row = Database::getRowFromTable(
+        'user', 
+        'email', 
+        $payload['email'], 
+        PDO::PARAM_STR);
 
-    $stmt = $conn->prepare("SELECT * FROM user WHERE email=:email");
-    $stmt->bindParam(':email', $payload['email'], PDO::PARAM_STR);
-    $stmt->execute();
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    Database::closeConnection($conn);
-
-    if(empty($user)) {
+    if(empty($row)) {
         header('Location: /veikals/admin/index.php');
         exit();
     }
 
-    $_SESSION["id"] = $user['user_id'];
-    $_SESSION["name"] = $user['name'];
-    $_SESSION["surname"] = $user['surname'];
-    $_SESSION["email"] = $user['email'];
+    $_SESSION["id"] = $row['user_id'];
+    $_SESSION["name"] = $row['name'];
+    $_SESSION["surname"] = $row['surname'];
+    $_SESSION["email"] = $row['email'];
 
     header('Location: /veikals/admin/src/panel.php');
     exit();

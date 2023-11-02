@@ -7,24 +7,18 @@
 
 <?php
     $name = null;
-    $surname = null;
-    $email = null;
 
     //Apstrādā formā ievadīto informāciju
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['save'])) {
             $name = $_POST['name'];
-            $surname = $_POST['surname'];
-            $email = $_POST['email'];
 
             ///Pārbauda vai viss ir ievadīts
-            if (!empty($name) && !empty($surname) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            if (!empty($name)) {
                 $conn = Database::openConnection();
 
-                $stmt = $conn->prepare("INSERT INTO user (name, surname, email) VALUES (:name, :surname, :email)");
+                $stmt = $conn->prepare("INSERT INTO product_category (name) VALUES (:name)");
                 $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-                $stmt->bindParam(':surname', $surname, PDO::PARAM_STR);
-                $stmt->bindParam(':email', $email, PDO::PARAM_STR);
                 $stmt->execute();
 
                 Database::closeConnection($conn);
@@ -40,15 +34,13 @@
 ?>
 
 <?php 
-    //dati priekš inputForm.php
+    //Dati priekš inputForm.php
     $dataArray = [
-        'userData' => [
-            'name' => $name,
-            'surname' => $surname,
-            'email' => $email,
+        'categoryData' => [
+            'name' => $name
         ],
         'page' => [
-            'title' => 'Izveidot jaunu lietotāju',
+            'title' => 'Izveidot jaunu preces kategoriju',
             'buttons' => [
                 [
                     'type' => 'submit',

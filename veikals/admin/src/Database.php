@@ -25,5 +25,17 @@
         public static function closeConnection ($con) {
             $con = null;
         }
+        public static function getRowFromTable ($tableName, $colName, $varName, $varType) {
+            $conn = Database::openConnection();
+
+            $stmt = $conn->prepare("SELECT * FROM $tableName WHERE $colName=:id");
+            $stmt->bindParam(':id', $varName, $varType);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+            Database::closeConnection($conn);
+
+            return $result;
+        }
     }
 ?>
