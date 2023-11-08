@@ -5,7 +5,7 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUDFunctions.php';
 
-    CRUDFunctions::processDelete('user', 'user_id');
+    CRUDFunctions::processDelete('product', 'product_id');
 ?>
 
 <!DOCTYPE html>

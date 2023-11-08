@@ -3,59 +3,14 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
     
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
-?>
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUDFunctions.php';
+    require_once 'formData.php';
 
-<?php
-    //pārbauda vai ID ir padots
-    if (!isset($_GET['id'])) {
-        header('Location: index.php');
-        exit();
-    }
+    CRUDFunctions::processUpdate('product_category', 'category_id', $formData);
 
-    $id = $_GET['id'];
-    $row = Database::getRowFromTable('product_category', 'category_id', $id, PDO::PARAM_INT);
-    
-    if(empty($row)) {
-        header('Location: index.php');
-        exit();
-    }
-
-    //Apstrādā formā ievadīto informāciju
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (isset($_POST['save'])) {
-            $name = $_POST['name'];
-
-            ///Pārbauda vai viss ir ievadīts
-            if (!empty($name)) {
-                $conn = Database::openConnection();
-
-                $stmt = $conn->prepare("UPDATE product_category SET name = :name WHERE category_id = :id");
-                $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-                $stmt->execute();
-
-                Database::closeConnection($conn);
-                header('Location: index.php');
-                exit();
-            }
-        } else if (isset($_POST['delete'])) {
-            header('Location: delete.php?id='.$id);
-            exit();
-        } else if (isset($_POST['back'])) {
-            header('Location: index.php');
-            exit();
-        }
-    } else {
-        $name = $row["name"];
-    }
-?>
-
-<?php 
     //dati priekš inputForm.php
     $dataArray = [
-        'categoryData' => [
-            'name' => $name
-        ],
+        'formData' => $formData,
         'page' => [
             'title' => 'Rediģēt kategorijas informāciju',
             'buttons' => [

@@ -24,7 +24,7 @@
         exit();
     }
 
-    $row = Database::getRowFromTable(
+    $row = Database::getRowFrom(
         'user', 
         'email', 
         $payload['email'], 

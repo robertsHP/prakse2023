@@ -6,13 +6,13 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUDFunctions.php';
     require_once 'formData.php';
 
-    CRUDFunctions::processCreate('user', $formData);
+    CRUDFunctions::processUpdate('product', 'product_id', $formData);
 
     //dati priekš inputForm.php
     $dataArray = [
         'formData' => $formData,
         'page' => [
-            'title' => 'Izveidot jaunu lietotāju',
+            'title' => 'Rediģēt produkta informāciju',
             'buttons' => [
                 [
                     'type' => 'submit',
@@ -25,6 +25,12 @@
                     'name' => 'save',
                     'value' => 'Saglabāt',
                     'class' => 'btn btn-primary execution-button'
+                ],
+                [
+                    'type' => 'submit',
+                    'name' => 'delete',
+                    'value' => 'Dzēst',
+                    'class' => 'btn btn-danger execution-button'
                 ]
             ]
         ]

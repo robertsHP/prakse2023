@@ -5,14 +5,14 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUDFunctions.php';
     require_once 'formData.php';
+    
+    CRUDFunctions::processCreate('product', $formData);
 
-    CRUDFunctions::processCreate('user', $formData);
-
-    //dati priekš inputForm.php
+    //Dati priekš inputForm.php
     $dataArray = [
         'formData' => $formData,
         'page' => [
-            'title' => 'Izveidot jaunu lietotāju',
+            'title' => 'Pievienot jaunu preci',
             'buttons' => [
                 [
                     'type' => 'submit',

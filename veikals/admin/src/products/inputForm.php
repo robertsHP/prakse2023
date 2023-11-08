@@ -3,7 +3,7 @@
         !!!!!PADOTIE DATI!!!!!
 
         $dataArray = [
-            'formData' => [
+            'data' => [
                 'name' => ...
             ],
             'page' => [
@@ -43,18 +43,25 @@
             <form method="post" action="">
                 <div class="row">
                     <div class="col-sm-6">
-                        <?php
-                            FormElement::input([
-                                'name' => 'name',
-                                'title' => 'Nosaukums',
-                                'required' => true,
-                                'type' => 'text',
-                                'placeholder' => 'Ievadi nosaukumu',
-                                'variable' => $dataArray['formData']['name'],
-                                'errorCheck' => [
-                                    ['Kategorijas nosaukums ir nepieciešams', empty($dataArray['formData']['name']['value'])]
-                                ]
-                            ]);
+                        <?php 
+                            // FormElement::input([
+                            //     'name' => 'name',
+                            //     'title' => 'Nosaukums',
+                            //     'required' => true,
+                            //     'type' => 'text',
+                            //     'placeholder' => 'Ievadi nosaukumu',
+                            //     'variable' => $dataArray['data']['name'],
+                            //     'errorCheck' => 'Preces nosaukums ir nepieciešams'
+                            // ]);
+                            // FormElement::input([
+                            //     'name' => 'description',
+                            //     'title' => 'Apraksts',
+                            //     'required' => true,
+                            //     'type' => 'text',
+                            //     'placeholder' => '...',
+                            //     'variable' => $dataArray['data']['description'],
+                            //     'errorCheck' => 'Apraksts ir nepieciešams'
+                            // ]);
                         ?>
                     </div>
                 </div>

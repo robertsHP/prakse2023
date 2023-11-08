@@ -25,14 +25,25 @@
         public static function closeConnection ($con) {
             $con = null;
         }
-        public static function getRowFromTable ($tableName, $colName, $varName, $varType) {
+        public static function getRowFrom ($tableName, $colName, $var, $varType) {
             $conn = Database::openConnection();
 
             $stmt = $conn->prepare("SELECT * FROM $tableName WHERE $colName=:id");
-            $stmt->bindParam(':id', $varName, $varType);
+            $stmt->bindParam(':id', $var, $varType);
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
         
+            Database::closeConnection($conn);
+
+            return $result;
+        }
+        public static function getAllRowsFrom ($tableName) {
+            $conn = Database::openConnection();
+
+            $stmt = $conn->prepare('SELECT * FROM '.$tableName);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
             Database::closeConnection($conn);
 
             return $result;
