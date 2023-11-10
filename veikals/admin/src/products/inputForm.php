@@ -32,7 +32,7 @@
         <div class="main-container">
             <h4><?php echo isset($page['title']) ? $page['title'] : ''; ?></h4>
 
-            <form method="post" action="">
+            <form method="post" action="" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-sm-6">
                         <?php 
@@ -87,26 +87,39 @@
                             $title = 'Bilde';
                             $tagName = 'photo_file_loc';
                             $variableData = $formData[$tagName];
-                            $errorConditions = [
-                                FormErrorType::EMPTY->value => 'Fails nav pievienots'
-                            ];
+                            $errorConditions = getFileErrorTypes();
 
-                            FormElement::loadLabel($title, $tagName, $variableData);
-                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                            $allowedFileTypes = implode(', ', $formData[$tagName]['allowed_file_formats']);
                         ?>
-                            <input 
-                                type="file"  
-                                class="form-control-file" 
-                                name="<?php echo $tagName; ?>"
-                                id="<?php echo $tagName; ?>"
-                                accept="image/png, image/jpeg"
-                                value="<?php 
+                            <div class="mb-3">
+                                <?php
+                                    FormElement::loadLabel($title, $tagName, $variableData);
+                                    FormElement::loadErrorMessage($variableData, $errorConditions);
+                                ?>
+                                <input 
+                                    type="file"  
+                                    class="form-control-file" 
+                                    name="<?php echo $tagName; ?>"
+                                    id="<?php echo $tagName; ?>"
+                                    accept="<?php echo $allowedFileTypes; ?>"
+                                    value="<?php 
+                                        if(isset($variableData))
+                                            echo $variableData['value'];
+                                    ?>">
+                            </div>
+                            <img 
+                                src="<?php 
                                     if(isset($variableData))
-                                        echo $_SERVER['DOCUMENT_ROOT'].'/veikals/files/products/'.$variableData['value'];
-                            ?>">
+                                        echo $variableData['value'];
+                                ?>" 
+                                name = <?php echo $tagName.'_thumbnail'; ?>
+                                id =<?php echo $tagName.'_thumbnail'; ?>
+                                class="img-thumbnail" 
+                                alt="">
+                        <br>
 
                         <?php 
-                            $title = 'Cena';
+                            $title = 'Cena (eiro)';
                             $tagName = 'price';
                             $variableData = $formData[$tagName];
                             $placeholder = 'Ievadi cenu';

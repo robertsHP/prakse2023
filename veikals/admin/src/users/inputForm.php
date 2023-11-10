@@ -42,7 +42,7 @@
                 ?>
             </h4>
 
-            <form method="post" action="">
+            <form method="post" action="" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-sm-6">
                         <?php 
@@ -101,7 +101,7 @@
                         $placeholder = 'name@example.com';
                         $errorConditions = [
                             FormErrorType::EMPTY->value => 'E-pasts ir nepieciešams',
-                            FormErrorType::INVALID->value => 'E-pasts nav pareizi ievadīts'
+                            FormErrorType::EMAIL_INVALID->value => 'E-pasts nav pareizi ievadīts'
                         ];
                     
                         FormElement::loadLabel($title, $tagName, $variableData);

@@ -40,7 +40,7 @@
                 ?>
             </h4>
 
-            <form method="post" action="">
+            <form method="post" action="" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-sm-6">
                         <?php 
