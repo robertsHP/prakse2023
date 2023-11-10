@@ -5,7 +5,15 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUDFunctions.php';
 
-    CRUDFunctions::delete('product_category', 'category_id');
+    include 'data.php';
+
+    CRUDFunctions::delete(
+        $tableName, 
+        $idColumnName,
+        function ($tableName, $idColumnName, $id) {
+            Database::deleteWithID($tableName, $idColumnName, $id);
+        }
+    );
 ?>
 
 <!DOCTYPE html>

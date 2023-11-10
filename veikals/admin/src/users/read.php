@@ -3,15 +3,9 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
     
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
-?>
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUDFunctions.php';
 
-<?php
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (isset($_POST['back'])) {
-            header('Location: index.php');
-            exit();
-        }
-    }
+    include 'data.php';
 
     $id = null;
     $pageTitle = null;
@@ -22,25 +16,8 @@
         $id = $_SESSION["id"];
         $pageTitle = "Konts";
     }
-    
-    if(!isset($id)) {
-        header('Location: index.php');
-        exit();
-    }
 
-    $conn = Database::openConnection();
-
-    $stmt = $conn->prepare("SELECT * FROM user WHERE user_id=:id");
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    Database::closeConnection($conn);
-    
-    if(empty($result)) {
-        header('Location: index.php');
-        exit();
-    }
+    $row = CRUDFunctions::read($tableName, $idColumnName, $id);
 ?>
 
 <!DOCTYPE html>
@@ -54,19 +31,19 @@
             <table class="table table-hover">
                 <tr>
                     <th>ID: </th>
-                    <th><?php echo $result['user_id'] ?></th>
+                    <th><?php echo $row['user_id'] ?></th>
                 </tr>
                 <tr>
                     <th>Vārds: </th>
-                    <th><?php echo $result['name'] ?></th>
+                    <th><?php echo $row['name'] ?></th>
                 </tr>
                 <tr>
                     <th>Uzvārds: </th>
-                    <th><?php echo $result['surname'] ?></th>
+                    <th><?php echo $row['surname'] ?></th>
                 </tr>
                 <tr>
                     <th>E-pasts: </th>
-                    <th><?php echo $result['email'] ?></th>
+                    <th><?php echo $row['email'] ?></th>
                 </tr>
             </table>
             <form method="post" action="">

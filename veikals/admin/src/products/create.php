@@ -19,8 +19,9 @@
         }
     );
 
+    //Lapas dati priekš inputForm.php
     $page = [
-        'title' => 'Izveidot jaunu lietotāju',
+        'title' => 'Pievienot jaunu preci',
         'buttons' => [
             [
                 'type' => 'submit',

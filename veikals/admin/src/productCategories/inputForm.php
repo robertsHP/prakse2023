@@ -3,7 +3,7 @@
         !!!!!PADOTIE DATI!!!!!
 
         $dataArray = [
-            'categoryData' => [
+            'formData' => [
                 'name' => ...
             ],
             'page' => [
@@ -20,29 +20,11 @@
             ]
         ];
     */
-?>
 
-<?php 
     $redirect = '/veikals/admin/index.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
-?>
 
-<?php
-    function outputButton ($type, $name, $value, $class) {
-        echo '<input 
-            type="'.$type.'" 
-            name="'.$name.'" 
-            value="'.$value.'" 
-            class="'.$class.'">
-        ';
-    }
-    function outputAlert ($strMsg) {
-        echo '
-            <div class="alert alert-danger">
-                '.$strMsg.'
-            </div>
-        ';
-    }
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FormElement.php';
 ?>
 
 <!DOCTYPE html>
@@ -61,38 +43,23 @@
             <form method="post" action="">
                 <div class="row">
                     <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="name">
-                                Vārds<span class="required-star">*</span>
-                            </label>
-                            <input 
-                                type="text" 
-                                class="form-control" 
-                                name="name" 
-                                id="name" 
-                                placeholder="Ievadi nosaukumu" 
-                                value="<?php 
-                                    if(isset($dataArray['categoryData']['name']))
-                                        echo $dataArray['categoryData']['name']
-                                ?>">
-                            <?php
-                                if(isset($dataArray['categoryData']['name']) && empty($dataArray['categoryData']['name']))
-                                    outputAlert("Kategorijas vārds ir nepieciešams");
-                            ?>
-                        </div>
+                        <?php
+                            FormElement::input([
+                                'name' => 'name',
+                                'title' => 'Nosaukums',
+                                'required' => true,
+                                'type' => 'text',
+                                'placeholder' => 'Ievadi nosaukumu',
+                                'variable' => $dataArray['formData']['name'],
+                                'errorCheck' => [
+                                    ['Kategorijas nosaukums ir nepieciešams', empty($dataArray['formData']['name']['value'])]
+                                ]
+                            ]);
+                        ?>
                     </div>
                 </div>
                 <?php 
-                    if(isset($dataArray['page']['buttons'])) {
-                        foreach ($dataArray['page']['buttons'] as $buttonInfo) {
-                            outputButton(
-                                $buttonInfo['type'],
-                                $buttonInfo['name'],
-                                $buttonInfo['value'],
-                                $buttonInfo['class']
-                            );
-                        }
-                    }
+                    FormElement::buttonRow($dataArray['page']);
                 ?>
             </form>
         </div>

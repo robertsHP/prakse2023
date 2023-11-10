@@ -3,67 +3,26 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
     
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
-?>
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUDFunctions.php';
 
-<?php
-    //pārbauda vai ID ir padots
-    if (!isset($_GET['id'])) {
-        header('Location: index.php');
-        exit();
-    }
-    
-    $id = $_GET['id'];
-    $row = Database::getRowFromTable('user', 'user_id', $id, PDO::PARAM_INT);
-    
-    if(empty($row)) {
-        header('Location: index.php');
-        exit();
-    }
+    include 'data.php';
 
-    //Apstrādā formā ievadīto informāciju
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (isset($_POST['save'])) {
-            $name = $_POST['name'];
-            $surname = $_POST['surname'];
-            $email = $_POST['email'];
-
-            ///Pārbauda vai viss ir ievadīts
-            if (!empty($name) && !empty($surname) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $conn = Database::openConnection();
-
-                $stmt = $conn->prepare("UPDATE user SET name = :name, surname = :surname, email = :email WHERE user_id = :id");
-                $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-                $stmt->bindParam(':surname', $surname, PDO::PARAM_STR);
-                $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-                $stmt->execute();
-
-                Database::closeConnection($conn);
+    CRUDFunctions::update(
+        $tableName, 
+        $idColumnName, 
+        $formData,
+        function ($tableName, $idColumnName, $id, &$formData) {
+            $success = Database::update($tableName, $idColumnName, $id, $formData);
+            if($success) {
                 header('Location: index.php');
                 exit();
             }
-        } else if (isset($_POST['delete'])) {
-            header('Location: delete.php?id='.$id);
-            exit();
-        } else if (isset($_POST['back'])) {
-            header('Location: index.php');
-            exit();
         }
-    } else {
-        $name = $row["name"];
-        $surname = $row["surname"];
-        $email = $row["email"];
-    }
-?>
+    );
 
-<?php 
     //dati priekš inputForm.php
     $dataArray = [
-        'userData' => [
-            'name' => $name,
-            'surname' => $surname,
-            'email' => $email,
-        ],
+        'formData' => $formData,
         'page' => [
             'title' => 'Rediģēt lietotāja informāciju',
             'buttons' => [
