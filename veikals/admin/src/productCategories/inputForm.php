@@ -43,23 +43,33 @@
             <form method="post" action="">
                 <div class="row">
                     <div class="col-sm-6">
-                        <?php
-                            FormElement::input([
-                                'name' => 'name',
-                                'title' => 'Nosaukums',
-                                'required' => true,
-                                'type' => 'text',
-                                'placeholder' => 'Ievadi nosaukumu',
-                                'variable' => $dataArray['formData']['name'],
-                                'errorCheck' => [
-                                    ['Kategorijas nosaukums ir nepieciešams', empty($dataArray['formData']['name']['value'])]
-                                ]
-                            ]);
+                        <?php 
+                            $title = 'Nosaukums';
+                            $tagName = 'name';
+                            $variableData = $formData[$tagName];
+                            $placeholder = 'Ievadi nosaukumu';
+                            $errorConditions = [
+                                FormErrorType::EMPTY->value => 'Kategorijas nosaukums ir nepieciešams'
+                            ];
+                        
+                            FormElement::loadLabel($title, $tagName, $variableData);
+                            FormElement::loadErrorMessage($variableData, $errorConditions);
                         ?>
+                            <input 
+                                type="text"  
+                                class="form-control" 
+                                name="<?php echo $tagName; ?>"
+                                id="<?php echo $tagName; ?>"
+                                placeholder="<?php echo $placeholder; ?>"
+                                value="<?php 
+                                    if(isset($variableData))
+                                        echo $variableData['value'];
+                            ?>">
+
                     </div>
                 </div>
                 <?php 
-                    FormElement::buttonRow($dataArray['page']);
+                    FormElement::loadButtonRow($dataArray['page']);
                 ?>
             </form>
         </div>

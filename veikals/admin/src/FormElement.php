@@ -1,6 +1,8 @@
 <?php
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FormErrorType.php';
+
     class FormElement {
-        public static function button ($type, $name, $value, $class) {
+        public static function loadButton ($type, $name, $value, $class) {
             ?>
                 <input 
                     type="<?php echo $type; ?>" 
@@ -9,17 +11,17 @@
                     class="<?php echo $class; ?>">
             <?php
         }
-        public static function alert ($strMsg) {
+        public static function loadAlert ($strMsg) {
             ?>
                 <div class="alert alert-danger">
                     <?php echo $strMsg; ?>
                 </div>
             <?php
         }
-        public static function buttonRow ($pageData) {
+        public static function loadButtonRow ($pageData) {
             if(isset($pageData['buttons'])) {
                 foreach ($pageData['buttons'] as $buttonInfo) {
-                    FormElement::button(
+                    FormElement::loadButton(
                         $buttonInfo['type'],
                         $buttonInfo['name'],
                         $buttonInfo['value'],
@@ -28,18 +30,22 @@
                 }
             }
         }
-        public static function errorMessage ($variableData, $errorMessages) {
+        public static function loadErrorMessage ($variableData, $errorConditions) {
             if(isset($variableData)) {
                 if($variableData['required']) {
                     if(isset($variableData['errorType'])) {
-                        if($variableData['errorType'] == 'empty') {
-                            FormElement::alert($errorMessages['empty']);
+                        $errorCases = FormErrorType::cases();
+                        for ($i = 1; $i < count($errorCases); $i++) {
+                            $case = $errorCases[$i];
+                            if($variableData['errorType'] == $case) {
+                                FormElement::loadAlert($errorConditions[$case->value]);
+                            }
                         }
                     }
                 }
             }
         }
-        public static function label ($title, $fieldName, $variableData) {
+        public static function loadLabel ($title, $fieldName, $variableData) {
             ?>
                 <label for=<?php echo $fieldName; ?>>
                     <?php 
