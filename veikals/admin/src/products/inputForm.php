@@ -32,7 +32,7 @@
         <div class="main-container">
             <h4><?php echo isset($page['title']) ? $page['title'] : ''; ?></h4>
 
-            <form method="post" action="">
+            <form method="post" action="" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-sm-6">
                         <?php 
@@ -40,12 +40,11 @@
                             $tagName = 'name';
                             $variableData = $formData[$tagName];
                             $placeholder = 'Ievadi nosaukumu';
-                            $errorMessages = [
-                                'empty' => 'Nosaukums nav ievadīts'
+                            $errorConditions = [
+                                FormErrorType::EMPTY->value => 'Nosaukums nav ievadīts'
                             ];
                         
-                            FormElement::label($title, $tagName, $variableData);
-                            FormElement::errorMessage($variableData, $errorMessages);
+                            FormElement::loadLabel($title, $tagName, $variableData);
                         ?>
                             <input 
                                 type="text"  
@@ -57,6 +56,9 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
+                        <?php 
+                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                        ?>
 
                         <?php 
                             $title = 'Apraksts';
@@ -64,12 +66,11 @@
                             $variableData = $formData[$tagName];
                             $fieldRequired = true;
                             $placeholder = '...';
-                            $errorMessages = [
-                                'empty' => 'Apraksts nav ievadīts'
+                            $errorConditions = [
+                                FormErrorType::EMPTY->value => 'Apraksts nav ievadīts'
                             ];
 
-                            FormElement::label($title, $tagName, $variableData);
-                            FormElement::errorMessage($variableData, $errorMessages);
+                            FormElement::loadLabel($title, $tagName, $variableData);
                         ?>
                             <textarea 
                                 class="form-control"
@@ -82,40 +83,64 @@
                                 if(isset($variableData))
                                     echo $variableData['value'];
                             ?></textarea>
+                        <?php 
+                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                        ?>
 
                         <?php 
                             $title = 'Bilde';
                             $tagName = 'photo_file_loc';
                             $variableData = $formData[$tagName];
-                            $errorMessages = [
-                                'empty' => 'Fails nav pievienots'
-                            ];
+                            $errorConditions = getFileErrorTypes();
 
-                            FormElement::label($title, $tagName, $variableData);
-                            FormElement::errorMessage($variableData, $errorMessages);
+                            $allowedFileTypes = implode(', ', $formData[$tagName]['allowed_file_formats']);
                         ?>
-                            <input 
-                                type="file"  
-                                class="form-control-file" 
-                                name="<?php echo $tagName; ?>"
-                                id="<?php echo $tagName; ?>"
-                                accept="image/png, image/jpeg"
-                                value="<?php 
-                                    if(isset($variableData))
-                                        echo $_SERVER['DOCUMENT_ROOT'].'/veikals/files/products/'.$variableData['value'];
-                            ?>">
+                            <div class="mb-3">
+                                <?php
+                                    FormElement::loadLabel($title, $tagName, $variableData);
+                                ?>
+                                <input 
+                                    type="file"  
+                                    class="form-control-file" 
+                                    name="<?php echo $tagName; ?>"
+                                    id="<?php echo $tagName; ?>"
+                                    accept="<?php echo $allowedFileTypes; ?>"
+                                    value="<?php 
+                                        if(isset($variableData))
+                                            echo $variableData['value'];
+                                    ?>">
+                            </div>
+                            <?php
+                                if(isset($variableData['value'])) {
+                                    ?>
+                                        <img 
+                                            src="<?php 
+                                                if(isset($variableData))
+                                                    echo $variableData['value'];
+                                            ?>" 
+                                            name = <?php echo $tagName.'_thumbnail'; ?>
+                                            id =<?php echo $tagName.'_thumbnail'; ?>
+                                            class="img-thumbnail" 
+                                            alt="">
+                                    <?php
+                                }
+                            ?>
+                        <br>
 
                         <?php 
-                            $title = 'Cena';
+                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                        ?>
+
+                        <?php 
+                            $title = 'Cena (eiro)';
                             $tagName = 'price';
                             $variableData = $formData[$tagName];
                             $placeholder = 'Ievadi cenu';
-                            $errorMessages = [
-                                'empty' => 'Cena nav ievadīta'
+                            $errorConditions = [
+                                FormErrorType::EMPTY->value => 'Cena nav ievadīta'
                             ];
 
-                            FormElement::label($title, $tagName, $variableData);
-                            FormElement::errorMessage($variableData, $errorMessages);
+                            FormElement::loadLabel($title, $tagName, $variableData);
                         ?>
                             <input 
                                 type="number"  
@@ -128,19 +153,20 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
+                        <?php 
+                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                        ?>
 
-                            
                         <?php 
                             $title = 'Pieejamais daudzums';
                             $tagName = 'available_amount';
                             $variableData = $formData[$tagName];
-                            $placeholder = 'Ievadi cenu';
-                            $errorMessages = [
-                                'empty' => 'Daudzums nav ievadīts'
+                            $placeholder = 'Ievadi daudzumu';
+                            $errorConditions = [
+                                FormErrorType::EMPTY->value => 'Daudzums nav ievadīts'
                             ];
 
-                            FormElement::label($title, $tagName, $variableData);
-                            FormElement::errorMessage($variableData, $errorMessages);
+                            FormElement::loadLabel($title, $tagName, $variableData);
                         ?>
                             <input 
                                 type="number"  
@@ -152,19 +178,20 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
+                        <?php 
+                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                        ?>
 
                         <?php 
                             $title = 'Kategorija';
                             $tagName = 'category_id';
                             $variableData = $formData[$tagName];
                             $placeholder = 'Izvēlies kategoriju';
-                            $errorMessages = [
-                                'empty' => 'Kategorija nav izvēlēta'
+                            $errorConditions = [
+                                FormErrorType::EMPTY->value => 'Kategorija nav izvēlēta'
                             ];
 
-                            FormElement::label($title, $tagName, $variableData);
-                            FormElement::errorMessage($variableData, $errorMessages);
-
+                            FormElement::loadLabel($title, $tagName, $variableData);
                         ?>
                             <select 
                                 class="form-control"
@@ -185,10 +212,13 @@
                                     }
                                 ?>
                             </select>
+                        <?php 
+                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                        ?>
                     </div>
                 </div>
                 <?php 
-                    FormElement::buttonRow($page);
+                    FormElement::loadButtonRow($page);
                 ?>
             </form>
         </div>

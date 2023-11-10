@@ -1,28 +1,4 @@
 <?php 
-    /*
-        !!!!!PADOTIE DATI!!!!!
-
-        $dataArray = [
-            'userData' => [
-                'name' => ...,
-                'surname' => ...,
-                'email' => ...,
-            ],
-            'page' => [
-                'title' => ...,
-                'buttons' => [
-                    [
-                        'type' => ...,
-                        'name' => ...,
-                        'value' => ...,
-                        'class' => ...
-                    ],
-                    ....
-                ]
-            ]
-        ];
-    */
-
     $redirect = '/veikals/admin/index.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
 
@@ -38,62 +14,94 @@
         <div class="main-container">
             <h4>
                 <?php 
-                    echo isset($dataArray['page']['title']) ? $dataArray['page']['title'] : ''; 
+                    echo isset($page['title']) ? $page['title'] : ''; 
                 ?>
             </h4>
 
-            <form method="post" action="">
+            <form method="post" action="" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-sm-6">
-                        <?php
-                            FormElement::input([
-                                'name' => 'name',
-                                'title' => 'Vārds',
-                                'required' => true,
-                                'type' => 'text',
-                                'placeholder' => 'Ievadi vārdu',
-                                'variable' => $dataArray['formData']['name'],
-                                'errorCheck' => [
-                                    ['Vārds ir nepieciešams', empty($dataArray['formData']['name']['value'])]
-                                ]
-                            ]);
+                        <?php 
+                            $title = 'Vārds';
+                            $tagName = 'name';
+                            $variableData = $formData[$tagName];
+                            $placeholder = 'Ievadi vārdu';
+                            $errorConditions = [
+                                FormErrorType::EMPTY->value => 'Vārds ir nepieciešams'
+                            ];
+                        
+                            FormElement::loadLabel($title, $tagName, $variableData);
+                        ?>
+                            <input 
+                                type="text"  
+                                class="form-control" 
+                                name="<?php echo $tagName; ?>"
+                                id="<?php echo $tagName; ?>"
+                                placeholder="<?php echo $placeholder; ?>"
+                                value="<?php 
+                                    if(isset($variableData))
+                                        echo $variableData['value'];
+                            ?>">
+                        <?php 
+                            FormElement::loadErrorMessage($variableData, $errorConditions);
                         ?>
                     </div>
                     <div class="col-sm-6">
-                        <?php
-                            FormElement::input([
-                                'name' => 'surname',
-                                'title' => 'Uzvārds',
-                                'required' => true,
-                                'type' => 'text',
-                                'placeholder' => 'Ievadi uzvārdu',
-                                'variable' => $dataArray['formData']['surname'],
-                                'errorCheck' => [
-                                    ['Uzvārds ir nepieciešams', empty($dataArray['formData']['surname']['value'])]
-                                ]
-                            ]);
+                        <?php 
+                            $title = 'Uzvārds';
+                            $tagName = 'surname';
+                            $variableData = $formData[$tagName];
+                            $placeholder = 'Ievadi uzvārdu';
+                            $errorConditions = [
+                                FormErrorType::EMPTY->value => 'Uzvārds ir nepieciešams'
+                            ];
+                        
+                            FormElement::loadLabel($title, $tagName, $variableData);
+                        ?>
+                            <input 
+                                type="text"  
+                                class="form-control" 
+                                name="<?php echo $tagName; ?>"
+                                id="<?php echo $tagName; ?>"
+                                placeholder="<?php echo $placeholder; ?>"
+                                value="<?php 
+                                    if(isset($variableData))
+                                        echo $variableData['value'];
+                            ?>">
+                        <?php 
+                            FormElement::loadErrorMessage($variableData, $errorConditions);
                         ?>
                     </div>
                 </div>
                 <div class="form-group">
-                    <?php
-                        FormElement::input([
-                            'name' => 'surname',
-                            'title' => 'E-pasts',
-                            'required' => true,
-                            'type' => 'email',
-                            'placeholder' => 'name@example.com',
-                            'variable' => $dataArray['formData']['email'],
-                            'errorCheck' => [
-                                ['E-pasts ir nepieciešams', empty($dataArray['formData']['email']['value'])],
-                                ['E-pasts nav pareizi ievadīts', 
-                                    !filter_var($dataArray['formData']['email']['value'], FILTER_VALIDATE_EMAIL)]
-                            ]
-                        ]);
+                    <?php 
+                        $title = 'E-pasts';
+                        $tagName = 'email';
+                        $variableData = $formData[$tagName];
+                        $placeholder = 'name@example.com';
+                        $errorConditions = [
+                            FormErrorType::EMPTY->value => 'E-pasts ir nepieciešams',
+                            FormErrorType::EMAIL_INVALID->value => 'E-pasts nav pareizi ievadīts'
+                        ];
+                    
+                        FormElement::loadLabel($title, $tagName, $variableData);
+                    ?>
+                        <input 
+                            type="text"  
+                            class="form-control" 
+                            name="<?php echo $tagName; ?>"
+                            id="<?php echo $tagName; ?>"
+                            placeholder="<?php echo $placeholder; ?>"
+                            value="<?php 
+                                if(isset($variableData))
+                                    echo $variableData['value'];
+                        ?>">
+                    <?php 
+                        FormElement::loadErrorMessage($variableData, $errorConditions);
                     ?>
                 </div>
                 <?php 
-                    FormElement::buttonRow($dataArray['page']);
+                    FormElement::loadButtonRow($page);
                 ?>
             </form>
         </div>

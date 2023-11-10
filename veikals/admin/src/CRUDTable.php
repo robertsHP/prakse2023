@@ -24,22 +24,6 @@
             <?php
         }
         public static function outputIndexTable ($dataArray) {
-            /*
-                !!!!!PADOTIE DATI!!!!!
-
-                $dataArray = [
-                    'columns' => [
-                        'ID' => 'KOLONAS NOSAUKUMS',
-                        '...' => '...'
-                        '...' => [
-                            '<ABĀM TABULĀM KOLONAS NOSAUKUMS>', 
-                            '<OTRAS TABULAS NOSAUKUMS>', 
-                            '<OTRAS TABULAS VĒRBĪBA AR KURU AIZVIETOT?>'
-                        ]
-                    ],
-                    'DBTableName' => '...'
-                ];
-            */
             ?>
                 <table class="table table-hover">
                     <thead class="thead-dark">
