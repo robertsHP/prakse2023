@@ -18,7 +18,7 @@
             FormErrorType::FILE_TOO_LARGE->value            => 'Fails ir pārāk liels',
             FormErrorType::FILE_FORMAT_INCORRECT->value     => 'Faila formāts nav pareizs',
             FormErrorType::FILE_IS_NOT_AN_IMAGE->value      => 'Fails nav bilde',
-            FormErrorType::FILE_UPLOAD_UNSUCCESSFUL->value  => 'Faila augšupielāde nebija veiksmīga',
+            FormErrorType::FILE_UPLOAD_UNSUCCESSFUL->value  => 'Faila augšupielāde nebija veiksmīga'
         ];
     }
 ?>
