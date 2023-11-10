@@ -37,6 +37,9 @@
 
             return $result;
         }
+        public static function getRowWithID ($tableName, $colName, $id) {
+            return Database::getRowFrom($tableName, $colName, $id, PDO::PARAM_INT);
+        }
         public static function getAllRowsFrom ($tableName) {
             $conn = Database::openConnection();
 
@@ -47,6 +50,61 @@
             Database::closeConnection($conn);
 
             return $result;
+        }
+        public static function insert ($tableName, $data) {
+            $success = false;
+            try {
+                $keys = array_keys($data);
+                $keysString = implode(', ', $keys);
+                $valuesString = ':'.implode(', :', $keys);
+    
+                $conn = Database::openConnection();
+    
+                    $stmt = $conn->prepare("INSERT INTO $tableName ($keysString) VALUES ($valuesString)");
+                    foreach ($data as $key => &$arr) {
+                        $stmt->bindParam(':'.$key, $arr['value'], $arr['db_var_type']);
+                    }
+                    $stmt->execute();
+    
+                Database::closeConnection($conn);
+                $success = true;
+            } catch(PDOException $Exception) {
+                throw new MyDatabaseException($Exception->getMessage(), $Exception->getCode());
+            }
+            return $success;
+        }
+        public static function deleteWithID ($tableName, $idColumnName, $id) {
+            $conn = Database::openConnection();
+
+            $stmt = $conn->prepare("DELETE FROM $tableName WHERE $idColumnName = :id");
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            Database::closeConnection($conn);
+        }
+        public static function update ($tableName, $idColumnName, $id, $data) {
+            $success = false;
+            try {
+                $keys = array_keys($data);
+                foreach ($keys as &$key)
+                    $key = $key.' = :'.$key;
+                $setString = implode(', ', $keys);
+
+                $conn = Database::openConnection();
+
+                    $stmt = $conn->prepare("UPDATE $tableName SET $setString WHERE $idColumnName = :id");
+                    foreach ($data as $key => &$arr) {
+                        $stmt->bindParam(':'.$key, $arr['value'], $arr['db_var_type']);
+                    }
+                    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                    $stmt->execute();
+
+                Database::closeConnection($conn);
+                $success = true;
+            } catch( PDOException $Exception ) {
+                throw new MyDatabaseException( $Exception->getMessage(), $Exception->getCode());
+            }
+            return $success;
         }
     }
 ?>

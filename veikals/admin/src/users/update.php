@@ -4,9 +4,21 @@
     
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUDFunctions.php';
-    require_once 'formData.php';
 
-    CRUDFunctions::processUpdate('user', 'user_id', $formData);
+    include 'data.php';
+
+    CRUDFunctions::update(
+        $tableName, 
+        $idColumnName, 
+        $formData,
+        function ($tableName, $idColumnName, $id, &$formData) {
+            $success = Database::update($tableName, $idColumnName, $id, $formData);
+            if($success) {
+                header('Location: index.php');
+                exit();
+            }
+        }
+    );
 
     //dati priekš inputForm.php
     $dataArray = [

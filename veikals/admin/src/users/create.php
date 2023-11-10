@@ -4,28 +4,35 @@
     
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUDFunctions.php';
-    require_once 'formData.php';
 
-    CRUDFunctions::processCreate('user', $formData);
+    include 'data.php';
 
-    //dati priekš inputForm.php
-    $dataArray = [
-        'formData' => $formData,
-        'page' => [
-            'title' => 'Izveidot jaunu lietotāju',
-            'buttons' => [
-                [
-                    'type' => 'submit',
-                    'name' => 'back',
-                    'value' => 'Atpakaļ',
-                    'class' => 'btn btn-outline-primary execution-button'
-                ],
-                [
-                    'type' => 'submit',
-                    'name' => 'save',
-                    'value' => 'Saglabāt',
-                    'class' => 'btn btn-primary execution-button'
-                ]
+    CRUDFunctions::create(
+        $tableName, 
+        $formData, 
+        function ($tableName, &$formData) {
+            $success = Database::insert($tableName, $formData);
+            if($success) {
+                header('Location: index.php');
+                exit();
+            }
+        }
+    );
+
+    $page = [
+        'title' => 'Izveidot jaunu lietotāju',
+        'buttons' => [
+            [
+                'type' => 'submit',
+                'name' => 'back',
+                'value' => 'Atpakaļ',
+                'class' => 'btn btn-outline-primary execution-button'
+            ],
+            [
+                'type' => 'submit',
+                'name' => 'save',
+                'value' => 'Saglabāt',
+                'class' => 'btn btn-primary execution-button'
             ]
         ]
     ];
