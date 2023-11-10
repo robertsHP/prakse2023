@@ -161,7 +161,7 @@
                             $title = 'Pieejamais daudzums';
                             $tagName = 'available_amount';
                             $variableData = $formData[$tagName];
-                            $placeholder = 'Ievadi cenu';
+                            $placeholder = 'Ievadi daudzumu';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Daudzums nav ievadīts'
                             ];
