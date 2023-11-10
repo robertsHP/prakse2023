@@ -65,7 +65,5 @@
         } else {
             $var['errorType'] = FormErrorType::FILE_UPLOAD_UNSUCCESSFUL;
         }
-    } else {
-        $var['errorType'] = FormErrorType::FILE_UPLOAD_UNSUCCESSFUL;
     }
 ?>
