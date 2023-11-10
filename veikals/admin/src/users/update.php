@@ -21,29 +21,26 @@
     );
 
     //dati priekš inputForm.php
-    $dataArray = [
-        'formData' => $formData,
-        'page' => [
-            'title' => 'Rediģēt lietotāja informāciju',
-            'buttons' => [
-                [
-                    'type' => 'submit',
-                    'name' => 'back',
-                    'value' => 'Atpakaļ',
-                    'class' => 'btn btn-outline-primary execution-button'
-                ],
-                [
-                    'type' => 'submit',
-                    'name' => 'save',
-                    'value' => 'Saglabāt',
-                    'class' => 'btn btn-primary execution-button'
-                ],
-                [
-                    'type' => 'submit',
-                    'name' => 'delete',
-                    'value' => 'Dzēst',
-                    'class' => 'btn btn-danger execution-button'
-                ]
+    $page = [
+        'title' => 'Rediģēt lietotāja informāciju',
+        'buttons' => [
+            [
+                'type' => 'submit',
+                'name' => 'back',
+                'value' => 'Atpakaļ',
+                'class' => 'btn btn-outline-primary execution-button'
+            ],
+            [
+                'type' => 'submit',
+                'name' => 'save',
+                'value' => 'Saglabāt',
+                'class' => 'btn btn-primary execution-button'
+            ],
+            [
+                'type' => 'submit',
+                'name' => 'delete',
+                'value' => 'Dzēst',
+                'class' => 'btn btn-danger execution-button'
             ]
         ]
     ];

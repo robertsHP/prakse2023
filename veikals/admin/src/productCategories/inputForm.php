@@ -36,7 +36,7 @@
         <div class="main-container">
             <h4>
                 <?php 
-                    echo isset($dataArray['page']['title']) ? $dataArray['page']['title'] : ''; 
+                    echo isset($page['title']) ? $page['title'] : ''; 
                 ?>
             </h4>
 
@@ -53,7 +53,6 @@
                             ];
                         
                             FormElement::loadLabel($title, $tagName, $variableData);
-                            FormElement::loadErrorMessage($variableData, $errorConditions);
                         ?>
                             <input 
                                 type="text"  
@@ -65,11 +64,13 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
-
+                        <?php 
+                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                        ?>
                     </div>
                 </div>
                 <?php 
-                    FormElement::loadButtonRow($dataArray['page']);
+                    FormElement::loadButtonRow($page);
                 ?>
             </form>
         </div>

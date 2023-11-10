@@ -5,7 +5,13 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUDFunctions.php';
 
-    CRUDFunctions::delete('user', 'user_id');
+    CRUDFunctions::delete(
+        'user', 
+        'user_id',
+        function ($tableName, $idColumnName, $id) {
+            Database::deleteWithID($tableName, $idColumnName, $id);
+        }
+    );
 ?>
 
 <!DOCTYPE html>

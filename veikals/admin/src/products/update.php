@@ -7,6 +7,8 @@
     
     include 'data.php';
 
+    echo $formData['photo_file_loc']['value'];
+
     CRUDFunctions::update(
         $tableName, 
         $idColumnName, 

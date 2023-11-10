@@ -10,7 +10,7 @@
                 if(isset($_POST[$key])) 
                     $arr['value'] = $_POST[$key];
 
-                require_once 'valueErrorCheck.php';
+                require 'valueErrorCheck.php';
             }
             return $hasErrors;
         }

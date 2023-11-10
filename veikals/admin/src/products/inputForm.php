@@ -45,7 +45,6 @@
                             ];
                         
                             FormElement::loadLabel($title, $tagName, $variableData);
-                            FormElement::loadErrorMessage($variableData, $errorConditions);
                         ?>
                             <input 
                                 type="text"  
@@ -57,6 +56,9 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
+                        <?php 
+                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                        ?>
 
                         <?php 
                             $title = 'Apraksts';
@@ -69,7 +71,6 @@
                             ];
 
                             FormElement::loadLabel($title, $tagName, $variableData);
-                            FormElement::loadErrorMessage($variableData, $errorConditions);
                         ?>
                             <textarea 
                                 class="form-control"
@@ -82,6 +83,9 @@
                                 if(isset($variableData))
                                     echo $variableData['value'];
                             ?></textarea>
+                        <?php 
+                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                        ?>
 
                         <?php 
                             $title = 'Bilde';
@@ -94,7 +98,6 @@
                             <div class="mb-3">
                                 <?php
                                     FormElement::loadLabel($title, $tagName, $variableData);
-                                    FormElement::loadErrorMessage($variableData, $errorConditions);
                                 ?>
                                 <input 
                                     type="file"  
@@ -107,16 +110,26 @@
                                             echo $variableData['value'];
                                     ?>">
                             </div>
-                            <img 
-                                src="<?php 
-                                    if(isset($variableData))
-                                        echo $variableData['value'];
-                                ?>" 
-                                name = <?php echo $tagName.'_thumbnail'; ?>
-                                id =<?php echo $tagName.'_thumbnail'; ?>
-                                class="img-thumbnail" 
-                                alt="">
+                            <?php
+                                if(isset($variableData['value'])) {
+                                    ?>
+                                        <img 
+                                            src="<?php 
+                                                if(isset($variableData))
+                                                    echo $variableData['value'];
+                                            ?>" 
+                                            name = <?php echo $tagName.'_thumbnail'; ?>
+                                            id =<?php echo $tagName.'_thumbnail'; ?>
+                                            class="img-thumbnail" 
+                                            alt="">
+                                    <?php
+                                }
+                            ?>
                         <br>
+
+                        <?php 
+                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                        ?>
 
                         <?php 
                             $title = 'Cena (eiro)';
@@ -128,7 +141,6 @@
                             ];
 
                             FormElement::loadLabel($title, $tagName, $variableData);
-                            FormElement::loadErrorMessage($variableData, $errorConditions);
                         ?>
                             <input 
                                 type="number"  
@@ -141,8 +153,10 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
+                        <?php 
+                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                        ?>
 
-                            
                         <?php 
                             $title = 'Pieejamais daudzums';
                             $tagName = 'available_amount';
@@ -153,7 +167,6 @@
                             ];
 
                             FormElement::loadLabel($title, $tagName, $variableData);
-                            FormElement::loadErrorMessage($variableData, $errorConditions);
                         ?>
                             <input 
                                 type="number"  
@@ -165,6 +178,9 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
+                        <?php 
+                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                        ?>
 
                         <?php 
                             $title = 'Kategorija';
@@ -176,8 +192,6 @@
                             ];
 
                             FormElement::loadLabel($title, $tagName, $variableData);
-                            FormElement::loadErrorMessage($variableData, $errorConditions);
-
                         ?>
                             <select 
                                 class="form-control"
@@ -198,6 +212,9 @@
                                     }
                                 ?>
                             </select>
+                        <?php 
+                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                        ?>
                     </div>
                 </div>
                 <?php 

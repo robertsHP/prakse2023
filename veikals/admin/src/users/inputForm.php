@@ -1,28 +1,4 @@
 <?php 
-    /*
-        !!!!!PADOTIE DATI!!!!!
-
-        $dataArray = [
-            'userData' => [
-                'name' => ...,
-                'surname' => ...,
-                'email' => ...,
-            ],
-            'page' => [
-                'title' => ...,
-                'buttons' => [
-                    [
-                        'type' => ...,
-                        'name' => ...,
-                        'value' => ...,
-                        'class' => ...
-                    ],
-                    ....
-                ]
-            ]
-        ];
-    */
-
     $redirect = '/veikals/admin/index.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
 
@@ -38,7 +14,7 @@
         <div class="main-container">
             <h4>
                 <?php 
-                    echo isset($dataArray['page']['title']) ? $dataArray['page']['title'] : ''; 
+                    echo isset($page['title']) ? $page['title'] : ''; 
                 ?>
             </h4>
 
@@ -55,7 +31,6 @@
                             ];
                         
                             FormElement::loadLabel($title, $tagName, $variableData);
-                            FormElement::loadErrorMessage($variableData, $errorConditions);
                         ?>
                             <input 
                                 type="text"  
@@ -67,6 +42,9 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
+                        <?php 
+                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                        ?>
                     </div>
                     <div class="col-sm-6">
                         <?php 
@@ -79,7 +57,6 @@
                             ];
                         
                             FormElement::loadLabel($title, $tagName, $variableData);
-                            FormElement::loadErrorMessage($variableData, $errorConditions);
                         ?>
                             <input 
                                 type="text"  
@@ -91,12 +68,15 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
+                        <?php 
+                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                        ?>
                     </div>
                 </div>
                 <div class="form-group">
                     <?php 
                         $title = 'E-pasts';
-                        $tagName = 'surname';
+                        $tagName = 'email';
                         $variableData = $formData[$tagName];
                         $placeholder = 'name@example.com';
                         $errorConditions = [
@@ -105,7 +85,6 @@
                         ];
                     
                         FormElement::loadLabel($title, $tagName, $variableData);
-                        FormElement::loadErrorMessage($variableData, $errorConditions);
                     ?>
                         <input 
                             type="text"  
@@ -117,9 +96,12 @@
                                 if(isset($variableData))
                                     echo $variableData['value'];
                         ?>">
+                    <?php 
+                        FormElement::loadErrorMessage($variableData, $errorConditions);
+                    ?>
                 </div>
                 <?php 
-                    FormElement::loadButtonRow($dataArray['page']);
+                    FormElement::loadButtonRow($page);
                 ?>
             </form>
         </div>
