@@ -2,7 +2,7 @@
     $redirect = '/veikals/admin/index.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
 
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FormElement.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FormElementLoader.php';
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +30,7 @@
                                 FormErrorType::EMPTY->value => 'Vārds ir nepieciešams'
                             ];
                         
-                            FormElement::loadLabel($title, $tagName, $variableData);
+                            FormElementLoader::loadLabel($title, $tagName, $variableData);
                         ?>
                             <input 
                                 type="text"  
@@ -43,7 +43,7 @@
                                         echo $variableData['value'];
                             ?>">
                         <?php 
-                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                            FormElementLoader::loadErrorMessage($variableData, $errorConditions);
                         ?>
                     </div>
                     <div class="col-sm-6">
@@ -56,7 +56,7 @@
                                 FormErrorType::EMPTY->value => 'Uzvārds ir nepieciešams'
                             ];
                         
-                            FormElement::loadLabel($title, $tagName, $variableData);
+                            FormElementLoader::loadLabel($title, $tagName, $variableData);
                         ?>
                             <input 
                                 type="text"  
@@ -69,7 +69,7 @@
                                         echo $variableData['value'];
                             ?>">
                         <?php 
-                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                            FormElementLoader::loadErrorMessage($variableData, $errorConditions);
                         ?>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                             FormErrorType::EMAIL_INVALID->value => 'E-pasts nav pareizi ievadīts'
                         ];
                     
-                        FormElement::loadLabel($title, $tagName, $variableData);
+                        FormElementLoader::loadLabel($title, $tagName, $variableData);
                     ?>
                         <input 
                             type="text"  
@@ -97,12 +97,14 @@
                                     echo $variableData['value'];
                         ?>">
                     <?php 
-                        FormElement::loadErrorMessage($variableData, $errorConditions);
+                        FormElementLoader::loadErrorMessage($variableData, $errorConditions);
                     ?>
                 </div>
-                <?php 
-                    FormElement::loadButtonRow($page);
-                ?>
+                <div class="element-row">
+                    <?php 
+                        FormElementLoader::loadButtonRow($page);
+                    ?>
+                </div>
             </form>
         </div>
     </body>

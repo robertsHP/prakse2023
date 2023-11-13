@@ -7,8 +7,6 @@
     
     include 'data.php';
 
-    echo $formData['photo_file_loc']['value'];
-
     CRUDFunctions::update(
         $tableName, 
         $idColumnName, 
@@ -35,7 +33,7 @@
                 'type' => 'submit',
                 'name' => 'back',
                 'value' => 'Atpakaļ',
-                'class' => 'btn btn-outline-primary execution-button'
+                'class' => 'btn btn-primary execution-button'
             ],
             [
                 'type' => 'submit',

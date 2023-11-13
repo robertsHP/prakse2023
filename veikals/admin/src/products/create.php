@@ -32,7 +32,7 @@
                 'type' => 'submit',
                 'name' => 'back',
                 'value' => 'Atpakaļ',
-                'class' => 'btn btn-outline-primary execution-button'
+                'class' => 'btn btn-primary execution-button'
             ],
             [
                 'type' => 'submit',

@@ -24,7 +24,7 @@
     $redirect = '/veikals/admin/index.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
 
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FormElement.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FormElementLoader.php';
 ?>
 
 <!DOCTYPE html>
@@ -52,7 +52,7 @@
                                 FormErrorType::EMPTY->value => 'Kategorijas nosaukums ir nepieciešams'
                             ];
                         
-                            FormElement::loadLabel($title, $tagName, $variableData);
+                            FormElementLoader::loadLabel($title, $tagName, $variableData);
                         ?>
                             <input 
                                 type="text"  
@@ -65,13 +65,15 @@
                                         echo $variableData['value'];
                             ?>">
                         <?php 
-                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                            FormElementLoader::loadErrorMessage($variableData, $errorConditions);
                         ?>
                     </div>
                 </div>
-                <?php 
-                    FormElement::loadButtonRow($page);
-                ?>
+                <div class="element-row">
+                    <?php 
+                        FormElementLoader::loadButtonRow($page);
+                    ?>
+                </div>
             </form>
         </div>
     </body>

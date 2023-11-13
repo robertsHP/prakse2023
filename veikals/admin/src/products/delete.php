@@ -26,7 +26,7 @@
             <h4>Vai tiešām vēlaties dzēst ierakstu?</h4>
 
             <form method="post" action="">
-                <input type="submit" name="back" value="Atpakaļ" class="btn btn-outline-primary execution-button">
+                <input type="submit" name="back" value="Atpakaļ" class="btn btn-primary execution-button">
                 <input type="submit" name="delete" value="Dzēst" class="btn btn-danger execution-button">
             </form>
         </div>

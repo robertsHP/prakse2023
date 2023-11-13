@@ -20,7 +20,7 @@
     $redirect = '/veikals/admin/index.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
 
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FormElement.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FormElementLoader.php';
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +44,7 @@
                                 FormErrorType::EMPTY->value => 'Nosaukums nav ievadīts'
                             ];
                         
-                            FormElement::loadLabel($title, $tagName, $variableData);
+                            FormElementLoader::loadLabel($title, $tagName, $variableData);
                         ?>
                             <input 
                                 type="text"  
@@ -57,7 +57,7 @@
                                         echo $variableData['value'];
                             ?>">
                         <?php 
-                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                            FormElementLoader::loadErrorMessage($variableData, $errorConditions);
                         ?>
 
                         <?php 
@@ -70,7 +70,7 @@
                                 FormErrorType::EMPTY->value => 'Apraksts nav ievadīts'
                             ];
 
-                            FormElement::loadLabel($title, $tagName, $variableData);
+                            FormElementLoader::loadLabel($title, $tagName, $variableData);
                         ?>
                             <textarea 
                                 class="form-control"
@@ -84,7 +84,7 @@
                                     echo $variableData['value'];
                             ?></textarea>
                         <?php 
-                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                            FormElementLoader::loadErrorMessage($variableData, $errorConditions);
                         ?>
 
                         <?php 
@@ -97,7 +97,7 @@
                         ?>
                             <div class="mb-3">
                                 <?php
-                                    FormElement::loadLabel($title, $tagName, $variableData);
+                                    FormElementLoader::loadLabel($title, $tagName, $variableData);
                                 ?>
                                 <input 
                                     type="file"  
@@ -120,7 +120,7 @@
                                             ?>" 
                                             name = <?php echo $tagName.'_thumbnail'; ?>
                                             id =<?php echo $tagName.'_thumbnail'; ?>
-                                            class="img-thumbnail" 
+                                            class="img-thumbnail img-product" 
                                             alt="">
                                     <?php
                                 }
@@ -128,7 +128,7 @@
                         <br>
 
                         <?php 
-                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                            FormElementLoader::loadErrorMessage($variableData, $errorConditions);
                         ?>
 
                         <?php 
@@ -140,7 +140,7 @@
                                 FormErrorType::EMPTY->value => 'Cena nav ievadīta'
                             ];
 
-                            FormElement::loadLabel($title, $tagName, $variableData);
+                            FormElementLoader::loadLabel($title, $tagName, $variableData);
                         ?>
                             <input 
                                 type="number"  
@@ -154,7 +154,7 @@
                                         echo $variableData['value'];
                             ?>">
                         <?php 
-                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                            FormElementLoader::loadErrorMessage($variableData, $errorConditions);
                         ?>
 
                         <?php 
@@ -166,7 +166,7 @@
                                 FormErrorType::EMPTY->value => 'Daudzums nav ievadīts'
                             ];
 
-                            FormElement::loadLabel($title, $tagName, $variableData);
+                            FormElementLoader::loadLabel($title, $tagName, $variableData);
                         ?>
                             <input 
                                 type="number"  
@@ -179,7 +179,7 @@
                                         echo $variableData['value'];
                             ?>">
                         <?php 
-                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                            FormElementLoader::loadErrorMessage($variableData, $errorConditions);
                         ?>
 
                         <?php 
@@ -191,7 +191,7 @@
                                 FormErrorType::EMPTY->value => 'Kategorija nav izvēlēta'
                             ];
 
-                            FormElement::loadLabel($title, $tagName, $variableData);
+                            FormElementLoader::loadLabel($title, $tagName, $variableData);
                         ?>
                             <select 
                                 class="form-control"
@@ -213,13 +213,15 @@
                                 ?>
                             </select>
                         <?php 
-                            FormElement::loadErrorMessage($variableData, $errorConditions);
+                            FormElementLoader::loadErrorMessage($variableData, $errorConditions);
                         ?>
                     </div>
                 </div>
-                <?php 
-                    FormElement::loadButtonRow($page);
-                ?>
+                <div class="element-row">
+                    <?php 
+                        FormElementLoader::loadButtonRow($page);
+                    ?>
+                </div>
             </form>
         </div>
     </body>

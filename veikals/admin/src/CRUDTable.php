@@ -26,7 +26,7 @@
         public static function outputIndexTable ($dataArray) {
             ?>
                 <table class="table table-hover">
-                    <thead class="thead-dark">
+                    <thead class="thead-custom">
                         <tr>
                             <?php
                                 foreach ($dataArray['columns'] as $key => $column)
