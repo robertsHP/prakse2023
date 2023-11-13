@@ -1,13 +1,40 @@
 
+/* || LOGIN */
+.login-bg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #6FCDB0;
+}
+.login-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+
+    box-shadow: 0 30px 40px rgba(0,0,0,.1);
+}
+
+.login-container h2 {
+    margin-bottom: 20px;
+}
+.google-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* || GALVENE */
 
 header {
     display: flex;
     justify-content: space-between;
-    background-color: #333333;
+    background-color: #6FCDB0;
     color: white;
-
-    padding: 5px;
 }
 header ul {
     display: flex;
@@ -20,20 +47,20 @@ header li {
     align-items: center;
 
     height: 100%;
-    padding: 10px;
 
     border-right: 1px solid;
-    border-left: 1px solid;
-    border-color: rgb(97, 97, 97);
+    border-color: #9FEEB6;
 }
 header a {
     text-decoration: none;
     color: white;
+    padding: 10px;
 }
 
 header a:hover {
     text-decoration: none;
-    color: rgb(209, 209, 209);
+    color: white;
+    background-color: #4DABA5;
 }
 
 header div {
@@ -52,6 +79,7 @@ header p {
     padding: 15px;
     margin: 10px;
 
+    background-color: white;
     border-color: #ECECEC;
     border-width: thin;
     border-style: solid;
@@ -93,6 +121,24 @@ header p {
     transform: scale(1.1);
 }
 
+.element-row {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.btn-primary {
+    color: white;
+    background-color: #3A8992;
+    border-color: #3A8992;
+}
+.btn-primary:hover {
+    background-color: #346778;
+    border-color: #346778;
+}
+.thead-custom {
+    background-color: #4DABA5;
+    color: white;
+}
+
 /* || CRUD */
 
 .grid {
@@ -111,4 +157,8 @@ header p {
 
 .table {
     width: auto;
+}
+.img-product {
+    width: 300px;
+    height: auto;
 }

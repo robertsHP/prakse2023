@@ -9,7 +9,6 @@
             foreach ($data as $key => &$arr) {
                 if(isset($_POST[$key])) 
                     $arr['value'] = $_POST[$key];
-
                 require 'valueErrorCheck.php';
             }
             return $hasErrors;
@@ -42,9 +41,6 @@
                 exit();
             }
         
-            foreach ($formData as $key => &$arr)
-                $arr['value'] = $row[$key];
-        
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {      
                 if (isset($_POST['save'])) {
                     $hasErrors = CRUDFunctions::assignData($formData);
@@ -58,6 +54,9 @@
                     header('Location: index.php');
                     exit();
                 }
+            } else {
+                foreach ($formData as $key => &$arr)
+                    $arr['value'] = $row[$key];
             }
         }
         public static function delete ($tableName, $idColumnName, $deleteFunc) {
