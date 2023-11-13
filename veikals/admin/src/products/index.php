@@ -12,7 +12,7 @@
     <body>
         <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/header.php'; ?>
         <div class="main-container">
-            <h4>Produkti</h4>
+            <h4>Preces</h4>
             <div class="option-container">
                 <a class="link-button" href="create.php">
                     <button type="button" class="btn btn-primary">
