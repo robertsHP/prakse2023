@@ -11,14 +11,12 @@
         $tableName, 
         $formData, 
         function ($tableName, &$formData) {
-            if(isset($_FILES['photo_file_loc'])) {
-                $success = CRUDFunctions::uploadFile('products', 'photo_file_loc', $formData);
+            $success = CRUDFunctions::uploadFile('products', 'photo_file_loc', $formData);
+            if($success) {
+                $success = Database::insert($tableName, $formData);
                 if($success) {
-                    $success = Database::insert($tableName, $formData);
-                    if($success) {
-                        header('Location: index.php');
-                        exit();
-                    }
+                    header('Location: index.php');
+                    exit();
                 }
             }
         }

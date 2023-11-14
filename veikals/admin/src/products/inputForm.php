@@ -110,7 +110,8 @@
                                             echo $variableData['value'];
                                     ?>">
                             </div>
-                            <?php
+                            <?php 
+                                FormElementLoader::loadErrorMessage($variableData, $errorConditions);
                                 if(isset($variableData['value'])) {
                                     ?>
                                         <img 
@@ -126,10 +127,6 @@
                                 }
                             ?>
                         <br>
-
-                        <?php 
-                            FormElementLoader::loadErrorMessage($variableData, $errorConditions);
-                        ?>
 
                         <?php 
                             $title = 'Cena (eiro)';
