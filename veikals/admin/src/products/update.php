@@ -13,10 +13,8 @@
         $formData,
         function ($tableName, $idColumnName, $id, &$formData) {
             $success = CRUDFunctions::uploadFile('products', 'photo_file_loc', $formData);
-            echo 'mane';
             if($success) {
                 $success = Database::update($tableName, $idColumnName, $id, $formData);
-                echo 'work';
                 if($success) {
                     header('Location: index.php');
                     exit();
