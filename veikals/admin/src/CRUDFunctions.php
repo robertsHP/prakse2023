@@ -40,6 +40,9 @@
                 header('Location: index.php');
                 exit();
             }
+
+            foreach ($formData as $key => &$arr)
+                $arr['value'] = $row[$key];
         
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {      
                 if (isset($_POST['save'])) {
@@ -54,9 +57,6 @@
                     header('Location: index.php');
                     exit();
                 }
-            } else {
-                foreach ($formData as $key => &$arr)
-                    $arr['value'] = $row[$key];
             }
         }
         public static function delete ($tableName, $idColumnName, $deleteFunc) {
@@ -103,9 +103,10 @@
             //Piešķir pareizo ceļu uz izvēlēto failu
             $targetDir = '/veikals/files/'.$folderName.'/';
             $file = $_FILES[$tagName];
-            $formData[$tagName]['value'] = $targetDir.$file['name'];
-            
-            include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/fileUpload.php';
+            if($file['name'] != '') {
+                $formData[$tagName]['value'] = $targetDir.$file['name'];
+                include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/fileUpload.php';
+            }
             return $success;
         }
     }

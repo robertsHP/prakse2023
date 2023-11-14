@@ -47,7 +47,7 @@
                             ?>" 
                             name="photo_file_loc"
                             id="photo_file_loc"
-                            class="img-thumbnail" 
+                            class="img-thumbnail img-product-photo" 
                             alt="">
                     </th>
                 </tr>

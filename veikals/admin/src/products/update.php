@@ -13,13 +13,11 @@
         $formData,
         function ($tableName, $idColumnName, $id, &$formData) {
             if(isset($_FILES['photo_file_loc'])) {
-                $success = CRUDFunctions::uploadFile('products', 'photo_file_loc', $formData);
+                CRUDFunctions::uploadFile('products', 'photo_file_loc', $formData);
+                $success = Database::update($tableName, $idColumnName, $id, $formData);
                 if($success) {
-                    $success = Database::update($tableName, $idColumnName, $id, $formData);
-                    if($success) {
-                        header('Location: index.php');
-                        exit();
-                    }
+                    header('Location: index.php');
+                    exit();
                 }
             }
         }
