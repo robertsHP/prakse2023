@@ -120,7 +120,7 @@
                                             ?>" 
                                             name = <?php echo $tagName.'_thumbnail'; ?>
                                             id =<?php echo $tagName.'_thumbnail'; ?>
-                                            class="img-thumbnail img-product" 
+                                            class="img-thumbnail img-product-photo" 
                                             alt="">
                                     <?php
                                 }
