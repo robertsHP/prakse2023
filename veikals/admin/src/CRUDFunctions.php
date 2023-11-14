@@ -4,20 +4,41 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FormDataType.php';
 
     class CRUDFunctions {
-        public static function assignData (&$data) {
+        public static function assignDataAndCheckErrors (&$data) {
             $hasErrors = false;
+
             foreach ($data as $key => &$arr) {
                 if(isset($_POST[$key])) 
                     $arr['value'] = $_POST[$key];
-                require 'valueErrorCheck.php';
+
+                if($arr['type'] == FormDataType::FILE) {
+                    if (isset($_FILES[$key])) {
+                        if(!isset($arr['value']))
+                            $arr['value'] = $_FILES[$key]['name'];
+                    } else {
+                        $arr['errorType'] = FormErrorType::EMPTY;
+                        $hasErrors = true;
+                    }
+                }
+
+                if(empty($arr['value'])) {
+                    $arr['errorType'] = FormErrorType::EMPTY;
+                    $hasErrors = true;
+                }
+            
+                if ($arr['type'] == FormDataType::EMAIL) {
+                    if(!filter_var($arr['value'], FILTER_VALIDATE_EMAIL)) {
+                        $arr['errorType'] = FormErrorType::INVALID;
+                        $hasErrors = true;
+                    }
+                }
             }
             return $hasErrors;
         }
         public static function create ($tableName, &$formData, $saveFunc) {
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $hasErrors = CRUDFunctions::assignData($formData);
-        
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {  
                 if (isset($_POST['save'])) {
+                    $hasErrors = CRUDFunctions::assignDataAndCheckErrors($formData);
                     if(!$hasErrors) {
                         $saveFunc($tableName, $formData);
                     }
@@ -46,7 +67,7 @@
         
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {      
                 if (isset($_POST['save'])) {
-                    $hasErrors = CRUDFunctions::assignData($formData);
+                    $hasErrors = CRUDFunctions::assignDataAndCheckErrors($formData);
                     if(!$hasErrors) {
                         $saveFunc($tableName, $idColumnName, $id, $formData);
                     }
@@ -100,13 +121,7 @@
         }
         public static function uploadFile ($folderName, $tagName, &$formData) {
             $success = false;
-            //Piešķir pareizo ceļu uz izvēlēto failu
-            $targetDir = '/veikals/files/'.$folderName.'/';
-            $file = $_FILES[$tagName];
-            if($file['name'] != '') {
-                $formData[$tagName]['value'] = $targetDir.$file['name'];
-                include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/fileUpload.php';
-            }
+            include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/fileUpload.php';
             return $success;
         }
     }

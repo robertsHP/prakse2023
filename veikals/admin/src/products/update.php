@@ -12,9 +12,11 @@
         $idColumnName, 
         $formData,
         function ($tableName, $idColumnName, $id, &$formData) {
-            if(isset($_FILES['photo_file_loc'])) {
-                CRUDFunctions::uploadFile('products', 'photo_file_loc', $formData);
+            $success = CRUDFunctions::uploadFile('products', 'photo_file_loc', $formData);
+            echo 'mane';
+            if($success) {
                 $success = Database::update($tableName, $idColumnName, $id, $formData);
+                echo 'work';
                 if($success) {
                     header('Location: index.php');
                     exit();
