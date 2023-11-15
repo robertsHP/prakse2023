@@ -3,6 +3,7 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
     
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FileManager.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUDFunctions.php';
     
     include 'data.php';
@@ -10,22 +11,12 @@
     CRUDFunctions::update(
         $tableName, 
         $idColumnName, 
-        $formData,
-        function ($tableName, $idColumnName, $id, &$formData) {
-            $success = CRUDFunctions::uploadFile('products', 'photo_file_loc', $formData);
-            if($success) {
-                $success = Database::update($tableName, $idColumnName, $id, $formData);
-                if($success) {
-                    header('Location: index.php');
-                    exit();
-                }
-            }
-        }
+        $formData
     );
 
     //Lapas dati priekš inputForm.php
     $page = [
-        'title' => 'Rediģēt produkta informāciju',
+        'title' => 'Rediģēt preces informāciju',
         'buttons' => [
             [
                 'type' => 'submit',

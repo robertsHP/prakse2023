@@ -9,11 +9,7 @@
 
     CRUDFunctions::delete(
         $tableName, 
-        $idColumnName,
-        function ($tableName, $idColumnName, $id) {
-            Database::deleteWithID($tableName, $idColumnName, $id);
-        }
-    );
+        $idColumnName);
 ?>
 
 <!DOCTYPE html>

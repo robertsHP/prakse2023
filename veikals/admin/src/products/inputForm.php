@@ -1,22 +1,4 @@
 <?php 
-    /*
-        !!!!!PADOTIE DATI!!!!!
-
-        $formData = []
-        $page => [
-            'title' => ...,
-            'buttons' => [
-                [
-                    'type' => ...,
-                    'name' => ...,
-                    'value' => ...,
-                    'class' => ...
-                ],
-                ....
-            ]
-        ]
-    */
-
     $redirect = '/veikals/admin/index.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
 
@@ -91,7 +73,7 @@
                             $title = 'Bilde';
                             $tagName = 'photo_file_loc';
                             $variableData = $formData[$tagName];
-                            $errorConditions = getFileErrorTypes();
+                            $errorConditions = FileManager::getFileErrorTypes();
 
                             $allowedFileTypes = implode(', ', $formData[$tagName]['allowed_file_formats']);
                         ?>

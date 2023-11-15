@@ -4,6 +4,8 @@
     
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUDTable.php';
+
+    include 'data.php';
 ?>
 
 <!DOCTYPE html>
@@ -23,12 +25,12 @@
             <?php 
                 CRUDTable::outputIndexTable([
                     'columns' => [
-                        'ID' => 'user_id',
+                        'ID' => $idColumnName,
                         'Vārds' => 'name',
                         'Uzvārds' => 'surname',
                         'E-pasts' => 'email'
                     ],
-                    'DBTableName' => 'user'
+                    'DBTableName' => $tableName
                 ]); 
             ?>
         </div>

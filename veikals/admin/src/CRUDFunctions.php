@@ -2,45 +2,27 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FormErrorType.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FormDataType.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUDDataProcessor.php';
 
     class CRUDFunctions {
-        public static function assignDataAndCheckErrors (&$data) {
-            $hasErrors = false;
-
-            foreach ($data as $key => &$arr) {
-                if(isset($_POST[$key])) 
-                    $arr['value'] = $_POST[$key];
-
-                if($arr['type'] == FormDataType::FILE) {
-                    if (isset($_FILES[$key])) {
-                        if(!isset($arr['value']))
-                            $arr['value'] = $_FILES[$key]['name'];
-                    } else {
-                        $arr['errorType'] = FormErrorType::EMPTY;
-                        $hasErrors = true;
-                    }
-                }
-
-                if(empty($arr['value'])) {
-                    $arr['errorType'] = FormErrorType::EMPTY;
-                    $hasErrors = true;
-                }
-            
-                if ($arr['type'] == FormDataType::EMAIL) {
-                    if(!filter_var($arr['value'], FILTER_VALIDATE_EMAIL)) {
-                        $arr['errorType'] = FormErrorType::INVALID;
-                        $hasErrors = true;
-                    }
-                }
-            }
-            return $hasErrors;
-        }
-        public static function create ($tableName, &$formData, $saveFunc) {
+        public static function create ($tableName, &$data) {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {  
                 if (isset($_POST['save'])) {
-                    $hasErrors = CRUDFunctions::assignDataAndCheckErrors($formData);
+                    $hasErrors = false;
+
+                    foreach ($data as $key => &$var) {
+                        CRUDDataProcessor::assignVariable($key, $var);
+                        CRUDDataProcessor::checkErrors($key, $var, $hasErrors);
+                        if($var['type'] === FormDataType::FILE) {
+                            FileManager::uploadFile($tableName, $var);
+                        }
+                    }
                     if(!$hasErrors) {
-                        $saveFunc($tableName, $formData);
+                        $success = Database::insert($tableName, $data);
+                        if($success) {
+                            header('Location: index.php');
+                            exit();
+                        }
                     }
                 } else if (isset($_POST['back'])) {
                     header('Location: index.php');
@@ -48,44 +30,62 @@
                 }
             }
         }
-        public static function update ($tableName, $idColumnName, &$formData, $saveFunc) {
+        private static function getID () {
             if (!isset($_GET['id'])) {
                 header('Location: index.php');
                 exit();
             } 
-            $id = $_GET['id'];
+            return $_GET['id'];
+        }
+        public static function update ($tableName, $idColumnName, &$data) {
+            $id = CRUDFunctions::getID();
             $row = Database::getRowWithID($tableName, $idColumnName, $id);
         
-            //Ja nav nekas tad veic redirect uz index
+            //Ja neatgreiž neko tad veic redirect uz index
             if(empty($row)) {
                 header('Location: index.php');
                 exit();
             }
 
-            foreach ($formData as $key => &$arr)
+            //Piešķir vērtības no datubāzes
+            foreach ($data as $key => &$arr)
                 $arr['value'] = $row[$key];
         
+            //Pārbauda vai POST izsaukts
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {      
+                //Pārbauda vai save poga nospiesta
                 if (isset($_POST['save'])) {
-                    $hasErrors = CRUDFunctions::assignDataAndCheckErrors($formData);
-                    if(!$hasErrors) {
-                        $saveFunc($tableName, $idColumnName, $id, $formData);
+                    $hasErrors = false;
+
+                    foreach ($data as $key => &$var) {
+                        CRUDDataProcessor::assignVariable($key, $var, true);
+                        CRUDDataProcessor::checkErrors($key, $var, $hasErrors);
+                        if($var['type'] == FormDataType::FILE) {
+                            if ($_FILES[$key]['name'] != '') {
+                                FileManager::uploadFile($tableName, $var);
+                            }
+                        }
                     }
+                    if(!$hasErrors) {
+                        $success = Database::update($tableName, $idColumnName, $id, $data);
+                        if($success) {
+                            header('Location: index.php');
+                            exit();
+                        }
+                    }
+                //Pārbauda vai delete poga nospiesta
                 } else if (isset($_POST['delete'])) {
                     header('Location: delete.php?id='.$id);
                     exit();
+                //Pārbauda vai back poga nospiesta
                 } else if (isset($_POST['back'])) {
                     header('Location: index.php');
                     exit();
                 }
             }
         }
-        public static function delete ($tableName, $idColumnName, $deleteFunc) {
-            if (!isset($_GET['id'])) {
-                header('Location: index.php');
-                exit();
-            } 
-            $id = $_GET['id'];
+        public static function delete ($tableName, $idColumnName) {
+            $id = CRUDFunctions::getID();
             //Ja nav nekas tad veic redirect uz index
             if(empty(Database::getRowWithID($tableName, $idColumnName, $id))) {
                 header('Location: index.php');
@@ -94,9 +94,11 @@
 
             //Formas pogu funkcijas
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                //Pārbauda vai delete poga nospiesta
                 if (isset($_POST['delete'])) {
-                    $deleteFunc($tableName, $idColumnName, $id);
+                    Database::deleteWithID($tableName, $idColumnName, $id);
                     header('Location: index.php');
+                //Pārbauda vai back poga nospiesta
                 } else if (isset($_POST['back'])) {
                     header('Location: index.php');
                 }
@@ -105,6 +107,7 @@
         }
         public static function read ($tableName, $idColumnName, $id) {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                //Pārbauda vai back poga nospiesta
                 if (isset($_POST['back'])) {
                     header('Location: index.php');
                     exit();
@@ -118,11 +121,6 @@
                 exit();
             }
             return $row;
-        }
-        public static function uploadFile ($folderName, $tagName, &$formData) {
-            $success = false;
-            include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/fileUpload.php';
-            return $success;
         }
     }
 ?>

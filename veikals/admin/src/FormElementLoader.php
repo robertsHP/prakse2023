@@ -33,7 +33,7 @@
         public static function loadErrorMessage ($variableData, $errorConditions) {
             if(isset($variableData)) {
                 if($variableData['required']) {
-                    if(isset($variableData['errorType'])) {
+                    if($variableData['errorType'] != FormErrorType::NONE) {
                         $errorCases = FormErrorType::cases();
                         for ($i = 1; $i < count($errorCases); $i++) {
                             $case = $errorCases[$i];
