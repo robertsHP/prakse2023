@@ -1,30 +1,9 @@
 <?php 
-    /*
-        !!!!!PADOTIE DATI!!!!!
-
-        $dataArray = [
-            'formData' => [
-                'name' => ...
-            ],
-            'page' => [
-                'title' => ...,
-                'buttons' => [
-                    [
-                        'type' => ...,
-                        'name' => ...,
-                        'value' => ...,
-                        'class' => ...
-                    ],
-                    ....
-                ]
-            ]
-        ];
-    */
-
     $redirect = '/veikals/admin/index.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
+    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
 
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FormElementLoader.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/BasicFormTagLoader.php';
 ?>
 
 <!DOCTYPE html>
@@ -52,7 +31,7 @@
                                 FormErrorType::EMPTY->value => 'Kategorijas nosaukums ir nepieciešams'
                             ];
                         
-                            FormElementLoader::loadLabel($title, $tagName, $variableData);
+                            BasicFormTagLoader::loadLabel($title, $tagName, $variableData);
                         ?>
                             <input 
                                 type="text"  
@@ -65,13 +44,13 @@
                                         echo $variableData['value'];
                             ?>">
                         <?php 
-                            FormElementLoader::loadErrorMessage($variableData, $errorConditions);
+                            BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions);
                         ?>
                     </div>
                 </div>
                 <div class="element-row">
                     <?php 
-                        FormElementLoader::loadButtonRow($page);
+                        BasicFormTagLoader::loadButtonRow($page);
                     ?>
                 </div>
             </form>

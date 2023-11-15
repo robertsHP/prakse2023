@@ -1,45 +1,53 @@
 <?php
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FormErrorType.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FormDataType.php';
 
-    //Piešķir pareizo ceļu uz izvēlēto failu
-    $targetDir = '/veikals/files/'.$folderName.'/';
-    $file = $_FILES[$tagName];
-
-    if($file['name'] != '') {
-        $formData[$tagName]['value'] = $targetDir.$file['name'];
-        $targetFile = $_SERVER['CONTEXT_DOCUMENT_ROOT'].$targetDir.basename($file["name"]);
-
-        $canUpload= true;
-        $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-    
-        $var = &$formData[$tagName];
-    
-        if (!file_exists($targetFile)) {
+    class FileUpload {
+        private static function moveFileToFolder ($targetFile, $fileVar, &$success) {
             if ($file["size"] <= 500000) {
-                $correct = false;
+                $valid = false;
+                $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
                 foreach ($var['allowed_file_formats'] as $fileType) {
                     if($imageFileType == $fileType) {
-                        $correct = true;
+                        $valid = true;
                         break;
                     }
                 }
-                if($correct) {
+                if($valid) {
                     if(move_uploaded_file($file["tmp_name"], $targetFile)) {
                         $success = true;
                     } else {
-                        $var['errorType'] = FormErrorType::FILE_UPLOAD_UNSUCCESSFUL;
+                        $fileVar['errorType'] = FormErrorType::FILE_UPLOAD_UNSUCCESSFUL;
                     }
                 } else {
-                    $var['errorType'] = FormErrorType::FILE_FORMAT_INCORRECT;
+                    $fileVar['errorType'] = FormErrorType::FILE_FORMAT_INCORRECT;
                 }
             } else {
-                $var['errorType'] = FormErrorType::FILE_TOO_LARGE;
+                $fileVar['errorType'] = FormErrorType::FILE_TOO_LARGE;
             }
-        } else {
-            $success = true;
         }
-    } else {
-        $var['errorType'] = FormErrorType::EMPTY;
+        public static function uploadFile ($folderName, &$fileVar) {
+            $success = false;
+
+            if(isset($fileVar)) {
+                if($fileVar['errorType'] == FormErrorType::NONE) {
+                    $targetDir = '/veikals/files/'.$folderName.'/';
+                    $fileVar['value'] = $targetDir.$fileVar['value'];
+
+                    $targetFile = $_SERVER['CONTEXT_DOCUMENT_ROOT'].$targetDir.basename($fileVar['value']);
+                    $canUpload = true;
+            
+                    if (!file_exists($targetFile)) {
+                        FileUpload::moveFileToFolder(
+                            $targetFile, 
+                            $fileVar, 
+                            $success);
+                    } else {
+                        $success = true;
+                    }
+                }
+            }
+            return $success;
+
+        }
     }
 ?>

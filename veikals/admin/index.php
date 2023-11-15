@@ -5,6 +5,7 @@
         header('Location: /veikals/admin/src/panel.php');
         exit();
     }
+    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
     
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Config.php';
 ?>

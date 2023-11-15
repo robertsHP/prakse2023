@@ -2,19 +2,20 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FormErrorType.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FormDataType.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUDDataProcessor.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/VariableHandler.php';
 
     class CRUDFunctions {
         public static function create ($tableName, &$data) {
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {  
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') { 
+                //Pārbauda vai save poga nospiesta
                 if (isset($_POST['save'])) {
                     $hasErrors = false;
 
                     foreach ($data as $key => &$var) {
-                        CRUDDataProcessor::assignVariable($key, $var);
-                        CRUDDataProcessor::checkErrors($key, $var, $hasErrors);
+                        VariableHandler::assignVariable($key, $var);
+                        VariableHandler::checkErrors($key, $var, $hasErrors);
                         if($var['type'] === FormDataType::FILE) {
-                            FileManager::uploadFile($tableName, $var);
+                            FileUpload::uploadFile($tableName, $var);
                         }
                     }
                     if(!$hasErrors) {
@@ -24,6 +25,7 @@
                             exit();
                         }
                     }
+                //Pārbauda vai back poga nospiesta
                 } else if (isset($_POST['back'])) {
                     header('Location: index.php');
                     exit();
@@ -52,25 +54,28 @@
                 $arr['value'] = $row[$key];
         
             //Pārbauda vai POST izsaukts
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {      
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 //Pārbauda vai save poga nospiesta
                 if (isset($_POST['save'])) {
                     $hasErrors = false;
 
+                    //Iziet cauri visiem datiem
                     foreach ($data as $key => &$var) {
-                        CRUDDataProcessor::assignVariable($key, $var, true);
-                        CRUDDataProcessor::checkErrors($key, $var, $hasErrors);
+                        VariableHandler::assignVariable($key, $var);
+                        VariableHandler::checkErrors($key, $var, $hasErrors);
+                        //Ja ir fails tad augšupielādē
                         if($var['type'] == FormDataType::FILE) {
                             if ($_FILES[$key]['name'] != '') {
-                                FileManager::uploadFile($tableName, $var);
+                                FileUpload::uploadFile($tableName, $var);
                             }
                         }
                     }
+                    //Pārbauda vai iziešanas procesā bija kādas kļudas
                     if(!$hasErrors) {
                         $success = Database::update($tableName, $idColumnName, $id, $data);
                         if($success) {
-                            header('Location: index.php');
-                            exit();
+                            // header('Location: index.php');
+                            // exit();
                         }
                     }
                 //Pārbauda vai delete poga nospiesta

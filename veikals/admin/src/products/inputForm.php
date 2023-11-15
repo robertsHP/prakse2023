@@ -1,8 +1,9 @@
 <?php 
     $redirect = '/veikals/admin/index.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
+    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
 
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FormElementLoader.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/BasicFormTagLoader.php';
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +27,7 @@
                                 FormErrorType::EMPTY->value => 'Nosaukums nav ievadīts'
                             ];
                         
-                            FormElementLoader::loadLabel($title, $tagName, $variableData);
+                            BasicFormTagLoader::loadLabel($title, $tagName, $variableData);
                         ?>
                             <input 
                                 type="text"  
@@ -39,7 +40,7 @@
                                         echo $variableData['value'];
                             ?>">
                         <?php 
-                            FormElementLoader::loadErrorMessage($variableData, $errorConditions);
+                            BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions);
                         ?>
 
                         <?php 
@@ -52,7 +53,7 @@
                                 FormErrorType::EMPTY->value => 'Apraksts nav ievadīts'
                             ];
 
-                            FormElementLoader::loadLabel($title, $tagName, $variableData);
+                            BasicFormTagLoader::loadLabel($title, $tagName, $variableData);
                         ?>
                             <textarea 
                                 class="form-control"
@@ -66,48 +67,30 @@
                                     echo $variableData['value'];
                             ?></textarea>
                         <?php 
-                            FormElementLoader::loadErrorMessage($variableData, $errorConditions);
+                            BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions);
                         ?>
 
                         <?php 
                             $title = 'Bilde';
                             $tagName = 'photo_file_loc';
                             $variableData = $formData[$tagName];
-                            $errorConditions = FileManager::getFileErrorTypes();
+                            $errorConditions = [
+                                FormErrorType::EMPTY->value                     => 'Fails nav pievienots',
+                                FormErrorType::FILE_ALREADY_EXISTS->value       => 'Fails jau eksistē',
+                                FormErrorType::FILE_TOO_LARGE->value            => 'Fails ir pārāk liels',
+                                FormErrorType::FILE_FORMAT_INCORRECT->value     => 'Faila formāts nav pareizs',
+                                FormErrorType::FILE_IS_NOT_AN_IMAGE->value      => 'Fails nav bilde',
+                                FormErrorType::FILE_UPLOAD_UNSUCCESSFUL->value  => 'Faila augšupielāde nebīja veiksmīga'
+                            ];
+                            $allowedFileTypes = implode(', ', $variableData['allowed_file_formats']);
 
-                            $allowedFileTypes = implode(', ', $formData[$tagName]['allowed_file_formats']);
+                            BasicFormTagLoader::loadLabel($title, $tagName, $variableData);
+
+                            include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/loadImageSelect.php';
+                            
+                            BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions);
                         ?>
-                            <div class="mb-3">
-                                <?php
-                                    FormElementLoader::loadLabel($title, $tagName, $variableData);
-                                ?>
-                                <input 
-                                    type="file"  
-                                    class="form-control-file" 
-                                    name="<?php echo $tagName; ?>"
-                                    id="<?php echo $tagName; ?>"
-                                    accept="<?php echo $allowedFileTypes; ?>"
-                                    value="<?php 
-                                        if(isset($variableData))
-                                            echo $variableData['value'];
-                                    ?>">
-                            </div>
-                            <?php 
-                                FormElementLoader::loadErrorMessage($variableData, $errorConditions);
-                                if(isset($variableData['value'])) {
-                                    ?>
-                                        <img 
-                                            src="<?php 
-                                                if(isset($variableData))
-                                                    echo $variableData['value'];
-                                            ?>" 
-                                            name = <?php echo $tagName.'_thumbnail'; ?>
-                                            id =<?php echo $tagName.'_thumbnail'; ?>
-                                            class="img-thumbnail img-product-photo" 
-                                            alt="">
-                                    <?php
-                                }
-                            ?>
+                        
                         <br>
 
                         <?php 
@@ -119,7 +102,7 @@
                                 FormErrorType::EMPTY->value => 'Cena nav ievadīta'
                             ];
 
-                            FormElementLoader::loadLabel($title, $tagName, $variableData);
+                            BasicFormTagLoader::loadLabel($title, $tagName, $variableData);
                         ?>
                             <input 
                                 type="number"  
@@ -133,7 +116,7 @@
                                         echo $variableData['value'];
                             ?>">
                         <?php 
-                            FormElementLoader::loadErrorMessage($variableData, $errorConditions);
+                            BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions);
                         ?>
 
                         <?php 
@@ -145,7 +128,7 @@
                                 FormErrorType::EMPTY->value => 'Daudzums nav ievadīts'
                             ];
 
-                            FormElementLoader::loadLabel($title, $tagName, $variableData);
+                            BasicFormTagLoader::loadLabel($title, $tagName, $variableData);
                         ?>
                             <input 
                                 type="number"  
@@ -158,7 +141,7 @@
                                         echo $variableData['value'];
                             ?>">
                         <?php 
-                            FormElementLoader::loadErrorMessage($variableData, $errorConditions);
+                            BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions);
                         ?>
 
                         <?php 
@@ -170,7 +153,7 @@
                                 FormErrorType::EMPTY->value => 'Kategorija nav izvēlēta'
                             ];
 
-                            FormElementLoader::loadLabel($title, $tagName, $variableData);
+                            BasicFormTagLoader::loadLabel($title, $tagName, $variableData);
                         ?>
                             <select 
                                 class="form-control"
@@ -192,13 +175,13 @@
                                 ?>
                             </select>
                         <?php 
-                            FormElementLoader::loadErrorMessage($variableData, $errorConditions);
+                            BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions);
                         ?>
                     </div>
                 </div>
                 <div class="element-row">
                     <?php 
-                        FormElementLoader::loadButtonRow($page);
+                        BasicFormTagLoader::loadButtonRow($page);
                     ?>
                 </div>
             </form>
