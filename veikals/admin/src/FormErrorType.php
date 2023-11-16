@@ -9,5 +9,7 @@
         case FILE_FORMAT_INCORRECT = 5;
         case FILE_IS_NOT_AN_IMAGE = 6;
         case FILE_UPLOAD_UNSUCCESSFUL = 7;
+        case FILE_NOT_FOUND = 8;
+        case FILE_COULDNT_BE_MOVED = 9;
     }
 ?>

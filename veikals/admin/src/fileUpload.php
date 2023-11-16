@@ -3,12 +3,23 @@
 
     class FileUpload {
         public const FILE_UPLOAD_PATH = '/veikals/files/';
+        public const DEFAULT_ERROR_CONDITIONS = [
+            FormErrorType::EMPTY->value                     => 'Fails nav pievienots',
+            FormErrorType::FILE_ALREADY_EXISTS->value       => 'Fails jau eksistē',
+            FormErrorType::FILE_TOO_LARGE->value            => 'Fails ir pārāk liels',
+            FormErrorType::FILE_FORMAT_INCORRECT->value     => 'Faila formāts nav pareizs',
+            FormErrorType::FILE_UPLOAD_UNSUCCESSFUL->value  => 'Faila augšupielāde nebija veiksmīga',
+            FormErrorType::FILE_NOT_FOUND->value            => 'Fails nebija atrasts',
+            FormErrorType::FILE_COULDNT_BE_MOVED->value     => 'Failu nevarējā pārcelt'
+        ];
 
         public static function moveFile ($oldPath, $newPath) {
             $moved = false;
             if($oldPath != '' && $newPath != '') {
                 if($oldPath != $newPath) {
-                    $moved = rename($oldPath, $newPath);
+                    if(file_exists($oldPath) && !file_exists($newPath)) {
+                        $moved = rename($oldPath, $newPath);
+                    }
                 }
             }
             return $moved;
@@ -42,17 +53,21 @@
         public static function uploadFile (&$key, &$fileVar) {
             $uploaded = false;
             if($fileVar['errorType'] == FormErrorType::NONE) {
+                $tempVar = $fileVar;
                 if($_FILES[$key]['tmp_name'] == '') {
-                    $tempVar = $fileVar;
                     VariableHandler::assignFileVariable($key, $tempVar);
                     $tempVar['value'] = FileUpload::prepareFolderPath($tempVar['value'], 'temp');
                     $tempVar['value'] = $_SERVER['CONTEXT_DOCUMENT_ROOT'].$tempVar['value'];
                 } else {
-                    $tempVar = $fileVar;
                     $tempVar['value'] = $_FILES[$key]['tmp_name'];
                 }
 
-                if (!file_exists($_SERVER['CONTEXT_DOCUMENT_ROOT'].$fileVar['value'])) {
+                $fileVarFullPath = $_SERVER['CONTEXT_DOCUMENT_ROOT'].$fileVar['value'];
+
+                $existenceCheck = file_exists($tempVar['value']) && !file_exists($fileVarFullPath);
+                $pathsAreNotTheSame = $tempVar['value'] != $fileVarFullPath;
+
+                if ($existenceCheck && $pathsAreNotTheSame) {
                     if (filesize($tempVar['value']) > 500000) {
                         $fileVar['errorType'] = FormErrorType::FILE_TOO_LARGE;
                         return $uploaded;
@@ -61,15 +76,12 @@
                         $fileVar['errorType'] = FormErrorType::FILE_FORMAT_INCORRECT;
                         return $uploaded;
                     }
-                    echo '|Upload = '.$tempVar['value'].'||||'.$fileVar['value'];
-                    if(!FileUpload::moveFile($tempVar['value'], $_SERVER['CONTEXT_DOCUMENT_ROOT'].$fileVar['value'])) {
+                    if(!FileUpload::moveFile($tempVar['value'], $fileVarFullPath)) {
                         $fileVar['errorType'] = FormErrorType::FILE_UPLOAD_UNSUCCESSFUL;
                         return $uploaded;
                     }
-                    $uploaded = true;
-                } else {
-                    $uploaded = true;
                 }
+                $uploaded = true;
             }
             return $uploaded;
         }
