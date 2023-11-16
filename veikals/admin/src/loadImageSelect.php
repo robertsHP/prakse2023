@@ -2,7 +2,6 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/BasicFormTagLoader.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FileUpload.php';
 
-
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['action'])) {
             switch ($_POST['action']) {

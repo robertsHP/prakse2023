@@ -27,19 +27,15 @@
             }
             return $hasErrors;
         }
-        private static function loopAndMoveTempFiles ($tableName, &$tempFiles) {
+        private static function loopAndMoveTempFiles ($tableName, &$tempFiles, &$data) {
             $filesUploaded = true;
             foreach ($tempFiles as &$file) {
                 $newPath = FileUpload::prepareFolderPath($file['var']['value'], $tableName);
                 $success = FileUpload::moveFile(
                     $_SERVER['CONTEXT_DOCUMENT_ROOT'].$file['var']['value'], 
-                    $_SERVER['CONTEXT_DOCUMENT_ROOT'].$newPath);
-
-                    $file['var']['value'] = $newPath;
-                if(!$success) {
-                    $file['var']['value'] = '';
-                    $filesUploaded = false;
-                }
+                    $_SERVER['CONTEXT_DOCUMENT_ROOT'].$newPath
+                );
+                $data[$file['key']]['value'] = $newPath;
             }
             return $filesUploaded;
         }
@@ -57,12 +53,12 @@
 
             $hasErrors = CRUDFunctions::loopAndProcessFormData($tempFiles, $data);
             if(!$hasErrors) {
-                $filesUploaded = CRUDFunctions::loopAndMoveTempFiles($tableName, $tempFiles);
+                $filesUploaded = CRUDFunctions::loopAndMoveTempFiles($tableName, $tempFiles, $data);
                 if($filesUploaded) {
                     $success = Database::insert($tableName, $data);
                     if($success) {
-                        // header('Location: index.php');
-                        // exit();
+                        header('Location: index.php');
+                        exit();
                     }
                 }
             }
@@ -83,9 +79,8 @@
             $tempFiles = [];
 
             $hasErrors = CRUDFunctions::loopAndProcessFormData($tempFiles, $data);
-            //Pārbauda vai iziešanas procesā bija kādas kļudas
             if(!$hasErrors) {
-                $filesUploaded = CRUDFunctions::loopAndMoveTempFiles($tableName, $tempFiles);
+                $filesUploaded = CRUDFunctions::loopAndMoveTempFiles($tableName, $tempFiles, $data);
                 if($filesUploaded) {
                     $success = Database::update($tableName, $idColumnName, $id, $data);
                     if($success) {
