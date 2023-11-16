@@ -5,26 +5,73 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/VariableHandler.php';
 
     class CRUDFunctions {
+        private static function loopAndProcessFormData (&$tempFiles, &$data) {
+            $hasErrors = false;
+
+            foreach ($data as $key => &$var) {
+                VariableHandler::assignVariable($key, $var);
+                if(VariableHandler::checkErrors($key, $var)) {
+                    $hasErrors = true;
+                }
+                //Saglabā visus izslaicīgos failus un augšupielādē servera /temp mapē
+                if($var['type'] === FormDataType::FILE) {
+                    if($var['value'] != '') {
+                        $var['value'] = FileUpload::prepareFolderPath($var['value'], 'temp');
+                        $tempFiles[] = [
+                            'key' => $key, 
+                            'var' => &$var
+                        ];
+                        FileUpload::uploadFile($key, $var);
+                    }
+                }
+            }
+            return $hasErrors;
+        }
+        private static function loopAndMoveTempFiles ($tableName, &$tempFiles) {
+            $filesUploaded = true;
+            foreach ($tempFiles as &$file) {
+                $newPath = FileUpload::prepareFolderPath($file['var']['value'], $tableName);
+                $success = FileUpload::moveFile(
+                    $_SERVER['CONTEXT_DOCUMENT_ROOT'].$file['var']['value'], 
+                    $_SERVER['CONTEXT_DOCUMENT_ROOT'].$newPath);
+
+                    $file['var']['value'] = $newPath;
+                if(!$success) {
+                    $file['var']['value'] = '';
+                    $filesUploaded = false;
+                }
+            }
+            return $filesUploaded;
+        }
+        private static function getID () {
+            //Saņem GET padoto id
+            if (!isset($_GET['id'])) {
+                header('Location: index.php');
+                exit();
+            } 
+            return $_GET['id'];
+        }
+
+        private static function performCreateSaveAction ($tableName, &$data) {
+            $tempFiles = [];
+
+            $hasErrors = CRUDFunctions::loopAndProcessFormData($tempFiles, $data);
+            if(!$hasErrors) {
+                $filesUploaded = CRUDFunctions::loopAndMoveTempFiles($tableName, $tempFiles);
+                if($filesUploaded) {
+                    $success = Database::insert($tableName, $data);
+                    if($success) {
+                        // header('Location: index.php');
+                        // exit();
+                    }
+                }
+            }
+        }
         public static function create ($tableName, &$data) {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') { 
                 //Pārbauda vai save poga nospiesta
                 if (isset($_POST['save'])) {
-                    $hasErrors = false;
-
-                    foreach ($data as $key => &$var) {
-                        VariableHandler::assignVariable($key, $var);
-                        VariableHandler::checkErrors($key, $var, $hasErrors);
-                        if($var['type'] === FormDataType::FILE) {
-                            FileUpload::uploadFile($tableName, $var);
-                        }
-                    }
-                    if(!$hasErrors) {
-                        $success = Database::insert($tableName, $data);
-                        if($success) {
-                            header('Location: index.php');
-                            exit();
-                        }
-                    }
+                    CRUDFunctions::performCreateSaveAction($tableName, $data);
                 //Pārbauda vai back poga nospiesta
                 } else if (isset($_POST['back'])) {
                     header('Location: index.php');
@@ -32,12 +79,21 @@
                 }
             }
         }
-        private static function getID () {
-            if (!isset($_GET['id'])) {
-                header('Location: index.php');
-                exit();
-            } 
-            return $_GET['id'];
+        private static function performUpdateSaveAction ($tableName, $idColumnName, $id, &$data) {
+            $tempFiles = [];
+
+            $hasErrors = CRUDFunctions::loopAndProcessFormData($tempFiles, $data);
+            //Pārbauda vai iziešanas procesā bija kādas kļudas
+            if(!$hasErrors) {
+                $filesUploaded = CRUDFunctions::loopAndMoveTempFiles($tableName, $tempFiles);
+                if($filesUploaded) {
+                    $success = Database::update($tableName, $idColumnName, $id, $data);
+                    if($success) {
+                        // header('Location: index.php');
+                        // exit();
+                    }
+                }
+            }
         }
         public static function update ($tableName, $idColumnName, &$data) {
             $id = CRUDFunctions::getID();
@@ -49,35 +105,20 @@
                 exit();
             }
 
-            //Piešķir vērtības no datubāzes
-            foreach ($data as $key => &$arr)
-                $arr['value'] = $row[$key];
+            //Dabū mainīgos no datubāzes
+            foreach ($data as $key => &$var) {
+                $var['value'] = $row[$key];
+            }
         
             //Pārbauda vai POST izsaukts
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 //Pārbauda vai save poga nospiesta
                 if (isset($_POST['save'])) {
-                    $hasErrors = false;
-
-                    //Iziet cauri visiem datiem
-                    foreach ($data as $key => &$var) {
-                        VariableHandler::assignVariable($key, $var);
-                        VariableHandler::checkErrors($key, $var, $hasErrors);
-                        //Ja ir fails tad augšupielādē
-                        if($var['type'] == FormDataType::FILE) {
-                            if ($_FILES[$key]['name'] != '') {
-                                FileUpload::uploadFile($tableName, $var);
-                            }
-                        }
-                    }
-                    //Pārbauda vai iziešanas procesā bija kādas kļudas
-                    if(!$hasErrors) {
-                        $success = Database::update($tableName, $idColumnName, $id, $data);
-                        if($success) {
-                            // header('Location: index.php');
-                            // exit();
-                        }
-                    }
+                    CRUDFunctions::performUpdateSaveAction(
+                        $tableName, 
+                        $idColumnName, 
+                        $id, 
+                        $data);
                 //Pārbauda vai delete poga nospiesta
                 } else if (isset($_POST['delete'])) {
                     header('Location: delete.php?id='.$id);

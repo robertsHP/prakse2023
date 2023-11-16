@@ -4,6 +4,19 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FileUpload.php';
 
     class VariableHandler {
+        public static function assignFileVariable (&$key, &$var) {
+            //Pārbauda vai session mainīgajā faila nosaukums ir saglabāts
+            if(isset($_SESSION['temp']['paths'][$key])) {
+                $var['value'] = $_SESSION['temp']['paths'][$key];
+                return;
+            }
+            //Ja nav tad iegūst no $_FILES
+            if($var['value'] == '') {
+                $var['value'] = $_FILES[$key]['name'];
+                //Un piešķir $_SESSION filePaths masīvam
+                $_SESSION['temp']['paths'][$key] = $var['value'];
+            }
+        }
         public static function assignVariable (&$key, &$var) {
             //Veic darbības atkarība no mainīgā tipa
             switch ($var['type']) {
@@ -15,27 +28,13 @@
                         $var['value'] = $_POST[$key];
                     break;
                 case FormDataType::FILE:
-                    if($var['value'] == '') {
-                        //Pārbauda vai session mainīgajā faila nosaukums ir saglabāts
-                        if(isset($_SESSION['temp']['filePaths'][$key])) {
-                            $sessionSavedPath = $_SESSION['temp']['filePaths'][$key];
-                            if($sessionSavedPath != '') {
-                                $var['value'] = $sessionSavedPath;
-                                echo 'AFTER AS NEW = '.$var['value']."\n";
-                                break;
-                            }
-                        } else if ($var['value'] == '') {
-
-                        }
-                        //Ja nav tad iegūst no $_FILES
-                        $var['value'] = $_FILES[$key]['name'];
-                        //Un piešķir $_SESSION filePaths masīvam
-                        $_SESSION['temp']['filePaths'][$key] = $var['value'];
-                    }
+                    VariableHandler::assignFileVariable($key, $var);
                     break;
             }
         }
-        public static function checkErrors (&$key, &$var, &$hasErrors) {
+        public static function checkErrors (&$key, &$var) {
+            $hasErrors = false;
+
             //Veic darbības atkarība no mainīgā tipa
             switch ($var['type']) {
                 case FormDataType::TEXT:
@@ -50,6 +49,7 @@
                     VariableHandler::checkErrorForFile($key, $var, $hasErrors);
                     break;
             }
+            return $hasErrors;
         }
     
         //Parbaudes visa veida mainīgajiem
