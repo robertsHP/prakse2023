@@ -1,6 +1,7 @@
 <?php 
     $redirect = '/veikals/admin/index.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
+    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
     
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUDFunctions.php';
@@ -10,14 +11,7 @@
     CRUDFunctions::update(
         $tableName, 
         $idColumnName, 
-        $formData,
-        function ($tableName, $idColumnName, $id, &$formData) {
-            $success = Database::update($tableName, $idColumnName, $id, $formData);
-            if($success) {
-                header('Location: index.php');
-                exit();
-            }
-        }
+        $formData
     );
 
     //Lapas dati priekš inputForm.php

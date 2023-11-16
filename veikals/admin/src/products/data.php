@@ -2,7 +2,7 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FormErrorType.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FormDataType.php';
 
-    $tableName = 'product';
+    $tableName = 'products';
     $idColumnName = 'product_id';
 
     $formData = [

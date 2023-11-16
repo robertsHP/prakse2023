@@ -1,6 +1,7 @@
 <?php 
     $redirect = '/veikals/admin/index.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
+    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
     
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUDFunctions.php';
@@ -9,17 +10,7 @@
 
     CRUDFunctions::create(
         $tableName, 
-        $formData, 
-        function ($tableName, &$formData) {
-            $success = CRUDFunctions::uploadFile('products', 'photo_file_loc', $formData);
-            if($success) {
-                $success = Database::insert($tableName, $formData);
-                if($success) {
-                    header('Location: index.php');
-                    exit();
-                }
-            }
-        }
+        $formData
     );
 
     //Lapas dati priekš inputForm.php
