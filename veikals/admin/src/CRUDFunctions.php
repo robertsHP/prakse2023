@@ -16,7 +16,8 @@
                 //Saglabā visus izslaicīgos failus un augšupielādē servera /temp mapē
                 if($var['type'] === FormDataType::FILE) {
                     if($var['value'] != '') {
-                        $var['value'] = FileUpload::prepareFolderPath($var['value'], 'temp');
+                        $var['value'] = FileUpload::prepareFolderPath(
+                            $var['value'], 'temp');
                         $tempFiles[] = [
                             'key' => $key, 
                             'var' => &$var
@@ -30,7 +31,9 @@
         private static function loopAndMoveTempFiles ($tableName, &$tempFiles, &$data) {
             $filesUploaded = true;
             foreach ($tempFiles as &$file) {
-                $newPath = FileUpload::prepareFolderPath($file['var']['value'], $tableName);
+                $newPath = FileUpload::prepareFolderPath(
+                    $file['var']['value'], 
+                    $tableName);
                 $success = FileUpload::moveFile(
                     $_SERVER['CONTEXT_DOCUMENT_ROOT'].$file['var']['value'], 
                     $_SERVER['CONTEXT_DOCUMENT_ROOT'].$newPath
@@ -57,8 +60,8 @@
                 if($filesUploaded) {
                     $success = Database::insert($tableName, $data);
                     if($success) {
-                        header('Location: index.php');
-                        exit();
+                        // header('Location: index.php');
+                        // exit();
                     }
                 }
             }
@@ -84,8 +87,8 @@
                 if($filesUploaded) {
                     $success = Database::update($tableName, $idColumnName, $id, $data);
                     if($success) {
-                        header('Location: index.php');
-                        exit();
+                        // header('Location: index.php');
+                        // exit();
                     }
                 }
             }
