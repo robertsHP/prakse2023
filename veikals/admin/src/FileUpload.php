@@ -50,8 +50,7 @@
             }
             return $fileName;
         }
-        public static function uploadFile (&$key, &$fileVar) {
-            $uploaded = false;
+        public static function uploadFile (&$key, &$fileVar, &$hasErrors) {
             if($fileVar['errorType'] == FormErrorType::NONE) {
                 $tempVar = $fileVar;
                 if($_FILES[$key]['tmp_name'] == '') {
@@ -70,20 +69,18 @@
                 if ($existenceCheck && $pathsAreNotTheSame) {
                     if (filesize($tempVar['value']) > 500000) {
                         $fileVar['errorType'] = FormErrorType::FILE_TOO_LARGE;
-                        return $uploaded;
+                        $hasErrors = true;
                     }
                     if(!FileUpload::isFileTypeCorrect($fileVar)) {
                         $fileVar['errorType'] = FormErrorType::FILE_FORMAT_INCORRECT;
-                        return $uploaded;
+                        $hasErrors = true;
                     }
                     if(!FileUpload::moveFile($tempVar['value'], $fileVarFullPath)) {
                         $fileVar['errorType'] = FormErrorType::FILE_UPLOAD_UNSUCCESSFUL;
-                        return $uploaded;
+                        $hasErrors = true;
                     }
                 }
-                $uploaded = true;
             }
-            return $uploaded;
         }
     }
 ?>
