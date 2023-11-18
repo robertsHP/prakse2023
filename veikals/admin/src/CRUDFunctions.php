@@ -22,7 +22,7 @@
                             'key' => $key, 
                             'var' => &$var
                         ];
-                        FileUpload::uploadFile($key, $var);
+                        FileUpload::uploadFile($key, $var, $hasErrors);
                     }
                 }
             }
