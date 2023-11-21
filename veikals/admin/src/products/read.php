@@ -4,7 +4,7 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
     
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUDFunctions.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDFunctions.php';
 
     include 'data.php';
 
@@ -28,7 +28,7 @@
             <table class="table table-hover">
                 <tr>
                     <th>ID: </th>
-                    <th><?php echo $row['category_id'] ?></th>
+                    <th><?php echo $row[$idColumnName] ?></th>
                 </tr>
                 <tr>
                     <th>Nosaukums: </th>

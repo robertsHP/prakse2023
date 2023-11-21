@@ -19,7 +19,7 @@
                 ?>
             </h4>
 
-            <form method="post" action="" enctype="multipart/form-data">
+            <form novalidate method="post" action="" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-sm-6">
                         <?php 
@@ -80,10 +80,7 @@
                         $tagName = 'email';
                         $variableData = $formData[$tagName];
                         $placeholder = 'name@example.com';
-                        $errorConditions = [
-                            FormErrorType::EMPTY->value => 'E-pasts ir nepieciešams',
-                            FormErrorType::EMAIL_INVALID->value => 'E-pasts nav pareizi ievadīts'
-                        ];
+                        $errorConditions = FormTypeErrorConditions::EMAIL_DEFAULT;
                     
                         BasicFormTagLoader::loadLabel($title, $tagName, $variableData);
                     ?>
