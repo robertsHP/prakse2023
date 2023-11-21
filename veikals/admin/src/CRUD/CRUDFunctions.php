@@ -58,8 +58,8 @@
                 if($filesUploaded) {
                     $success = Database::insert($tableName, $data);
                     if($success) {
-                        // header('Location: index.php');
-                        // exit();
+                        header('Location: index.php');
+                        exit();
                     }
                 }
             }
@@ -85,8 +85,8 @@
                 if($filesUploaded) {
                     $success = Database::update($tableName, $idColumnName, $id, $data);
                     if($success) {
-                        // header('Location: index.php');
-                        // exit();
+                        header('Location: index.php');
+                        exit();
                     }
                 }
             }
