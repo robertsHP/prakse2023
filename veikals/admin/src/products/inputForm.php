@@ -16,7 +16,7 @@
         <div class="main-container">
             <h4><?php echo isset($page['title']) ? $page['title'] : ''; ?></h4>
 
-            <form method="post" action="" enctype="multipart/form-data">
+            <form novalidate method="post" action="" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-sm-6">
                         <?php 
@@ -75,7 +75,7 @@
                             $title = 'Bilde';
                             $tagName = 'photo_file_loc';
                             $variableData = $formData[$tagName];
-                            $errorConditions = FileUpload::DEFAULT_ERROR_CONDITIONS;
+                            $errorConditions =  FormTypeErrorConditions::FILE_DEFAULT;
                             $allowedFileTypes = implode(', ', $variableData['allowed_file_formats']);
 
                             BasicFormTagLoader::loadLabel($title, $tagName, $variableData);

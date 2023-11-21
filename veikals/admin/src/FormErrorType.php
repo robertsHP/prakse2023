@@ -11,5 +11,26 @@
         case FILE_UPLOAD_UNSUCCESSFUL = 7;
         case FILE_NOT_FOUND = 8;
         case FILE_COULDNT_BE_MOVED = 9;
+
+        case PHONE_NUMBER_INVALID = 20;
+    }
+    class FormTypeErrorConditions {
+        public const FILE_DEFAULT = [
+            FormErrorType::EMPTY->value                     => 'Fails nav pievienots',
+            FormErrorType::FILE_ALREADY_EXISTS->value       => 'Fails jau eksistē',
+            FormErrorType::FILE_TOO_LARGE->value            => 'Fails ir pārāk liels',
+            FormErrorType::FILE_FORMAT_INCORRECT->value     => 'Faila formāts nav pareizs',
+            FormErrorType::FILE_UPLOAD_UNSUCCESSFUL->value  => 'Faila augšupielāde nebija veiksmīga',
+            FormErrorType::FILE_NOT_FOUND->value            => 'Fails nebija atrasts',
+            FormErrorType::FILE_COULDNT_BE_MOVED->value     => 'Failu nevarējā pārcelt'
+        ];
+        public const EMAIL_DEFAULT = [
+            FormErrorType::EMPTY->value => 'E-pasts ir nepieciešams',
+            FormErrorType::EMAIL_INVALID->value => 'E-pasts nav pareizi ievadīts'
+        ];
+        public const PHONE_NUMBER_DEFAULT = [
+            FormErrorType::EMPTY->value => 'Telefona numurs ir nepieciešams',
+            FormErrorType::PHONE_NUMBER_INVALID->value => 'Telefona numurs nav pareizi ievadīts'
+        ];
     }
 ?>

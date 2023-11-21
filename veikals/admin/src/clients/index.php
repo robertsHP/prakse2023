@@ -15,7 +15,7 @@
     <body>
         <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/header.php'; ?>
         <div class="main-container">
-            <h4>Preces</h4>
+            <h4>Klienti</h4>
             <div class="option-container">
                 <a class="link-button" href="create.php">
                     <button type="button" class="btn btn-primary">
@@ -27,10 +27,10 @@
                 CRUDTable::outputIndexTable([
                     'columns' => [
                         'ID' => $idColumnName,
-                        'Nosaukums' => 'name',
-                        'Cena' => 'price',
-                        'Pieejamais daudzums' => 'available_amount',
-                        'Kategorija' => ['category_id', 'product_category', 'name']
+                        'Vārds/Nosaukums' => 'name',
+                        'E-pasts' => 'email',
+                        'Telefona numurs' => 'phone_number',
+                        'Adrese' => 'adress'
                     ],
                     'DBTableName' => $tableName
                 ]); 

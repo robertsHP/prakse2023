@@ -5,5 +5,6 @@
         case DECIMAL = 2;
         case FILE = 3;
         case EMAIL = 4;
+        case PHONE_NUMBER = 5;
     }
 ?>

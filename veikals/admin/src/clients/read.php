@@ -9,17 +9,13 @@
     include 'data.php';
 
     $id = null;
-    $pageTitle = null;
     if (isset($_GET['id'])) {
         $id = $_GET['id'];
-        $pageTitle = "Lietotāja informācija";
-    } else if (isset($_SESSION["id"])) {
-        $id = $_SESSION["id"];
-        $pageTitle = "Konts";
     }
 
     $row = CRUDFunctions::read($tableName, $idColumnName, $id);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">  
@@ -28,23 +24,27 @@
         <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/header.php'; ?>
 
         <div class="main-container">
-            <h4><?php echo $pageTitle; ?></h4>
+            <h4>Preču kategorijas informācija</h4>
             <table class="table table-hover">
                 <tr>
                     <th>ID: </th>
                     <th><?php echo $row[$idColumnName] ?></th>
                 </tr>
                 <tr>
-                    <th>Vārds: </th>
+                    <th>Vārds/Nosaukums: </th>
                     <th><?php echo $row['name'] ?></th>
-                </tr>
-                <tr>
-                    <th>Uzvārds: </th>
-                    <th><?php echo $row['surname'] ?></th>
                 </tr>
                 <tr>
                     <th>E-pasts: </th>
                     <th><?php echo $row['email'] ?></th>
+                </tr>
+                <tr>
+                    <th>Telefona numurs: </th>
+                    <th><?php echo $row['phone_number'] ?></th>
+                </tr>
+                <tr>
+                    <th>Adrese: </th>
+                    <th><?php echo $row['adress'] ?></th>
                 </tr>
             </table>
             <form method="post" action="">
