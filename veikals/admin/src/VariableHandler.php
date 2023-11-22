@@ -24,9 +24,14 @@
             }
         }
 
+        public static function getSanitizedValue ($value) {
+            $value = trim($value);
+            return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+        }
+
         private static function assignDefaultVariable (&$key, &$var, &$hasErrors) {
             if(isset($_POST[$key]))
-                $var['value'] = $_POST[$key];
+                $var['value'] = VariableHandler::getSanitizedValue($_POST[$key]);
 
             if(empty($var['value'])) {
                 $var['errorType'] = FormErrorType::EMPTY;
@@ -35,7 +40,7 @@
         }
         private static function assignEmailVariable (&$key, &$var, &$hasErrors) {
             if(isset($_POST[$key]))
-                $var['value'] = $_POST[$key];
+                $var['value'] = VariableHandler::getSanitizedValue($_POST[$key]);
 
             if(empty($var['value'])) {
                 $var['errorType'] = FormErrorType::EMPTY;
@@ -47,15 +52,13 @@
                 $hasErrors = true;
             }
         }
-        private static function assignFileVariable (&$key, &$var, &$hasErrors) {
+        public static function assignFileVariable (&$key, &$var, &$hasErrors) {
             //Pārbauda vai session mainīgajā faila nosaukums ir saglabāts
             if(isset($_SESSION['temp']['paths'][$key])) {
-                $var['value'] = $_SESSION['temp']['paths'][$key];
-                return;
-            }
+                $var['value'] = VariableHandler::getSanitizedValue($_SESSION['temp']['paths'][$key]);
             //Ja nav tad iegūst no $_FILES
-            if($var['value'] == '') {
-                $var['value'] = $_FILES[$key]['name'];
+            } else if($var['value'] == '') {
+                $var['value'] = VariableHandler::getSanitizedValue($_FILES[$key]['name']);
                 //Un piešķir $_SESSION filePaths masīvam
                 $_SESSION['temp']['paths'][$key] = $var['value'];
             }
@@ -66,33 +69,15 @@
             }
         }
         private static function assignPhoneNumberVariable (&$key, &$var, &$hasErrors) {
-            $ccTag = $key.'-cc';
-            $numTag = $key.'-phone-number';
+            if(isset($_POST[$key]))
+                $var['value'] = VariableHandler::getSanitizedValue($_POST[$key]);
 
-            $countryCodeSet = isset($_POST[$ccTag]);
-            $numberSet = isset($_POST[$numTag]);
-
-            if($countryCodeSet && $numberSet) {
-                $countryCodeEmpty = empty($_POST[$ccTag]);
-                $numberEmpty = empty($_POST[$numTag]);
-
-                if($countryCodeEmpty && $numberEmpty) {
-                    $var['errorType'] = FormErrorType::EMPTY;
-                    $hasErrors = true; 
-                }
-
-                $countryCode = $_POST[$ccTag];
-                $phoneNum = $_POST[$numTag];
-
-                if(strlen($countryCode) < 4 || strlen($phoneNum) < 8) {
-                    $var['errorType'] = FormErrorType::PHONE_NUMBER_INVALID;
-                    $hasErrors = true; 
-                }
-
-                $var['value'] = [
-                    'country-code' => $_POST[$ccTag],
-                    'number' => $_POST[$numTag]
-                ];
+            if(empty($var['value']) || $var['value'] == '') {
+                $var['errorType'] = FormErrorType::EMPTY;
+                $hasErrors = true; 
+            } else if($var['value'][0] !== '+') {
+                $var['errorType'] = FormErrorType::PHONE_NUMBER_INVALID;
+                $hasErrors = true;
             }
         }
     }

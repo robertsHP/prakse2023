@@ -40,14 +40,6 @@
             }
             return $filesUploaded;
         }
-        private static function getID () {
-            //Saņem GET padoto id
-            if (!isset($_GET['id'])) {
-                header('Location: index.php');
-                exit();
-            } 
-            return $_GET['id'];
-        }
 
         private static function performCreateSaveAction ($tableName, &$data) {
             $tempFiles = [];
@@ -58,8 +50,8 @@
                 if($filesUploaded) {
                     $success = Database::insert($tableName, $data);
                     if($success) {
-                        header('Location: index.php');
-                        exit();
+                        // header('Location: index.php');
+                        // exit();
                     }
                 }
             }
@@ -85,37 +77,33 @@
                 if($filesUploaded) {
                     $success = Database::update($tableName, $idColumnName, $id, $data);
                     if($success) {
-                        header('Location: index.php');
-                        exit();
+                        // header('Location: index.php');
+                        // exit();
                     }
                 }
             }
         }
-        private static function getFormData (&$row, &$data) {
-            //Ja neatgreiž neko tad veic redirect uz index
-            if(empty($row)) {
+        public static function getID () {
+            //Saņem GET padoto id
+            if (!isset($_GET['id'])) {
                 header('Location: index.php');
                 exit();
-            }
-
-            //Dabū mainīgos no datubāzes
-            foreach ($data as $key => &$var) {
-                if($var['type'] == FormDataType::PHONE_NUMBER) {
-                    $value = explode(' ', $row[$key]);
-                    $var['value'] = [
-                        'country-code' => $value[0],
-                        'number' => $value[1]
-                    ];
-                } else {
-                    $var['value'] = $row[$key];
-                }
-            }
+            } 
+            return $_GET['id'];
         }
         public static function update ($tableName, $idColumnName, &$data) {
             $id = CRUDFunctions::getID();
             $row = Database::getRowWithID($tableName, $idColumnName, $id);
 
-            CRUDFunctions::getFormData($row, $data);
+            //Ja neatgreiž neko tad veic redirect uz index
+            if(empty($row)) {
+                header('Location: index.php');
+                exit();
+            }
+            //Dabū mainīgos no datubāzes
+            foreach ($data as $key => &$var) {
+                $var['value'] = $row[$key];
+            }
         
             //Pārbauda vai POST izsaukts
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
