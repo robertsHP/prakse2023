@@ -24,7 +24,7 @@
         <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/header.php'; ?>
 
         <div class="main-container">
-            <h4>Preču kategorijas informācija</h4>
+            <h4>Klienta informācija</h4>
             <table class="table table-hover">
                 <tr>
                     <th>ID: </th>

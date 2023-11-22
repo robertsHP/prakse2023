@@ -16,7 +16,7 @@
 
     //Lapas dati priekš inputForm.php
     $page = [
-        'title' => 'Rediģēt kategorijas informāciju',
+        'title' => 'Rediģēt klienta informāciju',
         'buttons' => [
             [
                 'type' => 'submit',
