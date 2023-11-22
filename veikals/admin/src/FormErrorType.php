@@ -13,8 +13,13 @@
         case FILE_COULDNT_BE_MOVED = 9;
 
         case PHONE_NUMBER_INVALID = 20;
+
+        case UPLOAD_FAILED = 30;
     }
     class FormTypeErrorConditions {
+        public const INPUT_FAIL_DEFAULT = [
+
+        ];
         public const FILE_DEFAULT = [
             FormErrorType::EMPTY->value                     => 'Fails nav pievienots',
             FormErrorType::FILE_ALREADY_EXISTS->value       => 'Fails jau eksistē',

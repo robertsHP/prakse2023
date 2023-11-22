@@ -63,10 +63,6 @@
                     $stmt = $conn->prepare("INSERT INTO $tableName ($keysString) VALUES ($valuesString)");
                     foreach ($data as $key => &$var) {
                         $value = &$var['value'];
-
-                        if($var['type'] == FormDataType::PHONE_NUMBER) {
-                            $value = $value['country-code'].' '.$value['number'];
-                        }
                         $stmt->bindParam(':'.$key, $var['value'], $var['db_var_type']);
                     }
                     $stmt->execute();
@@ -100,10 +96,6 @@
                     $stmt = $conn->prepare("UPDATE $tableName SET $setString WHERE $idColumnName = :id");
                     foreach ($data as $key => &$var) {
                         $value = &$var['value'];
-
-                        if($var['type'] == FormDataType::PHONE_NUMBER) {
-                            $value = $value['country-code'].' '.$value['number'];
-                        }
                         $stmt->bindParam(':'.$key, $value, $var['db_var_type']);
                     }
                     $stmt->bindParam(':id', $id, PDO::PARAM_INT);

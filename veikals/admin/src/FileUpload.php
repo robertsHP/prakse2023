@@ -45,7 +45,7 @@
             if($fileVar['errorType'] == FormErrorType::NONE) {
                 $tempVar = $fileVar;
                 if($_FILES[$key]['tmp_name'] == '') {
-                    VariableHandler::assignFileVariable($key, $tempVar);
+                    VariableHandler::assignFileVariable($key, $tempVar, $hasErrors);
                     $tempVar['value'] = FileUpload::prepareFolderPath($tempVar['value'], 'temp');
                     $tempVar['value'] = $_SERVER['CONTEXT_DOCUMENT_ROOT'].$tempVar['value'];
                 } else {

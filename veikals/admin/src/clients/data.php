@@ -21,7 +21,7 @@
             'required' => true
         ],
         'phone_number' => [
-            'value' => null, //['country-code' => ..., 'number' => ...
+            'value' => null,
             'type' => FormDataType::PHONE_NUMBER,
             'db_var_type' => PDO::PARAM_STR,
             'errorType' => FormErrorType::NONE,
