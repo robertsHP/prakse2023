@@ -5,6 +5,8 @@
 
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/BasicFormTagLoader.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FileUpload.php';
+
+    include $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/ImageSelectElement.php';
 ?>
 
 <!DOCTYPE html>
@@ -76,13 +78,22 @@
                             $tagName = 'photo_file_loc';
                             $variableData = $formData[$tagName];
                             $errorConditions =  FormTypeErrorConditions::FILE_DEFAULT;
-                            $allowedFileTypes = implode(', ', $variableData['allowed_file_formats']);
-
-                            BasicFormTagLoader::loadLabel($title, $tagName, $variableData);
-
-                            include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/loadImageSelect.php';
-                            
-                            BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions);
+                        ?>  
+                        <?php BasicFormTagLoader::loadLabel($title, $tagName, $variableData); ?>
+                            <div class="mb-3"> 
+                                <?php
+                                    $imageSelElement = new ImageSelectElement(
+                                        $title, 
+                                        $tagName,
+                                        $variableData['allowed_file_formats']
+                                    );
+                                    $imageSelElement->load($variableData['value']);
+                                ?>
+                            </div>
+                        <?php
+                            BasicFormTagLoader::loadErrorMessage(
+                                $variableData, 
+                                $errorConditions);
                         ?>
                         
                         <br>
