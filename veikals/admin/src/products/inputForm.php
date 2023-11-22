@@ -3,7 +3,7 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
 
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/BasicFormTagLoader.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/BasicFormTagLoader.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FileUpload.php';
 
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/ImageSelectElement.php';
@@ -82,12 +82,12 @@
                         <?php BasicFormTagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <div class="mb-3"> 
                                 <?php
-                                    $imageSelElement = new ImageSelectElement(
+                                    ImageSelectElement::load(
                                         $title, 
                                         $tagName,
+                                        $variableData['value'],
                                         $variableData['allowed_file_formats']
                                     );
-                                    $imageSelElement->load($variableData['value']);
                                 ?>
                             </div>
                         <?php

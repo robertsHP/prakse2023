@@ -62,13 +62,15 @@ function initImageSelect (elementValue, fileInputID, selectedImageID, deleteButt
         $(this).css('cursor', 'default');
     });
 
-    if(elementValue != '') {
-        $(fileInputID).hide();
-        $(selectedImageID).show();
-        $(deleteButtonID).show();
-    } else {
+    console.log(elementValue);
+
+    if(elementValue === null || elementValue === '') {
         $(fileInputID).show();
         $(selectedImageID).hide();
         $(deleteButtonID).hide();
+    } else {
+        $(fileInputID).hide();
+        $(selectedImageID).show();
+        $(deleteButtonID).show();
     }
 }

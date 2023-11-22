@@ -17,7 +17,7 @@
             foreach ($_SESSION['temp']['paths'] as $filePath) {
                 $filePath = FileUpload::prepareFolderPath($filePath, 'temp');
                 $filePath = $_SERVER['CONTEXT_DOCUMENT_ROOT'].$filePath;
-                if (file_exists($filePath)) {
+                if (file_exists($filePath) && $filePath != $_SERVER['CONTEXT_DOCUMENT_ROOT']) {
                     unlink($filePath);
                 }
             }
