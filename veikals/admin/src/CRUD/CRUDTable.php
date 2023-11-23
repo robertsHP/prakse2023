@@ -2,7 +2,7 @@
     class CRUDTable {
         public static function load (array $columns, string $tableName) {
             ?>
-                <table class="table table-hover">
+                <table class="table table-hover" id="index-table">
                     <thead class="thead-custom">
                         <tr>
                             <?php
@@ -12,31 +12,33 @@
                             ?>
                         </tr>
                     </thead>
-                <?php
-                    $result = Database::getAllRowsFrom($tableName);
+                    <tbody>
+                        <?php
+                            $result = Database::getAllRowsFrom($tableName);
 
-                    foreach ($result as $row) {
-                        echo '<tr>';
-                            foreach ($columns as $column) {
-                                if(is_array($column)) {
-                                    $tableName = $column[1];
-                                    $colName = $column[0];
-                                    $var = $row[$column[0]];
-                                    $row2 = Database::getRowFrom($tableName, $colName, $var, PDO::PARAM_INT);
-                                    if(empty($row2)) {
-                                        echo '<td>None</td>';
-                                    } else {
-                                        echo '<td>'.$row2[$column[2]].'</td>';
+                            foreach ($result as $row) {
+                                echo '<tr>';
+                                    foreach ($columns as $column) {
+                                        if(is_array($column)) {
+                                            $tableName = $column[1];
+                                            $colName = $column[0];
+                                            $var = $row[$column[0]];
+                                            $row2 = Database::getRowFrom($tableName, $colName, $var, PDO::PARAM_INT);
+                                            if(empty($row2)) {
+                                                echo '<td>None</td>';
+                                            } else {
+                                                echo '<td>'.$row2[$column[2]].'</td>';
+                                            }
+                                        } else {
+                                            echo '<td>'.$row[$column].'</td>';
+                                        }
                                     }
-                                } else {
-                                    echo '<td>'.$row[$column].'</td>';
-                                }
+                                    $id = reset($row);
+                                    CRUDTable::loadIndexButtons($id);
+                                echo '</tr>';
                             }
-                            $id = reset($row);
-                            CRUDTable::loadIndexButtons($id);
-                        echo '</tr>';
-                    }
-                ?>
+                        ?>
+                    </tbody>
                 </table>
             <?php
         }

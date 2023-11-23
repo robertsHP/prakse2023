@@ -1,12 +1,12 @@
 <?php
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/SearchElement.php';
 
     class CRUDOptions {
         public static function load () {
             ?>
             <div class="option-container">
-                <?php
-                    CRUDOptions::loadNewButton();
-                ?>
+                <div class="element"> <?php CRUDOptions::loadNewButton(); ?> </div>
+                <div class="element"> <?php SearchElement::load(); ?> </div>
             </div>
             <?php
         }

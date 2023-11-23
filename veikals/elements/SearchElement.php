@@ -1,8 +1,8 @@
 <?php
     class SearchElement {
         public static function load () {
-            SeachElement::loadSearchTag();
-            SeachElement::loadSearchScript();
+            SearchElement::loadSearchTag();
+            SearchElement::loadSearchScript();
         }
         private static function loadSearchTag () {
             ?>
@@ -10,7 +10,7 @@
                     <input 
                         type="text" 
                         class="form-control search-input"
-                        id="index-search" 
+                        id="search-input" 
                         name=""
                         placeholder="Meklēt..."
                         value=""
@@ -21,27 +21,23 @@
         }
         private static function loadSearchScript () {
             ?>
-            <script>
-                document.getElementById('index-search').addEventListener('input', function () {
-                    var input = document.getElementById('index-search');
-                    var filter = input.value.toUpperCase();
-                    var table = document.getElementById('index-table');
-                    var trElements = table.getElementsByTagName('tr');
+                <script>
+                    $(document).ready(function(){
+                        var $searchInput = $('#search-input');
+                        var $tableRows = $('table tbody tr');
 
-                    console.log(trElements);
-                    for (var i = 0; i < trElements.length; i++) {
-                        var td = trElements[i].getElementsByTagName('td')[1];
-                        if (td) {
-                            var txtValue = td.textContent || td.innerText;
-                            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                                trElements[i].style.display = '';
-                            } else {
-                                trElements[i].style.display = 'none';
-                            }
-                        }
-                    }
-                });
-            </script>
+                        $searchInput.on('keyup', function() {
+                            var searchTerm = $(this).val().toLowerCase();
+
+                            $tableRows.each(function() {
+                                var textToSearch = $(this).text().toLowerCase();
+                                var isVisible = textToSearch.includes(searchTerm);
+
+                                $(this).toggle(isVisible);
+                            });
+                        });
+                    });
+                </script>
             <?php
         }
     }
