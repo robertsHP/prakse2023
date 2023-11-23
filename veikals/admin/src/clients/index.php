@@ -4,7 +4,7 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
     
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/BasicFormTagLoader.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/TagLoader.php';
 
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDTable.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDOptions.php';

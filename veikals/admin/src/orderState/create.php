@@ -15,7 +15,7 @@
     
     //Lapas dati priekš inputForm.php
     $page = [
-        'title' => 'Izveidot jaunu preces kategoriju',
+        'title' => 'Izveidot jaunu statusu',
         'buttons' => [
             [
                 'type' => 'submit',

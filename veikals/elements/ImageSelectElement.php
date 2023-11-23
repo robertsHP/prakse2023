@@ -1,7 +1,4 @@
 <?php
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/BasicFormTagLoader.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FileUpload.php';
-
     class ImageSelectElement {
         public static function load (string $title, string $tagName, $elementValue, array $allowedFileFormats) {
             $thumbNailTagName = $tagName.'-thumbnail';

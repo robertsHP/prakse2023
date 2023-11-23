@@ -1,7 +1,7 @@
 <?php
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/enums/FormErrorType.php';
 
-    class BasicFormTagLoader {
+    class TagLoader {
         public static function loadButton ($type, $name, $value, $class) {
             ?>
                 <input 
@@ -21,7 +21,7 @@
         public static function loadButtonRow ($pageData) {
             if(isset($pageData['buttons'])) {
                 foreach ($pageData['buttons'] as $buttonInfo) {
-                    BasicFormTagLoader::loadButton(
+                    TagLoader::loadButton(
                         $buttonInfo['type'],
                         $buttonInfo['name'],
                         $buttonInfo['value'],
@@ -30,7 +30,7 @@
                 }
             }
         }
-        public static function loadErrorMessage ($variableData, $errorConditions) {
+        public static function loadInputErrorMessage ($variableData, $errorConditions) {
             if(isset($variableData)) {
                 if($variableData['required']) {
                     if($variableData['errorType'] != FormErrorType::NONE) {
@@ -38,7 +38,7 @@
                         for ($i = 1; $i < count($errorCases); $i++) {
                             $case = $errorCases[$i];
                             if($variableData['errorType'] == $case) {
-                                BasicFormTagLoader::loadAlert($errorConditions[$case->value]);
+                                TagLoader::loadAlert($errorConditions[$case->value]);
                             }
                         }
                     }

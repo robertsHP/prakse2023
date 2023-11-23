@@ -3,7 +3,7 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
 
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/BasicFormTagLoader.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/TagLoader.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FileUpload.php';
 
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/ImageSelectElement.php';
@@ -29,9 +29,8 @@
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Nosaukums nav ievadīts'
                             ];
-                        
-                            BasicFormTagLoader::loadLabel($title, $tagName, $variableData);
                         ?>
+                        <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <input 
                                 type="text"  
                                 class="form-control" 
@@ -42,10 +41,9 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
-                        <?php 
-                            BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions);
-                        ?>
+                        <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
 
+                        
                         <?php 
                             $title = 'Apraksts';
                             $tagName = 'description';
@@ -55,9 +53,8 @@
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Apraksts nav ievadīts'
                             ];
-
-                            BasicFormTagLoader::loadLabel($title, $tagName, $variableData);
                         ?>
+                        <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <textarea 
                                 class="form-control"
                                 name="<?php echo $tagName; ?>"
@@ -69,9 +66,8 @@
                                 if(isset($variableData))
                                     echo $variableData['value'];
                             ?></textarea>
-                        <?php 
-                            BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions);
-                        ?>
+                        <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
+
 
                         <?php 
                             $title = 'Bilde';
@@ -79,7 +75,7 @@
                             $variableData = $formData[$tagName];
                             $errorConditions =  FormTypeErrorConditions::FILE_DEFAULT;
                         ?>  
-                        <?php BasicFormTagLoader::loadLabel($title, $tagName, $variableData); ?>
+                        <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <div class="mb-3"> 
                                 <?php
                                     ImageSelectElement::load(
@@ -90,11 +86,7 @@
                                     );
                                 ?>
                             </div>
-                        <?php
-                            BasicFormTagLoader::loadErrorMessage(
-                                $variableData, 
-                                $errorConditions);
-                        ?>
+                        <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
                         
                         <br>
 
@@ -106,9 +98,8 @@
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Cena nav ievadīta'
                             ];
-
-                            BasicFormTagLoader::loadLabel($title, $tagName, $variableData);
                         ?>
+                        <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <input 
                                 type="number"  
                                 class="form-control" 
@@ -120,9 +111,7 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
-                        <?php 
-                            BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions);
-                        ?>
+                        <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
 
                         <?php 
                             $title = 'Pieejamais daudzums';
@@ -132,9 +121,8 @@
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Daudzums nav ievadīts'
                             ];
-
-                            BasicFormTagLoader::loadLabel($title, $tagName, $variableData);
                         ?>
+                        <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <input 
                                 type="number"  
                                 class="form-control" 
@@ -145,9 +133,7 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
-                        <?php 
-                            BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions);
-                        ?>
+                        <?php  TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
 
                         <?php 
                             $title = 'Kategorija';
@@ -157,9 +143,8 @@
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Kategorija nav izvēlēta'
                             ];
-
-                            BasicFormTagLoader::loadLabel($title, $tagName, $variableData);
                         ?>
+                        <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <select 
                                 class="form-control"
                                 name="<?php echo $tagName; ?>"
@@ -179,14 +164,12 @@
                                     }
                                 ?>
                             </select>
-                        <?php 
-                            BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions);
-                        ?>
+                        <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
                     </div>
                 </div>
                 <div class="element-row">
                     <?php 
-                        BasicFormTagLoader::loadButtonRow($page);
+                        TagLoader::loadButtonRow($page);
                     ?>
                 </div>
             </form>

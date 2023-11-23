@@ -3,7 +3,7 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
 
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/BasicFormTagLoader.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/TagLoader.php';
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +32,7 @@
                                 FormErrorType::EMPTY->value => 'Kategorijas nosaukums ir nepieciešams'
                             ];
                         ?>
-                        <?php BasicFormTagLoader::loadLabel($title, $tagName, $variableData); ?>
+                        <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                         <input 
                             type="text"  
                             class="form-control" 
@@ -43,7 +43,7 @@
                                 if(isset($variableData))
                                     echo $variableData['value'];
                         ?>">
-                        <?php BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions); ?>
+                        <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
 
 
                         <?php 
@@ -53,7 +53,7 @@
                             $placeholder = 'name@example.com';
                             $errorConditions = FormTypeErrorConditions::EMAIL_DEFAULT;
                         ?>
-                        <?php BasicFormTagLoader::loadLabel($title, $tagName, $variableData); ?>
+                        <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                         <input 
                             type="text"  
                             class="form-control" 
@@ -64,7 +64,7 @@
                                 if(isset($variableData))
                                     echo $variableData['value'];
                         ?>">
-                        <?php BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions); ?>
+                        <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
 
 
                         <?php 
@@ -74,7 +74,7 @@
                             $errorConditions = FormTypeErrorConditions::PHONE_NUMBER_DEFAULT;
                             $placeholder = '+371XXXXXXXX';
                         ?>
-                        <?php BasicFormTagLoader::loadLabel($title, $tagName, $variableData); ?>
+                        <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                         <div class="row">
                             <div class="col-4">
                                 <input 
@@ -102,7 +102,7 @@
                                 </script>
                             </div>
                         </div> 
-                        <?php BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions); ?>
+                        <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
 
 
                         <?php 
@@ -114,7 +114,7 @@
                                 FormErrorType::EMPTY->value => 'Adrese ir nepieciešama'
                             ];
                         ?>
-                        <?php BasicFormTagLoader::loadLabel($title, $tagName, $variableData); ?>
+                        <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <input 
                                 type="text"  
                                 class="form-control" 
@@ -125,11 +125,11 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
-                        <?php BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions); ?>
+                        <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
                     </div>
                 </div>
                 <div class="element-row">
-                    <?php BasicFormTagLoader::loadButtonRow($page); ?>
+                    <?php TagLoader::loadButtonRow($page); ?>
                 </div>
             </form>
         </div>

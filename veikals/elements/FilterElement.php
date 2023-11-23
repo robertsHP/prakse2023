@@ -3,9 +3,10 @@
         public static function load () {
 
         }
-        private static function outputFilterSelect ($tableName, ) {
+        private static function outputFilterSelect ($tableName) {
             ?>
                 <select name="cars" id="cars">
+                    
                     <option value="volvo">Volvo</option>
                     <option value="saab">Saab</option>
                     <option value="opel">Opel</option>
