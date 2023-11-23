@@ -29,11 +29,10 @@
                             $variableData = $formData[$tagName];
                             $placeholder = 'Ievadi nosaukumu';
                             $errorConditions = [
-                                FormErrorType::EMPTY->value => 'Kategorijas nosaukums ir nepieciešams'
+                                FormErrorType::EMPTY->value => 'Statusa nosaukums ir nepieciešams'
                             ];
-                        
-                            BasicFormTagLoader::loadLabel($title, $tagName, $variableData);
                         ?>
+                        <?php BasicFormTagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <input 
                                 type="text"  
                                 class="form-control" 
@@ -44,9 +43,7 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
-                        <?php 
-                            BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions);
-                        ?>
+                        <?php BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions); ?>
                     </div>
                 </div>
                 <div class="element-row">

@@ -2,8 +2,8 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/enums/FormErrorType.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/enums/FormDataType.php';
 
-    $tableName = 'product_category';
-    $idColumnName = 'category_id';
+    $tableName = 'order_state';
+    $idColumnName = 'state_id';
 
     $formData = [
         'name' => [

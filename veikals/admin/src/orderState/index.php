@@ -17,16 +17,13 @@
     <body>
         <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/header.php'; ?>
         <div class="main-container">
-            <h4>Preces</h4>
+            <h4>Pasūtījumu statusi</h4>
             <?php 
                 CRUDOptions::load();
                 CRUDTable::load(
                     [
                         'ID' => $idColumnName,
-                        'Nosaukums' => 'name',
-                        'Cena' => 'price',
-                        'Pieejamais daudzums' => 'available_amount',
-                        'Kategorija' => ['category_id', 'product_category', 'name']
+                        'Nosaukums' => 'name'
                     ],
                     $tableName
                 );
