@@ -69,19 +69,25 @@
             }
         }
         private static function performUpdateSaveAction ($tableName, $idColumnName, $id, &$data) {
-            $tempFiles = [];
+            // if (!empty($_POST['token'])) {
+            //     if (hash_equals($_SESSION['token'], $_POST['token'])) {
+                    $tempFiles = [];
 
-            $hasErrors = CRUDFunctions::loopAndProcessFormData($tempFiles, $data);
-            if(!$hasErrors) {
-                $filesUploaded = CRUDFunctions::loopAndMoveTempFiles($tableName, $tempFiles, $data);
-                if($filesUploaded) {
-                    $success = Database::update($tableName, $idColumnName, $id, $data);
-                    if($success) {
-                        header('Location: index.php');
-                        exit();
+                    $hasErrors = CRUDFunctions::loopAndProcessFormData($tempFiles, $data);
+                    if(!$hasErrors) {
+                        $filesUploaded = CRUDFunctions::loopAndMoveTempFiles($tableName, $tempFiles, $data);
+                        if($filesUploaded) {
+                            $success = Database::update($tableName, $idColumnName, $id, $data);
+                            if($success) {
+                                header('Location: index.php');
+                                exit();
+                            }
+                        }
                     }
-                }
-            }
+            //     } else {
+            //         // TagLoader::
+            //     }
+            // }
         }
         public static function getID () {
             //Saņem GET padoto id

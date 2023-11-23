@@ -3,7 +3,7 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
 
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/BasicFormTagLoader.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/TagLoader.php';
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +32,7 @@
                                 FormErrorType::EMPTY->value => 'Statusa nosaukums ir nepieciešams'
                             ];
                         ?>
-                        <?php BasicFormTagLoader::loadLabel($title, $tagName, $variableData); ?>
+                        <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <input 
                                 type="text"  
                                 class="form-control" 
@@ -43,12 +43,12 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
-                        <?php BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions); ?>
+                        <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
                     </div>
                 </div>
                 <div class="element-row">
                     <?php 
-                        BasicFormTagLoader::loadButtonRow($page);
+                        TagLoader::loadButtonRow($page);
                     ?>
                 </div>
             </form>

@@ -3,7 +3,7 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
 
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/BasicFormTagLoader.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/TagLoader.php';
 ?>
 
 <!DOCTYPE html>
@@ -30,9 +30,8 @@
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Vārds ir nepieciešams'
                             ];
-                        
-                            BasicFormTagLoader::loadLabel($title, $tagName, $variableData);
                         ?>
+                        <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <input 
                                 type="text"  
                                 class="form-control" 
@@ -43,9 +42,7 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
-                        <?php 
-                            BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions);
-                        ?>
+                        <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
                     </div>
                     <div class="col-sm-6">
                         <?php 
@@ -56,9 +53,8 @@
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Uzvārds ir nepieciešams'
                             ];
-                        
-                            BasicFormTagLoader::loadLabel($title, $tagName, $variableData);
                         ?>
+                        <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <input 
                                 type="text"  
                                 class="form-control" 
@@ -69,9 +65,7 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
-                        <?php 
-                            BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions);
-                        ?>
+                        <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
                     </div>
                 </div>
                 <div class="form-group">
@@ -81,9 +75,8 @@
                         $variableData = $formData[$tagName];
                         $placeholder = 'name@example.com';
                         $errorConditions = FormTypeErrorConditions::EMAIL_DEFAULT;
-                    
-                        BasicFormTagLoader::loadLabel($title, $tagName, $variableData);
                     ?>
+                    <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                         <input 
                             type="text"  
                             class="form-control" 
@@ -94,14 +87,10 @@
                                 if(isset($variableData))
                                     echo $variableData['value'];
                         ?>">
-                    <?php 
-                        BasicFormTagLoader::loadErrorMessage($variableData, $errorConditions);
-                    ?>
+                    <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
                 </div>
                 <div class="element-row">
-                    <?php 
-                        BasicFormTagLoader::loadButtonRow($page);
-                    ?>
+                    <?php TagLoader::loadButtonRow($page); ?>
                 </div>
             </form>
         </div>
