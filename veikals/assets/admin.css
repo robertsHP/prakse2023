@@ -101,6 +101,11 @@ header p {
     margin-bottom: 15px;
 }
 
+.element {
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .quicklink-container {
     display: flex;
     flex-wrap: wrap;
