@@ -26,7 +26,7 @@
                         <?php 
                             $title = 'Nosaukums';
                             $tagName = 'name';
-                            $variableData = $formData[$tagName];
+                            $variableData = $data[$tagName];
                             $placeholder = 'Ievadi nosaukumu';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Statusa nosaukums ir nepieciešams'

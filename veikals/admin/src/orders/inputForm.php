@@ -22,17 +22,17 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <?php 
-                            $title = 'Nosaukums';
-                            $tagName = 'name';
+                            $title = 'Numurs';
+                            $tagName = 'number';
                             $variableData = $data[$tagName];
-                            $placeholder = 'Ievadi nosaukumu';
+                            $placeholder = 'Ievadi numuru';
                             $errorConditions = [
-                                FormErrorType::EMPTY->value => 'Nosaukums nav ievadīts'
+                                FormErrorType::EMPTY->value => 'Numurs nav ievadīts'
                             ];
                         ?>
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <input 
-                                type="text"  
+                                type="number"  
                                 class="form-control" 
                                 name="<?php echo $tagName; ?>"
                                 id="<?php echo $tagName; ?>"
@@ -43,56 +43,66 @@
                             ?>">
                         <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
 
-                        
+
                         <?php 
-                            $title = 'Apraksts';
-                            $tagName = 'description';
+                            $title = 'Klients';
+                            $tagName = 'client_id';
                             $variableData = $data[$tagName];
-                            $fieldRequired = true;
-                            $placeholder = '...';
+                            $placeholder = 'Izvēlies klientu';
                             $errorConditions = [
-                                FormErrorType::EMPTY->value => 'Apraksts nav ievadīts'
+                                FormErrorType::EMPTY->value => 'Klients nav izvēlēts'
                             ];
                         ?>
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
-                            <textarea 
+                            <select 
                                 class="form-control"
                                 name="<?php echo $tagName; ?>"
                                 id="<?php echo $tagName; ?>"
-                                rows="4" 
-                                cols="50" 
-                                placeholder="<?php echo $placeholder; ?>"
-                            ><?php 
-                                if(isset($variableData))
-                                    echo $variableData['value'];
-                            ?></textarea>
+                                value="<?php 
+                                    if(isset($variableData))
+                                        echo $variableData['value'];
+                            ?>">
+                                <?php
+                                    $rows = Database::getAllRowsFrom('clients');
+                                    foreach ($rows as $row) {
+                                        $selected = $row[$tagName] == $variableData['value'] ? ' selected' : '';
+                                        echo '<option 
+                                            value="'.$row[$tagName].'"
+                                            '.$selected.'
+                                        >'.$row['name'].'</option>';
+                                    }
+                                ?>
+                            </select>
                         <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
 
 
                         <?php 
-                            $title = 'Bilde';
-                            $tagName = 'photo_file_loc';
+                            $title = 'Datums';
+                            $tagName = 'date';
                             $variableData = $data[$tagName];
-                            $errorConditions =  FormTypeErrorConditions::FILE_DEFAULT;
-                        ?>  
+                            $placeholder = 'Norādi datumu';
+                            $errorConditions = [
+                                FormErrorType::EMPTY->value => 'Datums nav norādīts'
+                            ];
+                        ?>
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
-                            <div class="mb-3"> 
-                                <?php
-                                    ImageSelectElement::load(
-                                        $title, 
-                                        $tagName,
-                                        $variableData['value'],
-                                        $variableData['allowed_file_formats']
-                                    );
-                                ?>
-                            </div>
+                            <input 
+                                type="date"  
+                                class="form-control" 
+                                name="<?php echo $tagName; ?>"
+                                id="<?php echo $tagName; ?>"
+                                placeholder="<?php echo $placeholder; ?>"
+                                step=".01"
+                                value="<?php 
+                                    if(isset($variableData))
+                                        echo $variableData['value'];
+                            ?>">
                         <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
-                        
-                        <br>
+
 
                         <?php 
                             $title = 'Cena (eiro)';
-                            $tagName = 'price';
+                            $tagName = 'total_price';
                             $variableData = $data[$tagName];
                             $placeholder = 'Ievadi cenu';
                             $errorConditions = [
@@ -113,36 +123,14 @@
                             ?>">
                         <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
 
-                        <?php 
-                            $title = 'Pieejamais daudzums';
-                            $tagName = 'available_amount';
-                            $variableData = $data[$tagName];
-                            $placeholder = 'Ievadi daudzumu';
-                            $errorConditions = [
-                                FormErrorType::EMPTY->value => 'Daudzums nav ievadīts'
-                            ];
-                        ?>
-                        <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
-                            <input 
-                                type="number"  
-                                class="form-control" 
-                                name="<?php echo $tagName; ?>"
-                                id="<?php echo $tagName; ?>"
-                                placeholder="<?php echo $placeholder; ?>"
-                                value="<?php 
-                                    if(isset($variableData))
-                                        echo $variableData['value'];
-                            ?>">
-                        <?php  TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
 
-                        
                         <?php 
-                            $title = 'Kategorija';
-                            $tagName = 'category_id';
+                            $title = 'Statuss';
+                            $tagName = 'state_id';
                             $variableData = $data[$tagName];
-                            $placeholder = 'Izvēlies kategoriju';
+                            $placeholder = 'Izvēlies statusu';
                             $errorConditions = [
-                                FormErrorType::EMPTY->value => 'Kategorija nav izvēlēta'
+                                FormErrorType::EMPTY->value => 'Statuss nav norādīts'
                             ];
                         ?>
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
@@ -155,7 +143,7 @@
                                         echo $variableData['value'];
                             ?>">
                                 <?php
-                                    $rows = Database::getAllRowsFrom('product_categories');
+                                    $rows = Database::getAllRowsFrom('order_states');
                                     foreach ($rows as $row) {
                                         $selected = $row[$tagName] == $variableData['value'] ? ' selected' : '';
                                         echo '<option 

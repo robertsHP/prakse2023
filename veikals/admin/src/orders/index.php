@@ -23,10 +23,11 @@
                 CRUDTable::load(
                     [
                         'ID' => $idColumnName,
-                        'Nosaukums' => 'name',
-                        'Cena' => 'price',
-                        'Pieejamais daudzums' => 'available_amount',
-                        'Kategorija' => ['category_id', 'product_categories', 'name']
+                        'Numurs' => 'number',
+                        'Klients' => ['client_id', 'clients', 'name'],
+                        'Datums' => 'date',
+                        'Cena' => 'total_price',
+                        'Pasūtījuma statuss' => ['state_id', 'order_states', 'name']
                     ],
                     $tableName
                 );

@@ -2,10 +2,10 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/enums/FormErrorType.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/enums/FormDataType.php';
 
-    $tableName = 'order_state';
+    $tableName = 'order_states';
     $idColumnName = 'state_id';
 
-    $formData = [
+    $data = [
         'name' => [
             'value' => null,
             'type' => FormDataType::TEXT,

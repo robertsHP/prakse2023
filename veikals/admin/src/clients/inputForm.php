@@ -26,7 +26,7 @@
                         <?php 
                             $title = 'Vārds/Nosaukums';
                             $tagName = 'name';
-                            $variableData = $formData[$tagName];
+                            $variableData = $data[$tagName];
                             $placeholder = 'Ievadi vārdu';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Kategorijas nosaukums ir nepieciešams'
@@ -49,7 +49,7 @@
                         <?php 
                             $title = 'E-pasts';
                             $tagName = 'email';
-                            $variableData = $formData[$tagName];
+                            $variableData = $data[$tagName];
                             $placeholder = 'name@example.com';
                             $errorConditions = FormTypeErrorConditions::EMAIL_DEFAULT;
                         ?>
@@ -70,7 +70,7 @@
                         <?php 
                             $title = 'Telefona numurs';
                             $tagName = 'phone_number';
-                            $variableData = $formData[$tagName];
+                            $variableData = $data[$tagName];
                             $errorConditions = FormTypeErrorConditions::PHONE_NUMBER_DEFAULT;
                             $placeholder = '+371XXXXXXXX';
                         ?>
@@ -108,7 +108,7 @@
                         <?php 
                             $title = 'Adrese';
                             $tagName = 'adress';
-                            $variableData = $formData[$tagName];
+                            $variableData = $data[$tagName];
                             $placeholder = 'Ievadi adresi';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Adrese ir nepieciešama'

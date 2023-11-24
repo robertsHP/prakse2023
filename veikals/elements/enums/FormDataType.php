@@ -6,5 +6,6 @@
         case FILE = 3;
         case EMAIL = 4;
         case PHONE_NUMBER = 5;
+        case DATE = 6;
     }
 ?>

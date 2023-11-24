@@ -10,7 +10,7 @@
 
     CRUDFunctions::create(
         $tableName, 
-        $formData
+        $data
     );
 
     //Lapas dati priekš inputForm.php

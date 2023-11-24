@@ -17,8 +17,10 @@
                 );
                 $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 return $con;
-            } catch(PDOException $e) {
-                die($e->getMessage());
+            } catch (PDOException $exception) {
+                echo "PDO Exception: " . $exception->getMessage();
+                echo "<br>";
+                echo "Error Code: " . $exception->getCode();
             }
             return null;
         }
@@ -26,29 +28,41 @@
             $con = null;
         }
         public static function getRowFrom ($tableName, $colName, $var, $varType) {
-            $conn = Database::openConnection();
+            $result = null;
+            try {
+                $conn = Database::openConnection();
 
-            $stmt = $conn->prepare("SELECT * FROM $tableName WHERE $colName=:id");
-            $stmt->bindParam(':id', $var, $varType);
-            $stmt->execute();
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-            Database::closeConnection($conn);
-
+                $stmt = $conn->prepare("SELECT * FROM $tableName WHERE $colName=:id");
+                $stmt->bindParam(':id', $var, $varType);
+                $stmt->execute();
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+                Database::closeConnection($conn);
+            } catch (PDOException $exception) {
+                echo "PDO Exception: " . $exception->getMessage();
+                echo "<br>";
+                echo "Error Code: " . $exception->getCode();
+            }
             return $result;
         }
         public static function getRowWithID ($tableName, $colName, $id) {
             return Database::getRowFrom($tableName, $colName, $id, PDO::PARAM_INT);
         }
         public static function getAllRowsFrom ($tableName) {
-            $conn = Database::openConnection();
+            $result = null;
+            try {
+                $conn = Database::openConnection();
+                
+                $stmt = $conn->prepare("SELECT * FROM $tableName");
+                $stmt->execute();
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $stmt = $conn->prepare('SELECT * FROM '.$tableName);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            Database::closeConnection($conn);
-
+                Database::closeConnection($conn);
+            } catch (PDOException $exception) {
+                echo "PDO Exception: " . $exception->getMessage();
+                echo "<br>";
+                echo "Error Code: " . $exception->getCode();
+            }
             return $result;
         }
         public static function insert ($tableName, $data) {
@@ -69,19 +83,27 @@
     
                 Database::closeConnection($conn);
                 $success = true;
-            } catch(PDOException $Exception) {
-                throw new MyDatabaseException($Exception->getMessage(), $Exception->getCode());
+            } catch (PDOException $exception) {
+                echo "PDO Exception: " . $exception->getMessage();
+                echo "<br>";
+                echo "Error Code: " . $exception->getCode();
             }
             return $success;
         }
         public static function deleteWithID ($tableName, $idColumnName, $id) {
-            $conn = Database::openConnection();
+            try {
+                $conn = Database::openConnection();
 
-            $stmt = $conn->prepare("DELETE FROM $tableName WHERE $idColumnName = :id");
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
+                $stmt = $conn->prepare("DELETE FROM $tableName WHERE $idColumnName = :id");
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $stmt->execute();
 
-            Database::closeConnection($conn);
+                Database::closeConnection($conn);
+            } catch (PDOException $exception) {
+                echo "PDO Exception: " . $exception->getMessage();
+                echo "<br>";
+                echo "Error Code: " . $exception->getCode();
+            }
         }
         public static function update ($tableName, $idColumnName, $id, $data) {
             $success = false;
@@ -103,8 +125,10 @@
 
                 Database::closeConnection($conn);
                 $success = true;
-            } catch( PDOException $Exception ) {
-                throw new MyDatabaseException( $Exception->getMessage(), $Exception->getCode());
+            } catch (PDOException $exception) {
+                echo "PDO Exception: " . $exception->getMessage();
+                echo "<br>";
+                echo "Error Code: " . $exception->getCode();
             }
             return $success;
         }

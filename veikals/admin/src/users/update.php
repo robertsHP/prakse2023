@@ -11,7 +11,7 @@
     CRUDFunctions::update(
         $tableName, 
         $idColumnName, 
-        $formData
+        $data
     );
 
     //dati priekš inputForm.php
