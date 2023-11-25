@@ -25,7 +25,7 @@
     }
 
     $row = Database::getRowFrom(
-        'user', 
+        'users', 
         'email', 
         $payload['email'], 
         PDO::PARAM_STR);
