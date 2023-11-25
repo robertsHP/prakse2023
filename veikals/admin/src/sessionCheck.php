@@ -1,5 +1,5 @@
 <?php
-    //$redirect = ...
+    //$redirectPath = ...
 
     if(session_status() === PHP_SESSION_NONE) {
         session_start();
@@ -10,7 +10,7 @@
         // $token = $_SESSION['token'];
 
         if(!isset($_SESSION["id"])) {
-            header('Location: '.$redirect);
+            header('Location: '.$redirectPath);
             exit();
         }
     }

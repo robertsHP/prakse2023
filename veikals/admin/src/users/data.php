@@ -1,11 +1,11 @@
 <?php
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/enums/FormErrorType.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/enums/FormDataType.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/enums/FormErrorType.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/enums/FormDataType.php';
 
-    $tableName = 'user';
+    $tableName = 'users';
     $idColumnName = 'user_id';
 
-    $formData = [
+    $data = [
         'name' => [
             'value' => null,
             'type' => FormDataType::TEXT,

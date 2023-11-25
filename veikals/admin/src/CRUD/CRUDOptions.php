@@ -1,5 +1,5 @@
 <?php
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/SearchElement.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/SearchElement.php';
 
     class CRUDOptions {
         public static function load () {

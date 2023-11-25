@@ -7,7 +7,7 @@
     }
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
     
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Config.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/Config.php';
 ?>
 
 <!DOCTYPE html>

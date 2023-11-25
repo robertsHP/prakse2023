@@ -3,10 +3,10 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
 
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/TagLoader.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FileUpload.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/TagLoader.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/FileUpload.php';
 
-    include $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/ImageSelectElement.php';
+    include $_SERVER['DOCUMENT_ROOT'].'/veikals/global/ImageSelectElement.php';
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +24,7 @@
                         <?php 
                             $title = 'Nosaukums';
                             $tagName = 'name';
-                            $variableData = $formData[$tagName];
+                            $variableData = $data[$tagName];
                             $placeholder = 'Ievadi nosaukumu';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Nosaukums nav ievadīts'
@@ -47,7 +47,7 @@
                         <?php 
                             $title = 'Apraksts';
                             $tagName = 'description';
-                            $variableData = $formData[$tagName];
+                            $variableData = $data[$tagName];
                             $fieldRequired = true;
                             $placeholder = '...';
                             $errorConditions = [
@@ -72,7 +72,7 @@
                         <?php 
                             $title = 'Bilde';
                             $tagName = 'photo_file_loc';
-                            $variableData = $formData[$tagName];
+                            $variableData = $data[$tagName];
                             $errorConditions =  FormTypeErrorConditions::FILE_DEFAULT;
                         ?>  
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
@@ -93,7 +93,7 @@
                         <?php 
                             $title = 'Cena (eiro)';
                             $tagName = 'price';
-                            $variableData = $formData[$tagName];
+                            $variableData = $data[$tagName];
                             $placeholder = 'Ievadi cenu';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Cena nav ievadīta'
@@ -116,7 +116,7 @@
                         <?php 
                             $title = 'Pieejamais daudzums';
                             $tagName = 'available_amount';
-                            $variableData = $formData[$tagName];
+                            $variableData = $data[$tagName];
                             $placeholder = 'Ievadi daudzumu';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Daudzums nav ievadīts'
@@ -135,10 +135,11 @@
                             ?>">
                         <?php  TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
 
+                        
                         <?php 
                             $title = 'Kategorija';
                             $tagName = 'category_id';
-                            $variableData = $formData[$tagName];
+                            $variableData = $data[$tagName];
                             $placeholder = 'Izvēlies kategoriju';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Kategorija nav izvēlēta'
@@ -154,11 +155,11 @@
                                         echo $variableData['value'];
                             ?>">
                                 <?php
-                                    $rows = Database::getAllRowsFrom('product_category');
+                                    $rows = Database::getAllRowsFrom('product_categories');
                                     foreach ($rows as $row) {
-                                        $selected = $row['category_id'] == $variableData['value'] ? ' selected' : '';
+                                        $selected = $row[$tagName] == $variableData['value'] ? ' selected' : '';
                                         echo '<option 
-                                            value="'.$row['category_id'].'"
+                                            value="'.$row[$tagName].'"
                                             '.$selected.'
                                         >'.$row['name'].'</option>';
                                     }

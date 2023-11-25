@@ -1,30 +1,20 @@
 <?php 
-    $redirect = '/veikals/admin/index.php';
+    $redirectPath = '/veikals/admin/index.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
-    
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDFunctions.php';
 
     include 'data.php';
+
+    $pageTitle = 'Preces informācija';
 
     $id = null;
     if (isset($_GET['id'])) {
         $id = $_GET['id'];
     }
 
-    $row = CRUDFunctions::read($tableName, $idColumnName, $id);
-?>
-
-
-<!DOCTYPE html>
-<html lang="en">  
-    <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/head.php'; ?>
-    <body>
-        <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/header.php'; ?>
-
-        <div class="main-container">
-            <h4>Preču kategorijas informācija</h4>
+    function displayData ($idColumnName, $data, $row) {
+        $keys = array_keys($data);
+        ?>
             <table class="table table-hover">
                 <tr>
                     <th>ID: </th>
@@ -32,19 +22,19 @@
                 </tr>
                 <tr>
                     <th>Nosaukums: </th>
-                    <th><?php echo $row['name'] ?></th>
+                    <th><?php echo $row[$keys[0]] ?></th>
                 </tr>
                 <tr>
                     <th>Apraksts: </th>
-                    <th><?php echo $row['description'] ?></th>
+                    <th><?php echo $row[$keys[1]] ?></th>
                 </tr>
                 <tr>
                     <th>Bilde: </th>
                     <th>
                         <img 
                             src="<?php 
-                                if(isset($row['photo_file_loc']))
-                                    echo $row['photo_file_loc'];
+                                if(isset($row[$keys[2]]))
+                                    echo $row[$keys[2]];
                             ?>" 
                             name="photo_file_loc"
                             id="photo_file_loc"
@@ -54,28 +44,27 @@
                 </tr>
                 <tr>
                     <th>Cena: </th>
-                    <th><?php echo $row['price'].' eiro' ?></th>
+                    <th><?php echo $row[$keys[3]].' eiro' ?></th>
                 </tr>
                 <tr>
                     <th>Pieejamais daudzums: </th>
-                    <th><?php echo $row['available_amount'] ?></th>
+                    <th><?php echo $row[$keys[4]] ?></th>
                 </tr>
                 <tr>
                     <th>Kategorija: </th>
                     <th>
                         <?php 
                             $catRow = Database::getRowWithID(
-                                'product_category', 
-                                'category_id', 
-                                $row['category_id']);
+                                'product_categories', 
+                                $keys[5], 
+                                $row[$keys[5]]);
                             echo $catRow['name'];
                         ?>
                     </th>
                 </tr>
             </table>
-            <form method="post" action="">
-                <input type="submit" name="back" value="Atpakaļ" class="btn btn-primary execution-button">
-            </form>
-        </div>
-    </body>
-</html>
+        <?php
+    }
+
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/readPage.php';
+?>

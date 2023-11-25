@@ -3,7 +3,7 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
 
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/TagLoader.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/TagLoader.php';
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +25,7 @@
                         <?php 
                             $title = 'Vārds';
                             $tagName = 'name';
-                            $variableData = $formData[$tagName];
+                            $variableData = $data[$tagName];
                             $placeholder = 'Ievadi vārdu';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Vārds ir nepieciešams'
@@ -48,7 +48,7 @@
                         <?php 
                             $title = 'Uzvārds';
                             $tagName = 'surname';
-                            $variableData = $formData[$tagName];
+                            $variableData = $data[$tagName];
                             $placeholder = 'Ievadi uzvārdu';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Uzvārds ir nepieciešams'
@@ -72,7 +72,7 @@
                     <?php 
                         $title = 'E-pasts';
                         $tagName = 'email';
-                        $variableData = $formData[$tagName];
+                        $variableData = $data[$tagName];
                         $placeholder = 'name@example.com';
                         $errorConditions = FormTypeErrorConditions::EMAIL_DEFAULT;
                     ?>

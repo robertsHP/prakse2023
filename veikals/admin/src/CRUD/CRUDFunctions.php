@@ -1,8 +1,9 @@
 <?php
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/enums/FormErrorType.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/enums/FormDataType.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/VariableHandler.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/Database.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/VariableHandler.php';
+    
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/enums/FormErrorType.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/enums/FormDataType.php';
 
     class CRUDFunctions {
         private static function loopAndProcessFormData (&$tempFiles, &$data) {
