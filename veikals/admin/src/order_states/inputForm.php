@@ -3,7 +3,7 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
 
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/TagLoader.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/TagLoader.php';
 ?>
 
 <!DOCTYPE html>
@@ -29,11 +29,10 @@
                             $variableData = $data[$tagName];
                             $placeholder = 'Ievadi nosaukumu';
                             $errorConditions = [
-                                FormErrorType::EMPTY->value => 'Kategorijas nosaukums ir nepieciešams'
+                                FormErrorType::EMPTY->value => 'Statusa nosaukums ir nepieciešams'
                             ];
-                        
-                            TagLoader::loadLabel($title, $tagName, $variableData);
                         ?>
+                        <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <input 
                                 type="text"  
                                 class="form-control" 
@@ -44,9 +43,7 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
-                        <?php 
-                            TagLoader::loadInputErrorMessage($variableData, $errorConditions);
-                        ?>
+                        <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
                     </div>
                 </div>
                 <div class="element-row">

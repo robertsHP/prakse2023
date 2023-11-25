@@ -1,9 +1,11 @@
 <?php
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/Database.php';
+
     class CRUDTable {
         public static function load (array $columns, string $tableName) {
-            $result = Database::getAllRowsFrom($tableName);
+            $dbResult = Database::getAllRowsFrom($tableName);
 
-            if(!empty($result)) {
+            if(!empty($dbResult)) {
                 ?>
                     <table class="table table-hover" id="index-table">
                         <thead class="thead-custom">
@@ -16,32 +18,40 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-                                foreach ($result as $row) {
-                                    echo '<tr>';
-                                        foreach ($columns as $column) {
-                                            if(is_array($column)) {
-                                                $tableName = $column[1];
-                                                $colName = $column[0];
-                                                $var = $row[$column[0]];
-                                                $row2 = Database::getRowFrom($tableName, $colName, $var, PDO::PARAM_INT);
-                                                if(empty($row2)) {
-                                                    echo '<td>None</td>';
-                                                } else {
-                                                    echo '<td>'.$row2[$column[2]].'</td>';
-                                                }
-                                            } else {
-                                                echo '<td>'.$row[$column].'</td>';
-                                            }
-                                        }
-                                        $id = reset($row);
-                                        CRUDTable::loadIndexButtons($id);
-                                    echo '</tr>';
-                                }
-                            ?>
+                            <?php CRUDTable::loadData($dbResult, $columns); ?>
                         </tbody>
                     </table>
                 <?php
+            }
+        }
+        private static function loadData (array $dbResult, array $columns) {
+
+            foreach ($dbResult as $row) {
+                $keys = array_keys($row);
+                $id = $row[$keys[0]];
+                echo '<tr>';
+                    foreach ($columns as $column) {
+                        //Ja ir aivietojama vērtība
+                        if (isset($column['value-swap-info'])) {
+                            $colName = $column['col-name'];
+                            $swapTable = $column['value-swap-info']['swap-table'];
+                            $swapColName = $column['value-swap-info']['swap-col-name'];
+
+                            //Ar ID dabū konkrētās rindas datus ar kuriem aizvietot mainīgo
+                            $swapRow = Database::getRowWithID($swapTable, $colName, $row[$column['col-name']]);
+                            echo empty($swapRow) ? 
+                                '<td></td>' 
+                                : 
+                                '<td>'.$swapRow[$swapColName].'</td>';
+                        //Ja ir parasta vērtība
+                        } else if (isset($column['col-name'])) {
+                            echo '<td>'.$row[$column['col-name']].'</td>';
+                        } else {
+                            echo '<td></td>';
+                        }
+                    }
+                    CRUDTable::loadIndexButtons($id);
+                echo '</tr>';
             }
         }
         private static function loadIndexButtons ($rowID) {

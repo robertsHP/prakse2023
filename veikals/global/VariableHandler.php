@@ -1,7 +1,7 @@
 <?php
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/enums/FormDataType.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/enums/FormErrorType.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FileUpload.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/enums/FormDataType.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/enums/FormErrorType.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/FileUpload.php';
 
     class VariableHandler {
         public static function assignVariable (&$key, &$var, &$hasErrors) {
@@ -20,6 +20,9 @@
                     break;
                 case FormDataType::PHONE_NUMBER:
                     VariableHandler::assignPhoneNumberVariable($key, $var, $hasErrors);
+                    break;
+                case FormDataType::DATE:
+                    VariableHandler::assignDateVariable($key, $var, $hasErrors);
                     break;
             }
         }
@@ -77,6 +80,38 @@
                 $hasErrors = true; 
             } else if($var['value'][0] !== '+') {
                 $var['errorType'] = FormErrorType::PHONE_NUMBER_INVALID;
+                $hasErrors = true;
+            }
+        }
+        private static function isValidDate($dateString) {
+            $dateFormats = [
+                'Y-m-d',
+                'd/m/Y',
+                'm/d/Y',
+            ];
+            //Iziet cauri visien datumu formātiem
+            foreach ($dateFormats as $format) {
+                $dateTime = DateTime::createFromFormat($format, $dateString);
+                $errors = DateTime::getLastErrors();
+
+                //Pārbauda vai tika veiksmīgi izveidots
+                if($errors == null)
+                    if ($dateTime !== false)
+                        return true;
+            }
+            return false;
+        }
+        private static function assignDateVariable (&$key, &$var, &$hasErrors) {
+            if(isset($_POST[$key]))
+                $var['value'] = VariableHandler::getSanitizedValue($_POST[$key]);
+
+            if(empty($var['value'])) {
+                $var['errorType'] = FormErrorType::EMPTY;
+                $hasErrors = true;
+            }
+
+            if (!VariableHandler::isValidDate($var['value'])) {
+                $var['errorType'] = FormErrorType::DATE_INVALID;
                 $hasErrors = true;
             }
         }

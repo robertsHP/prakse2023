@@ -5,7 +5,7 @@
 
     include 'data.php';
 
-    $pageTitle = 'Izveidot jaunu klientu';
+    $pageTitle = 'Izveidot jaunu preču kategoriju';
 
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/createPage.php';
 ?>

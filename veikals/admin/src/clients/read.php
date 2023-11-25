@@ -1,30 +1,20 @@
 <?php 
-    $redirect = '/veikals/admin/index.php';
+    $redirectPath = '/veikals/admin/index.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
-    
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDFunctions.php';
 
     include 'data.php';
+
+    $pageTitle = 'Klienta informācija';
 
     $id = null;
     if (isset($_GET['id'])) {
         $id = $_GET['id'];
     }
 
-    $row = CRUDFunctions::read($tableName, $idColumnName, $id);
-?>
-
-
-<!DOCTYPE html>
-<html lang="en">  
-    <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/head.php'; ?>
-    <body>
-        <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/header.php'; ?>
-
-        <div class="main-container">
-            <h4>Klienta informācija</h4>
+    function displayData ($idColumnName, $data, $row) {
+        $keys = array_keys($data);
+        ?>
             <table class="table table-hover">
                 <tr>
                     <th>ID: </th>
@@ -32,24 +22,23 @@
                 </tr>
                 <tr>
                     <th>Vārds/Nosaukums: </th>
-                    <th><?php echo $row['name'] ?></th>
+                    <th><?php echo $row[$keys[0]] ?></th>
                 </tr>
                 <tr>
                     <th>E-pasts: </th>
-                    <th><?php echo $row['email'] ?></th>
+                    <th><?php echo $row[$keys[1]] ?></th>
                 </tr>
                 <tr>
                     <th>Telefona numurs: </th>
-                    <th><?php echo $row['phone_number'] ?></th>
+                    <th><?php echo $row[$keys[2]] ?></th>
                 </tr>
                 <tr>
                     <th>Adrese: </th>
-                    <th><?php echo $row['adress'] ?></th>
+                    <th><?php echo $row[$keys[3]] ?></th>
                 </tr>
             </table>
-            <form method="post" action="">
-                <input type="submit" name="back" value="Atpakaļ" class="btn btn-primary execution-button">
-            </form>
-        </div>
-    </body>
-</html>
+        <?php
+    }
+
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/readPage.php';
+?>

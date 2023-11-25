@@ -2,18 +2,14 @@
     $redirectPath = '/veikals/admin/index.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
-
+    
     include 'data.php';
 
-    $pageTitle = null;
+    $pageTitle = 'Preču kategorijas informācija';
 
     $id = null;
     if (isset($_GET['id'])) {
         $id = $_GET['id'];
-        $pageTitle = "Lietotāja informācija";
-    } else {
-        $id = $_SESSION["id"];
-        $pageTitle = "Konts";
     }
 
     function displayData ($idColumnName, $data, $row) {
@@ -25,16 +21,8 @@
                     <th><?php echo $row[$idColumnName] ?></th>
                 </tr>
                 <tr>
-                    <th>Vārds: </th>
+                    <th>Nosaukums: </th>
                     <th><?php echo $row[$keys[0]] ?></th>
-                </tr>
-                <tr>
-                    <th>Uzvārds: </th>
-                    <th><?php echo $row[$keys[1]] ?></th>
-                </tr>
-                <tr>
-                    <th>E-pasts: </th>
-                    <th><?php echo $row[$keys[2]] ?></th>
                 </tr>
             </table>
         <?php

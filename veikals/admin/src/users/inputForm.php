@@ -3,7 +3,7 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
 
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/TagLoader.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/TagLoader.php';
 ?>
 
 <!DOCTYPE html>

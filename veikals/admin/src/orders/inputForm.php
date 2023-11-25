@@ -3,10 +3,9 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
 
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/TagLoader.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FileUpload.php';
-
-    include $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/ImageSelectElement.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/TagLoader.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/FileUpload.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/ImageSelectElement.php';
 ?>
 
 <!DOCTYPE html>
@@ -80,10 +79,7 @@
                             $title = 'Datums';
                             $tagName = 'date';
                             $variableData = $data[$tagName];
-                            $placeholder = 'Norādi datumu';
-                            $errorConditions = [
-                                FormErrorType::EMPTY->value => 'Datums nav norādīts'
-                            ];
+                            $errorConditions = FormTypeErrorConditions::DATE_DEFAULT;
                         ?>
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <input 
@@ -91,7 +87,6 @@
                                 class="form-control" 
                                 name="<?php echo $tagName; ?>"
                                 id="<?php echo $tagName; ?>"
-                                placeholder="<?php echo $placeholder; ?>"
                                 step=".01"
                                 value="<?php 
                                     if(isset($variableData))

@@ -1,12 +1,15 @@
 <?php 
-    $redirect = '/veikals/admin/index.php';
-    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
-    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
+    /*
+        $tableName = ...
+        $idColumnName = ...
+        $data = []
+        $redirectPath = ...
+        $inputFormPath = ...
+        $pageTitle = ...
+    */
+
+    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDFunctions.php';
     
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDFunctions.php';
-    
-    include 'data.php';
 
     CRUDFunctions::update(
         $tableName, 
@@ -16,7 +19,7 @@
 
     //Lapas dati priekš inputForm.php
     $page = [
-        'title' => 'Rediģēt kategorijas informāciju',
+        'title' => $pageTitle,
         'buttons' => [
             [
                 'type' => 'submit',
@@ -38,5 +41,8 @@
             ]
         ]
     ];
-    include 'inputForm.php'; 
+
+    $inputFormPath = '/veikals/admin/src/'.$tableName.'/inputForm.php';
+
+    include $_SERVER['DOCUMENT_ROOT'].$inputFormPath;
 ?>

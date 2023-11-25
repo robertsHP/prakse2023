@@ -1,14 +1,19 @@
 <?php 
-    $redirect = '/veikals/admin/index.php';
+    /*
+        $tableName = ...
+        $idColumnName = ...
+
+        $pageTitle = ...
+        $redirectPath = ...
+        $columns = ...
+        $data = []
+    */
+
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
     
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
-    
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDTable.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDOptions.php';
-
-    include 'data.php';
 ?>
 
 <!DOCTYPE html>
@@ -17,16 +22,10 @@
     <body>
         <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/header.php'; ?>
         <div class="main-container">
-            <h4>Preču kategorijas</h4>
+            <h4><?php echo $pageTitle; ?></h4>
             <?php 
                 CRUDOptions::load();
-                CRUDTable::load(
-                    [
-                        'ID' => $idColumnName,
-                        'Nosaukums' => 'name'
-                    ],
-                    $tableName
-                );
+                CRUDTable::load($columns, $tableName);
             ?>
         </div>
     </body>

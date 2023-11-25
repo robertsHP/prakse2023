@@ -1,7 +1,7 @@
 <?php 
     include 'data.php';
 
-    $pageTitle = 'Lietotāji';
+    $pageTitle = 'Produktu kategorijas';
     $redirectPath = '/veikals/admin/index.php';
 
     $keys = array_keys($data);
@@ -10,14 +10,8 @@
         'ID' => [
             'col-name' => $idColumnName
         ],
-        'Vārds' => [
+        'Nosaukums' => [
             'col-name' => $keys[0]
-        ],
-        'Uzvārds' => [
-            'col-name' => $keys[1]
-        ],
-        'E-pasts' => [
-            'col-name' => $keys[2]
         ]
     ];
 

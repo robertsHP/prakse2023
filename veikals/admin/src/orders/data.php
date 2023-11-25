@@ -1,12 +1,13 @@
 <?php
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/enums/FormErrorType.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/elements/enums/FormDataType.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/enums/FormErrorType.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/enums/FormDataType.php';
 
     $tableName = 'orders';
     $idColumnName = 'order_id';
 
     $data = [
         'number' => [
+            'title' => 'Numurs',
             'value' => null,
             'type' => FormDataType::NUMBER,
             'db_var_type' => PDO::PARAM_INT,
@@ -14,6 +15,7 @@
             'required' => true
         ],
         'client_id' => [
+            'title' => 'Klients',
             'value' => null,
             'type' => FormDataType::NUMBER,
             'db_var_type' => PDO::PARAM_INT,
@@ -21,6 +23,7 @@
             'required' => true
         ],
         'date' => [
+            'title' => 'Datums',
             'value' => null,
             'type' => FormDataType::DATE,
             'db_var_type' => PDO::PARAM_STR,
@@ -28,6 +31,7 @@
             'required' => true
         ],
         'total_price' => [
+            'title' => 'Cena',
             'value' => null,
             'type' => FormDataType::NUMBER,
             'db_var_type' => PDO::PARAM_INT,
@@ -35,6 +39,7 @@
             'required' => true
         ],
         'state_id' => [
+            'title' => 'Pasūtījuma statuss',
             'value' => null,
             'type' => FormDataType::NUMBER,
             'db_var_type' => PDO::PARAM_INT,

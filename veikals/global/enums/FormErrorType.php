@@ -11,10 +11,11 @@
         case FILE_UPLOAD_UNSUCCESSFUL = 7;
         case FILE_NOT_FOUND = 8;
         case FILE_COULDNT_BE_MOVED = 9;
+        case FILE_UPLOAD_FAILED = 10;
+
+        case DATE_INVALID = 11;
 
         case PHONE_NUMBER_INVALID = 20;
-
-        case UPLOAD_FAILED = 30;
     }
     class FormTypeErrorConditions {
         public const INPUT_FAIL_DEFAULT = [
@@ -32,6 +33,10 @@
         public const EMAIL_DEFAULT = [
             FormErrorType::EMPTY->value => 'E-pasts ir nepieciešams',
             FormErrorType::EMAIL_INVALID->value => 'E-pasts nav pareizi ievadīts'
+        ];
+        public const DATE_DEFAULT = [
+            FormErrorType::EMPTY->value => 'Datums nav norādīts',
+            FormErrorType::DATE_INVALID->value => 'Datums nav pareizi norādīts'
         ];
         public const PHONE_NUMBER_DEFAULT = [
             FormErrorType::EMPTY->value => 'Telefona numurs ir nepieciešams',

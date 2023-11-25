@@ -21,6 +21,7 @@
                 echo "PDO Exception: " . $exception->getMessage();
                 echo "<br>";
                 echo "Error Code: " . $exception->getCode();
+                echo "<br>";
             }
             return null;
         }
@@ -42,6 +43,7 @@
                 echo "PDO Exception: " . $exception->getMessage();
                 echo "<br>";
                 echo "Error Code: " . $exception->getCode();
+                echo "<br>";
             }
             return $result;
         }
@@ -62,6 +64,7 @@
                 echo "PDO Exception: " . $exception->getMessage();
                 echo "<br>";
                 echo "Error Code: " . $exception->getCode();
+                echo "<br>";
             }
             return $result;
         }
@@ -87,6 +90,7 @@
                 echo "PDO Exception: " . $exception->getMessage();
                 echo "<br>";
                 echo "Error Code: " . $exception->getCode();
+                echo "<br>";
             }
             return $success;
         }
@@ -103,6 +107,7 @@
                 echo "PDO Exception: " . $exception->getMessage();
                 echo "<br>";
                 echo "Error Code: " . $exception->getCode();
+                echo "<br>";
             }
         }
         public static function update ($tableName, $idColumnName, $id, $data) {
@@ -129,6 +134,7 @@
                 echo "PDO Exception: " . $exception->getMessage();
                 echo "<br>";
                 echo "Error Code: " . $exception->getCode();
+                echo "<br>";
             }
             return $success;
         }

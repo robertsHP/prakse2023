@@ -1,21 +1,23 @@
 <?php 
-    $redirect = '/veikals/admin/index.php';
-    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
-    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
-    
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/Database.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDFunctions.php';
+    /*
+        $tableName = ...
+        $idColumnName = ...
+        $data = []
+        $redirectPath = ...
+        $inputFormPath = ...
+        $pageTitle = ...
+    */
 
-    include 'data.php';
+    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDFunctions.php';
 
     CRUDFunctions::create(
         $tableName, 
         $data
     );
-    
+
     //Lapas dati priekš inputForm.php
     $page = [
-        'title' => 'Izveidot jaunu preces kategoriju',
+        'title' => $pageTitle,
         'buttons' => [
             [
                 'type' => 'submit',
@@ -31,5 +33,8 @@
             ]
         ]
     ];
-    include 'inputForm.php'; 
+
+    $inputFormPath = '/veikals/admin/src/'.$tableName.'/inputForm.php';
+
+    include $_SERVER['DOCUMENT_ROOT'].$inputFormPath;
 ?>

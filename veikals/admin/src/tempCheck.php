@@ -1,5 +1,5 @@
 <?php
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/FileUpload.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/FileUpload.php';
 
     //Māsīvs iekšā $_SESSION, kas glabā datus īslaicīgai izmantošanai
 
