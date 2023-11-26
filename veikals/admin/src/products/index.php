@@ -4,22 +4,22 @@
     $pageTitle = 'Produkti';
     $redirectPath = '/veikals/admin/index.php';
 
-    $keys = array_keys($data);
+    $keys = array_keys($data['form-data']);
 
     $columns = [
         'ID' => [
-            'col-name' => $idColumnName
+            'col-name' => $data['id-column-name']
         ],
-        'Nosaukums' => [
+        $data['form-data'][$keys[0]]['title'] => [
             'col-name' => $keys[0]
         ],
-        'Cena' => [
+        $data['form-data'][$keys[3]]['title'] => [
             'col-name' => $keys[3]
         ],
-        'Pieejamais daudzums' => [
+        $data['form-data'][$keys[4]]['title'] => [
             'col-name' => $keys[4]
         ],
-        'Kategorija' => [
+        $data['form-data'][$keys[5]]['title'] => [
             'col-name' => $keys[5],
             'value-swap-info' => [
                 'swap-table' => 'product_categories',

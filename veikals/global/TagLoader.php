@@ -32,13 +32,15 @@
         }
         public static function loadInputErrorMessage ($variableData, $errorConditions) {
             if(isset($variableData)) {
-                if($variableData['required']) {
-                    if($variableData['errorType'] != FormErrorType::NONE) {
-                        $errorCases = FormErrorType::cases();
-                        for ($i = 1; $i < count($errorCases); $i++) {
-                            $case = $errorCases[$i];
-                            if($variableData['errorType'] == $case) {
-                                TagLoader::loadAlert($errorConditions[$case->value]);
+                if(array_key_exists('required', $variableData)) {
+                    if($variableData['required']) {
+                        if($variableData['errorType'] != FormErrorType::NONE) {
+                            $errorCases = FormErrorType::cases();
+                            for ($i = 1; $i < count($errorCases); $i++) {
+                                $case = $errorCases[$i];
+                                if($variableData['errorType'] == $case) {
+                                    TagLoader::loadAlert($errorConditions[$case->value]);
+                                }
                             }
                         }
                     }
@@ -51,8 +53,10 @@
                     <?php 
                         echo $title; 
                         if(isset($variableData)) {
-                            if($variableData['required']) {
-                                ?> <span class="required-star">*</span> <?php
+                            if(array_key_exists('required', $variableData)) {
+                                if($variableData['required']) {
+                                    ?> <span class="required-star">*</span> <?php
+                                }
                             }
                         }
                     ?>

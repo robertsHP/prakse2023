@@ -2,7 +2,11 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/Database.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDFunctions.php';
 
-    $row = CRUDFunctions::read($tableName, $idColumnName, $id);
+    $row = CRUDFunctions::read(
+        $data['table-name'], 
+        $data['id-column-name'], 
+        $id
+    );
 ?>
 
 <!DOCTYPE html>
@@ -13,7 +17,9 @@
 
         <div class="main-container">
             <h4><?php echo $pageTitle; ?></h4>
-            <?php displayData($idColumnName, $data, $row); ?>
+            <?php 
+                displayData($data['id-column-name'], $data['form-data'], $row); 
+            ?>
             <form method="post" action="">
                 <input type="submit" name="back" value="Atpakaļ" class="btn btn-primary execution-button">
             </form>

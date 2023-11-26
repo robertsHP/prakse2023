@@ -7,6 +7,8 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/FileUpload.php';
 
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/global/ImageSelectElement.php';
+
+    $productsData = $data['form-data'];
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +26,7 @@
                         <?php 
                             $title = 'Nosaukums';
                             $tagName = 'name';
-                            $variableData = $data[$tagName];
+                            $variableData = $productsData[$tagName];
                             $placeholder = 'Ievadi nosaukumu';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Nosaukums nav ievadīts'
@@ -47,7 +49,7 @@
                         <?php 
                             $title = 'Apraksts';
                             $tagName = 'description';
-                            $variableData = $data[$tagName];
+                            $variableData = $productsData[$tagName];
                             $fieldRequired = true;
                             $placeholder = '...';
                             $errorConditions = [
@@ -72,14 +74,13 @@
                         <?php 
                             $title = 'Bilde';
                             $tagName = 'photo_file_loc';
-                            $variableData = $data[$tagName];
+                            $variableData = $productsData[$tagName];
                             $errorConditions =  FormTypeErrorConditions::FILE_DEFAULT;
                         ?>  
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <div class="mb-3"> 
                                 <?php
                                     ImageSelectElement::load(
-                                        $title, 
                                         $tagName,
                                         $variableData['value'],
                                         $variableData['allowed_file_formats']
@@ -93,7 +94,7 @@
                         <?php 
                             $title = 'Cena (eiro)';
                             $tagName = 'price';
-                            $variableData = $data[$tagName];
+                            $variableData = $productsData[$tagName];
                             $placeholder = 'Ievadi cenu';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Cena nav ievadīta'
@@ -116,7 +117,7 @@
                         <?php 
                             $title = 'Pieejamais daudzums';
                             $tagName = 'available_amount';
-                            $variableData = $data[$tagName];
+                            $variableData = $productsData[$tagName];
                             $placeholder = 'Ievadi daudzumu';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Daudzums nav ievadīts'
@@ -139,7 +140,7 @@
                         <?php 
                             $title = 'Kategorija';
                             $tagName = 'category_id';
-                            $variableData = $data[$tagName];
+                            $variableData = $productsData[$tagName];
                             $placeholder = 'Izvēlies kategoriju';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Kategorija nav izvēlēta'

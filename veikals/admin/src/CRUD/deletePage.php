@@ -8,8 +8,9 @@
     include 'data.php';
 
     CRUDFunctions::delete(
-        $tableName, 
-        $idColumnName);
+        $data['table-name'], 
+        $data['id-column-name']
+    );
 ?>
 
 <!DOCTYPE html>

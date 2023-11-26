@@ -4,13 +4,13 @@
     $pageTitle = 'Produktu kategorijas';
     $redirectPath = '/veikals/admin/index.php';
 
-    $keys = array_keys($data);
+    $keys = array_keys($data['form-data']);
 
     $columns = [
         'ID' => [
-            'col-name' => $idColumnName
+            'col-name' => $data['id-column-name']
         ],
-        'Nosaukums' => [
+        $data['form-data'][$keys[0]]['title'] => [
             'col-name' => $keys[0]
         ]
     ];

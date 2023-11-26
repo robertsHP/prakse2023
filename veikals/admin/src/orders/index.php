@@ -4,29 +4,29 @@
     $pageTitle = 'Pasūtījumi';
     $redirectPath = '/veikals/admin/index.php';
 
-    $keys = array_keys($data);
+    $keys = array_keys($data['form-data']);
 
     $columns = [
         'ID' => [
-            'col-name' => $idColumnName
+            'col-name' => $data['id-column-name']
         ],
-        'Numurs' => [
+        $data['form-data'][$keys[0]]['title'] => [
             'col-name' => $keys[0]
         ],
-        'Klients' => [
+        $data['form-data'][$keys[1]]['title'] => [
             'col-name' => $keys[1],
             'value-swap-info' => [
                 'swap-table' => 'clients',
                 'swap-col-name' => 'name'
             ]
         ],
-        'Datums' => [
+        $data['form-data'][$keys[2]]['title'] => [
             'col-name' => $keys[2]
         ],
-        'Cena' => [
+        $data['form-data'][$keys[3]]['title'] => [
             'col-name' => $keys[3]
         ],
-        'Pasūtījuma statuss' => [
+        $data['form-data'][$keys[4]]['title'] => [
             'col-name' => $keys[4],
             'link-info' => [
                 'swap-table' => 'order_states',

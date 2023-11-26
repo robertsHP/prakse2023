@@ -4,6 +4,8 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
 
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/TagLoader.php';
+
+    $usersData = $data['form-data'];
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +27,7 @@
                         <?php 
                             $title = 'Vārds';
                             $tagName = 'name';
-                            $variableData = $data[$tagName];
+                            $variableData = $usersData[$tagName];
                             $placeholder = 'Ievadi vārdu';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Vārds ir nepieciešams'
@@ -48,7 +50,7 @@
                         <?php 
                             $title = 'Uzvārds';
                             $tagName = 'surname';
-                            $variableData = $data[$tagName];
+                            $variableData = $usersData[$tagName];
                             $placeholder = 'Ievadi uzvārdu';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Uzvārds ir nepieciešams'
@@ -72,7 +74,7 @@
                     <?php 
                         $title = 'E-pasts';
                         $tagName = 'email';
-                        $variableData = $data[$tagName];
+                        $variableData = $usersData[$tagName];
                         $placeholder = 'name@example.com';
                         $errorConditions = FormTypeErrorConditions::EMAIL_DEFAULT;
                     ?>

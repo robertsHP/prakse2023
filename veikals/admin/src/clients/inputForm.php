@@ -1,5 +1,7 @@
 <?php 
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/TagLoader.php';
+
+    $clientData = $data['form-data'];
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +24,7 @@
                         <?php 
                             $title = 'Vārds/Nosaukums';
                             $tagName = 'name';
-                            $variableData = $data[$tagName];
+                            $variableData = $clientData[$tagName];
                             $placeholder = 'Ievadi vārdu';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Kategorijas nosaukums ir nepieciešams'
@@ -45,7 +47,7 @@
                         <?php 
                             $title = 'E-pasts';
                             $tagName = 'email';
-                            $variableData = $data[$tagName];
+                            $variableData = $clientData[$tagName];
                             $placeholder = 'name@example.com';
                             $errorConditions = FormTypeErrorConditions::EMAIL_DEFAULT;
                         ?>
@@ -66,7 +68,7 @@
                         <?php 
                             $title = 'Telefona numurs';
                             $tagName = 'phone_number';
-                            $variableData = $data[$tagName];
+                            $variableData = $clientData[$tagName];
                             $errorConditions = FormTypeErrorConditions::PHONE_NUMBER_DEFAULT;
                             $placeholder = '+371XXXXXXXX';
                         ?>
@@ -104,7 +106,7 @@
                         <?php 
                             $title = 'Adrese';
                             $tagName = 'adress';
-                            $variableData = $data[$tagName];
+                            $variableData = $clientData[$tagName];
                             $placeholder = 'Ievadi adresi';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Adrese ir nepieciešama'

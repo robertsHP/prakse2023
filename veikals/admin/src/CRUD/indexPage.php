@@ -25,7 +25,7 @@
             <h4><?php echo $pageTitle; ?></h4>
             <?php 
                 CRUDOptions::load();
-                CRUDTable::load($columns, $tableName);
+                CRUDTable::load($columns, $data['table-name']);
             ?>
         </div>
     </body>

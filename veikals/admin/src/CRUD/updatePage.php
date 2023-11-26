@@ -12,9 +12,9 @@
     
 
     CRUDFunctions::update(
-        $tableName, 
-        $idColumnName, 
-        $data
+        $data['table-name'], 
+        $data['id-column-name'], 
+        $data['form-data']
     );
 
     //Lapas dati priekš inputForm.php
@@ -42,7 +42,7 @@
         ]
     ];
 
-    $inputFormPath = '/veikals/admin/src/'.$tableName.'/inputForm.php';
+    $inputFormPath = '/veikals/admin/src/'.$data['table-name'].'/inputForm.php';
 
     include $_SERVER['DOCUMENT_ROOT'].$inputFormPath;
 ?>

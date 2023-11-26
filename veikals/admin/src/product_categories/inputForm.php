@@ -4,6 +4,8 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
 
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/TagLoader.php';
+
+    $productCategoryData = $data['form-data'];
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +28,7 @@
                         <?php 
                             $title = 'Nosaukums';
                             $tagName = 'name';
-                            $variableData = $data[$tagName];
+                            $variableData = $productCategoryData[$tagName];
                             $placeholder = 'Ievadi nosaukumu';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Kategorijas nosaukums ir nepieciešams'

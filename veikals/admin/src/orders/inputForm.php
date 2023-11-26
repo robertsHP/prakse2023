@@ -6,6 +6,9 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/TagLoader.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/FileUpload.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/ImageSelectElement.php';
+    require_once 'EditableTableElement.php';
+
+    $ordersData = $data['form-data'];
 ?>
 
 <!DOCTYPE html>
@@ -19,11 +22,11 @@
 
             <form novalidate method="post" action="" enctype="multipart/form-data">
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <?php 
                             $title = 'Numurs';
                             $tagName = 'number';
-                            $variableData = $data[$tagName];
+                            $variableData = $ordersData[$tagName];
                             $placeholder = 'Ievadi numuru';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Numurs nav ievadīts'
@@ -46,8 +49,7 @@
                         <?php 
                             $title = 'Klients';
                             $tagName = 'client_id';
-                            $variableData = $data[$tagName];
-                            $placeholder = 'Izvēlies klientu';
+                            $variableData = $ordersData[$tagName];
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Klients nav izvēlēts'
                             ];
@@ -78,7 +80,7 @@
                         <?php 
                             $title = 'Datums';
                             $tagName = 'date';
-                            $variableData = $data[$tagName];
+                            $variableData = $ordersData[$tagName];
                             $errorConditions = FormTypeErrorConditions::DATE_DEFAULT;
                         ?>
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
@@ -98,7 +100,7 @@
                         <?php 
                             $title = 'Cena (eiro)';
                             $tagName = 'total_price';
-                            $variableData = $data[$tagName];
+                            $variableData = $ordersData[$tagName];
                             $placeholder = 'Ievadi cenu';
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Cena nav ievadīta'
@@ -122,8 +124,7 @@
                         <?php 
                             $title = 'Statuss';
                             $tagName = 'state_id';
-                            $variableData = $data[$tagName];
-                            $placeholder = 'Izvēlies statusu';
+                            $variableData = $ordersData[$tagName];
                             $errorConditions = [
                                 FormErrorType::EMPTY->value => 'Statuss nav norādīts'
                             ];
@@ -149,6 +150,24 @@
                                 ?>
                             </select>
                         <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
+                    </div>
+                    <div class="col">
+                        <?php 
+                            $title = 'Preces';
+                            $tagName = 'products';
+                            $variableData = $ordersData[$tagName];
+                            $errorConditions = [
+                                FormErrorType::EMPTY->value => 'Statuss nav norādīts'
+                            ];
+                        ?>
+                        <?php 
+                            TagLoader::loadLabel($title, $tagName, $variableData);
+
+                            include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/products/data.php';
+                            EditableTableElement::load($data);
+
+                            TagLoader::loadInputErrorMessage($variableData, $errorConditions);
+                        ?>
                     </div>
                 </div>
                 <div class="element-row">

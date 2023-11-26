@@ -11,8 +11,8 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDFunctions.php';
 
     CRUDFunctions::create(
-        $tableName, 
-        $data
+        $data['table-name'], 
+        $data['form-data']
     );
 
     //Lapas dati priekš inputForm.php
@@ -34,7 +34,7 @@
         ]
     ];
 
-    $inputFormPath = '/veikals/admin/src/'.$tableName.'/inputForm.php';
+    $inputFormPath = '/veikals/admin/src/'.$data['table-name'].'/inputForm.php';
 
     include $_SERVER['DOCUMENT_ROOT'].$inputFormPath;
 ?>

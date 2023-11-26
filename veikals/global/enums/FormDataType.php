@@ -7,5 +7,6 @@
         case EMAIL = 4;
         case PHONE_NUMBER = 5;
         case DATE = 6;
+        case DATA_TABLE = 7;
     }
 ?>
