@@ -6,7 +6,6 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/TagLoader.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/FileUpload.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/ImageSelectElement.php';
-    require_once 'EditableTableElement.php';
 
     $ordersData = $data['form-data'];
 ?>
@@ -20,7 +19,7 @@
         <div class="main-container">
             <h4><?php echo isset($page['title']) ? $page['title'] : ''; ?></h4>
 
-            <form novalidate method="post" action="" enctype="multipart/form-data">
+            <form id="main-form" novalidate method="post">
                 <div class="row">
                     <div class="col-sm-4">
                         <?php 
@@ -164,7 +163,7 @@
                             TagLoader::loadLabel($title, $tagName, $variableData);
 
                             include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/products/data.php';
-                            EditableTableElement::load($data);
+                            include 'editableTable/editableTable.php';
 
                             TagLoader::loadInputErrorMessage($variableData, $errorConditions);
                         ?>

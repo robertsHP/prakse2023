@@ -1,7 +1,7 @@
 <?php
     class MiniImageSelectElement {
         public static function load (string $tagName, $elementValue, array $allowedFileFormats) {
-            $thumbNailTagName = $tagName.'-thumbnail';
+            $thumbNailTagName = $tagName.'-mini-image-sel';
             $allowedFileFormatsStr = implode(', ', $allowedFileFormats);
 
             MiniImageSelectElement::loadRequestProcessing($tagName);

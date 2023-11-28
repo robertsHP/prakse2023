@@ -1,7 +1,7 @@
 <?php
     class ImageSelectElement {
         public static function load (string $tagName, $elementValue, array $allowedFileFormats) {
-            $thumbNailTagName = $tagName.'-thumbnail';
+            $thumbNailTagName = $tagName.'-image-sel';
             $deleteButtonTagName = $tagName.'-delete';
             $allowedFileFormatsStr = implode(', ', $allowedFileFormats);
 
