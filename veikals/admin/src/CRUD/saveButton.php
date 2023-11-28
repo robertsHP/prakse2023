@@ -9,23 +9,26 @@
 <div id="result"></div>
 
 <script>
-    var data = <?php echo json_encode($data); ?>
+    var tableName = <?php echo json_encode($data['table-name']); ?>;
 
     $(document).ready(function () {
+        var redirectPath = '/veikals/admin/src/'+tableName+'/index.php';
+        
         $('#save-button').click(function () {
+            var data = <?php echo json_encode($data); ?>;
             $('.input-form').each(function() {
                 var tempFormData = $(this).serializeArray();
                 $.ajax({
                     type: 'POST',
                     url: '/veikals/admin/src/CRUD/savePageData.php',
-                    dataType: 'json',
+                    // dataType: 'json',
                     data: {
                         tempFormData: tempFormData,
                         data: data
                     },
                     success: function (response) {
                         if(response.success) {
-                            window.location.href = '/veikals/admin/src/orders/index.php';
+                            window.location.href = redirectPath;
                         } else {
                             $.each(response.errorTags, function(index, value) {
                                 if (value['error-message'] != null) {

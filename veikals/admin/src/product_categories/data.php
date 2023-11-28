@@ -3,6 +3,8 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/enums/FormDataType.php';
 
     $data = [
+        'id' => null,
+        'db-process-type' => null,
         'table-name' => 'product_categories',
         'id-column-name' => 'category_id',
         'form-data' => [

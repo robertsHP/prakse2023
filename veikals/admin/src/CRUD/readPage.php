@@ -20,7 +20,6 @@
         header('Location: index.php');
         exit();
     }
-    return $row;    
 ?>
 
 <!DOCTYPE html>

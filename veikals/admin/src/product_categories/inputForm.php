@@ -17,12 +17,7 @@
         <div class="main-container">
             <h4> <?php echo isset($pageTitle) ? $pageTitle : ''; ?> </h4>
 
-            <form 
-                novalidate 
-                method="post" 
-                action="" 
-                enctype="multipart/form-data"
-            >
+            <form class="input-form">
                 <div class="row">
                     <div class="col-sm-6">
                         <?php 
@@ -30,9 +25,6 @@
                             $tagName = 'name';
                             $variableData = $productCategoryData[$tagName];
                             $placeholder = 'Ievadi nosaukumu';
-                            $errorConditions = [
-                                FormErrorType::EMPTY->value => 'Kategorijas nosaukums ir nepieciešams'
-                            ];
                         
                             TagLoader::loadLabel($title, $tagName, $variableData);
                         ?>
@@ -47,16 +39,28 @@
                                         echo $variableData['value'];
                             ?>">
                         <?php 
-                            TagLoader::loadInputErrorMessage($variableData, $errorConditions);
+                            $data['error-tags'][$tagName] = [
+                                'id' => $tagName.'-alert',
+                                'error-conditions' => [
+                                    FormErrorType::EMPTY->value => 'Kategorijas nosaukums ir nepieciešams'
+                                ]
+                            ];
+                            TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
                     </div>
                 </div>
-                <div class="element-row">
-                    <?php 
-                        TagLoader::loadButtonRow($page);
-                    ?>
-                </div>
             </form>
+            <?php
+                include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/hideErrorTags.php';
+            ?>
+            <div class="element-row">
+                <?php
+                    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/backButton.php';
+                    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/saveButton.php';
+                    if(isset($data['id']))
+                        include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/deleteButton.php';
+                ?>
+            </div>
         </div>
     </body>
 </html>

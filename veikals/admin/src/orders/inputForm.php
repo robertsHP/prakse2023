@@ -1,11 +1,5 @@
 <?php 
-    $redirect = '/veikals/admin/index.php';
-    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/sessionCheck.php';
-    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
-
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/TagLoader.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/FileUpload.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/ImageSelectElement.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/Database.php';
 ?>
 
@@ -99,7 +93,7 @@
                                 step=".01"
                                 value="<?php 
                                     if(isset($variableData))
-                                        echo $variableData['value'];
+                                        echo date('Y-m-d', strtotime($variableData['value']));
                             ?>">
                         <?php 
                             $data['error-tags'][$tagName] = [
@@ -198,19 +192,15 @@
                     </div>
                 </div>
             </form>
+            <?php
+                include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/hideErrorTags.php';
+            ?>
             <div class="element-row">
-                <script>
-                    var errorTags = <?php echo json_encode($data['error-tags']); ?>
-
-                    $(document).ready(function () {
-                        $.each(errorTags, function(index, value) {
-                            $("#"+index+"-alert").hide();
-                        });
-                    });
-                </script>
                 <?php
-                    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/buttons/backButton.php';
-                    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/buttons/saveButton.php';
+                    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/backButton.php';
+                    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/saveButton.php';
+                    if(isset($data['id']))
+                        include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/deleteButton.php';
                 ?>
             </div>
         </div>

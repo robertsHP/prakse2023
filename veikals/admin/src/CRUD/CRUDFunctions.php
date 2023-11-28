@@ -51,8 +51,8 @@
             $data['id'] = $_GET['id'];
         }
         public static function loadExistingVariables (&$data) {
-            if(isset($data['user-id'])) {
-                $row = Database::getRowWithID($data['table-name'], $data['id-column-name'], $data['user-id']);
+            if(isset($data['id'])) {
+                $row = Database::getRowWithID($data['table-name'], $data['id-column-name'], $data['id']);
 
                 //Ja neatgreiž neko tad veic redirect uz index
                 if(empty($row)) {

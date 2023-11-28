@@ -4,9 +4,9 @@
 
     $data = [
         'id' => null,
+        'db-process-type' => null,
         'table-name' => 'orders',
         'id-column-name' => 'order_id',
-        'db-process-type' => null,
         'form-data' => [
             'number' => [
                 'title' => 'Numurs',

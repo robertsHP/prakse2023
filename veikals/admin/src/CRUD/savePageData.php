@@ -47,7 +47,7 @@
                         $response['success'] = Database::update(
                             $data['table-name'], 
                             $data['id-column-name'], 
-                            $id,
+                            $data['id'],
                             $data['form-data']);
                     }
                 }
