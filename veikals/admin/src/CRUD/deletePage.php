@@ -7,10 +7,31 @@
 
     include 'data.php';
 
-    CRUDFunctions::delete(
-        $data['table-name'], 
-        $data['id-column-name']
-    );
+    CRUDFunctions::setID($data);
+
+    $tableName = $data['table-name'];
+    $idColumnName = $data['id-column-name']; 
+    $id = $data['id'];
+
+    //Ja nav nekas tad veic redirect uz index
+    if(empty(Database::getRowWithID($tableName, $idColumnName, $id))) {
+        header('Location: index.php');
+        exit();
+    }
+
+    //Formas pogu funkcijas
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        //Pārbauda vai delete poga nospiesta
+        if (isset($_POST['delete'])) {
+            Database::deleteWithID($tableName, $idColumnName, $id);
+            header('Location: index.php');
+        //Pārbauda vai back poga nospiesta
+        } else if (isset($_POST['back'])) {
+            header('Location: index.php');
+        }
+        exit();
+    }
+
 ?>
 
 <!DOCTYPE html>

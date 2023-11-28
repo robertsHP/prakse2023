@@ -5,7 +5,12 @@
 
     include 'data.php';
 
-    $pageTitle = 'Rediģēt pasūtījumu';
+    CRUDFunctions::setID($data);
+    CRUDFunctions::loadExistingVariables($data);
 
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/updatePage.php';
+    $pageTitle = 'Rediģēt pasūtījumu';
+    $data['db-process-type'] = 'update';
+    $inputFormPath = '/veikals/admin/src/'.$data['table-name'].'/inputForm.php';
+
+    include $_SERVER['DOCUMENT_ROOT'].$inputFormPath;
 ?>

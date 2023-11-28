@@ -6,8 +6,7 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/TagLoader.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/FileUpload.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/ImageSelectElement.php';
-
-    $ordersData = $data['form-data'];
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/Database.php';
 ?>
 
 <!DOCTYPE html>
@@ -17,19 +16,16 @@
         <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/header.php'; ?>
 
         <div class="main-container">
-            <h4><?php echo isset($page['title']) ? $page['title'] : ''; ?></h4>
+            <h4><?php echo isset($pageTitle) ? $pageTitle : ''; ?></h4>
 
-            <form id="main-form" novalidate method="post">
+            <form class="input-form">
                 <div class="row">
                     <div class="col-sm-4">
                         <?php 
                             $title = 'Numurs';
                             $tagName = 'number';
-                            $variableData = $ordersData[$tagName];
+                            $variableData = $data['form-data'][$tagName];
                             $placeholder = 'Ievadi numuru';
-                            $errorConditions = [
-                                FormErrorType::EMPTY->value => 'Numurs nav ievadīts'
-                            ];
                         ?>
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <input 
@@ -42,16 +38,21 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
-                        <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
+                        <?php 
+                            $data['error-tags'][$tagName] = [
+                                'id' => $tagName.'-alert',
+                                'error-conditions' => [
+                                    FormErrorType::EMPTY->value => 'Numurs nav ievadīts'
+                                ]
+                            ];
+                            TagLoader::loadInputErrorMessage($tagName, $variableData);
+                        ?>
 
 
                         <?php 
                             $title = 'Klients';
                             $tagName = 'client_id';
-                            $variableData = $ordersData[$tagName];
-                            $errorConditions = [
-                                FormErrorType::EMPTY->value => 'Klients nav izvēlēts'
-                            ];
+                            $variableData = $data['form-data'][$tagName];
                         ?>
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <select 
@@ -73,14 +74,21 @@
                                     }
                                 ?>
                             </select>
-                        <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
+                        <?php 
+                            $data['error-tags'][$tagName] = [
+                                'id' => $tagName.'-alert',
+                                'error-conditions' => [
+                                    FormErrorType::EMPTY->value => 'Klients nav izvēlēts'
+                                ]
+                            ];
+                            TagLoader::loadInputErrorMessage($tagName, $variableData);
+                        ?>
 
 
                         <?php 
                             $title = 'Datums';
                             $tagName = 'date';
-                            $variableData = $ordersData[$tagName];
-                            $errorConditions = FormTypeErrorConditions::DATE_DEFAULT;
+                            $variableData = $data['form-data'][$tagName];
                         ?>
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <input 
@@ -93,17 +101,20 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
-                        <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
+                        <?php 
+                            $data['error-tags'][$tagName] = [
+                                'id' => $tagName.'-alert',
+                                'error-conditions' => FormTypeErrorConditions::DATE_DEFAULT
+                            ];
+                            TagLoader::loadInputErrorMessage($tagName, $variableData);
+                        ?>
 
 
                         <?php 
                             $title = 'Cena (eiro)';
                             $tagName = 'total_price';
-                            $variableData = $ordersData[$tagName];
+                            $variableData = $data['form-data'][$tagName];
                             $placeholder = 'Ievadi cenu';
-                            $errorConditions = [
-                                FormErrorType::EMPTY->value => 'Cena nav ievadīta'
-                            ];
                         ?>
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <input 
@@ -117,16 +128,21 @@
                                     if(isset($variableData))
                                         echo $variableData['value'];
                             ?>">
-                        <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
+                        <?php 
+                            $data['error-tags'][$tagName] = [
+                                'id' => $tagName.'-alert',
+                                'error-conditions' => [
+                                    FormErrorType::EMPTY->value => 'Cena nav ievadīta'
+                                ]
+                            ];
+                            TagLoader::loadInputErrorMessage($tagName, $variableData);
+                        ?>
 
 
                         <?php 
                             $title = 'Statuss';
                             $tagName = 'state_id';
-                            $variableData = $ordersData[$tagName];
-                            $errorConditions = [
-                                FormErrorType::EMPTY->value => 'Statuss nav norādīts'
-                            ];
+                            $variableData = $data['form-data'][$tagName];
                         ?>
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <select 
@@ -148,33 +164,55 @@
                                     }
                                 ?>
                             </select>
-                        <?php TagLoader::loadInputErrorMessage($variableData, $errorConditions); ?>
+                        <?php 
+                            $data['error-tags'][$tagName] = [
+                                'id' => $tagName.'-alert',
+                                'error-conditions' => [
+                                    FormErrorType::EMPTY->value => 'Statuss nav norādīts'
+                                ]
+                            ];
+                            TagLoader::loadInputErrorMessage($tagName, $variableData);
+                        ?>
                     </div>
                     <div class="col">
                         <?php 
                             $title = 'Preces';
                             $tagName = 'products';
-                            $variableData = $ordersData[$tagName];
-                            $errorConditions = [
-                                FormErrorType::EMPTY->value => 'Statuss nav norādīts'
-                            ];
+                            $variableData = $data['form-data'][$tagName];
                         ?>
                         <?php 
                             TagLoader::loadLabel($title, $tagName, $variableData);
 
-                            include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/products/data.php';
-                            include 'editableTable/editableTable.php';
+                            // include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/products/data.php';
+                            // $productsData = $data;
+                            // include 'editableTable/editableTable.php';
 
-                            TagLoader::loadInputErrorMessage($variableData, $errorConditions);
+                            $data['error-tags'][$tagName] = [
+                                'id' => $tagName.'-alert',
+                                'error-conditions' => [
+                                    FormErrorType::EMPTY->value => 'Statuss nav norādīts'
+                                ]
+                            ];
+                            TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
                     </div>
                 </div>
-                <div class="element-row">
-                    <?php 
-                        TagLoader::loadButtonRow($page);
-                    ?>
-                </div>
             </form>
+            <div class="element-row">
+                <script>
+                    var errorTags = <?php echo json_encode($data['error-tags']); ?>
+
+                    $(document).ready(function () {
+                        $.each(errorTags, function(index, value) {
+                            $("#"+index+"-alert").hide();
+                        });
+                    });
+                </script>
+                <?php
+                    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/buttons/backButton.php';
+                    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/buttons/saveButton.php';
+                ?>
+            </div>
         </div>
     </body>
 </html>

@@ -2,11 +2,25 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/Database.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDFunctions.php';
 
-    $row = CRUDFunctions::read(
-        $data['table-name'], 
-        $data['id-column-name'], 
-        $id
-    );
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        //Pārbauda vai back poga nospiesta
+        if (isset($_POST['back'])) {
+            header('Location: index.php');
+            exit();
+        }
+    }
+
+    $tableName = $data['table-name'];
+    $idColumnName = $data['id-column-name']; 
+    $id = $data['id'];
+
+    $row = Database::getRowWithID($tableName, $idColumnName, $id);
+    
+    if(empty($row)) {
+        header('Location: index.php');
+        exit();
+    }
+    return $row;    
 ?>
 
 <!DOCTYPE html>

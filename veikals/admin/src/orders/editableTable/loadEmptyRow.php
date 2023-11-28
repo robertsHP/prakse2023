@@ -28,11 +28,11 @@
                     </td>
                     <td>
                         <?php 
-                            MiniImageSelectElement::load(
-                                'temp-row-'.$count,
-                                null,
-                                $data['form-data'][$dataKeys[2]]['allowed_file_formats']
-                            );
+                            $tagName = 'temp-row-'.$count;
+                            $elementValue = null;
+                            $allowedFileFormats = $data['form-data'][$dataKeys[2]]['allowed_file_formats'];
+
+                            include 'miniImageSelectElement.php';
                         ?>
                     </td>
                     <td>

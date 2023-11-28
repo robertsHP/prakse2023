@@ -4,27 +4,42 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/FileUpload.php';
 
     class VariableHandler {
-        public static function assignVariable (&$key, &$var, &$hasErrors) {
+        public static function assignVariable (&$key, &$var, &$hasErrors, &$errorTags) {
+            $var['error-type'] = FormErrorType::NONE;
+
             //Veic darbības atkarība no mainīgā tipa
             switch ($var['type']) {
-                case FormDataType::TEXT:
-                case FormDataType::NUMBER:
-                case FormDataType::DECIMAL:
+                case FormDataType::TEXT->value:
+                case FormDataType::NUMBER->value:
+                case FormDataType::DECIMAL->value:
                     VariableHandler::assignDefaultVariable($key, $var, $hasErrors);
                     break;
-                case FormDataType::EMAIL:
+                case FormDataType::EMAIL->value:
                     VariableHandler::assignEmailVariable($key, $var, $hasErrors);
                     break;
-                case FormDataType::FILE:
+                case FormDataType::FILE->value:
                     VariableHandler::assignFileVariable($key, $var, $hasErrors);
                     break;
-                case FormDataType::PHONE_NUMBER:
+                case FormDataType::PHONE_NUMBER->value:
                     VariableHandler::assignPhoneNumberVariable($key, $var, $hasErrors);
                     break;
-                case FormDataType::DATE:
+                case FormDataType::DATE->value:
                     VariableHandler::assignDateVariable($key, $var, $hasErrors);
                     break;
             }
+
+            // echo "<p>".$var['error-type']->value."</p>";
+
+            $errorTag = &$errorTags[$key];
+            $errorCondition = $var['error-type'];
+
+            if($errorCondition->value != FormErrorType::NONE->value) {
+                if(isset($errorTag['error-conditions'][$errorCondition->value])) {
+                    $errorTag['error-message'] = $errorTag['error-conditions'][$errorCondition->value];
+                    return;
+                }
+            }
+            $errorTag['error-message'] = null;
         }
 
         public static function getSanitizedValue ($value) {
@@ -32,27 +47,32 @@
             return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
         }
 
+        private static function checkIfEmpty (&$var, &$hasErrors) {
+            if(empty($var['value']) || $var['value'] == '') {
+                $var['error-type'] = FormErrorType::EMPTY;
+                $hasErrors = true;
+                return true;
+            }
+            return false;
+        }
+
         private static function assignDefaultVariable (&$key, &$var, &$hasErrors) {
             if(isset($_POST[$key]))
                 $var['value'] = VariableHandler::getSanitizedValue($_POST[$key]);
 
-            if(empty($var['value'])) {
-                $var['errorType'] = FormErrorType::EMPTY;
-                $hasErrors = true;
-            }
+            VariableHandler::checkIfEmpty($var, $hasErrors);
         }
         private static function assignEmailVariable (&$key, &$var, &$hasErrors) {
             if(isset($_POST[$key]))
                 $var['value'] = VariableHandler::getSanitizedValue($_POST[$key]);
 
-            if(empty($var['value'])) {
-                $var['errorType'] = FormErrorType::EMPTY;
-                $hasErrors = true;
-            }
+            $empty = VariableHandler::checkIfEmpty($var, $hasErrors);
 
-            if(!filter_var($var['value'], FILTER_VALIDATE_EMAIL)) {
-                $var['errorType'] = FormErrorType::EMAIL_INVALID;
-                $hasErrors = true;
+            if(!$empty) {
+                if(!filter_var($var['value'], FILTER_VALIDATE_EMAIL)) {
+                    $var['error-type'] = FormErrorType::EMAIL_INVALID;
+                    $hasErrors = true;
+                }
             }
         }
         public static function assignFileVariable (&$key, &$var, &$hasErrors) {
@@ -66,21 +86,19 @@
                 $_SESSION['temp']['paths'][$key] = $var['value'];
             }
 
-            if(empty($var['value']) || $var['value'] == '') {
-                $var['errorType'] = FormErrorType::EMPTY;
-                $hasErrors = true;
-            }
+            VariableHandler::checkIfEmpty($var, $hasErrors);
         }
         private static function assignPhoneNumberVariable (&$key, &$var, &$hasErrors) {
             if(isset($_POST[$key]))
                 $var['value'] = VariableHandler::getSanitizedValue($_POST[$key]);
 
-            if(empty($var['value']) || $var['value'] == '') {
-                $var['errorType'] = FormErrorType::EMPTY;
-                $hasErrors = true; 
-            } else if($var['value'][0] !== '+') {
-                $var['errorType'] = FormErrorType::PHONE_NUMBER_INVALID;
-                $hasErrors = true;
+            $empty = VariableHandler::checkIfEmpty($var, $hasErrors);
+            
+            if(!$empty) {
+                if($var['value'][0] !== '+') {
+                    $var['error-type'] = FormErrorType::PHONE_NUMBER_INVALID;
+                    $hasErrors = true;
+                }
             }
         }
         private static function isValidDate($dateString) {
@@ -105,14 +123,16 @@
             if(isset($_POST[$key]))
                 $var['value'] = VariableHandler::getSanitizedValue($_POST[$key]);
 
-            if(empty($var['value'])) {
-                $var['errorType'] = FormErrorType::EMPTY;
-                $hasErrors = true;
-            }
+            $empty = VariableHandler::checkIfEmpty($var, $hasErrors);
 
-            if (!VariableHandler::isValidDate($var['value'])) {
-                $var['errorType'] = FormErrorType::DATE_INVALID;
-                $hasErrors = true;
+            // echo '<p>'.$var['value'].'</p>';
+            if(!$empty) {
+                // echo '<p>'.$var['value'].'</p>';
+                if (!VariableHandler::isValidDate($var['value'])) {
+                    // echo '<p>'.$var['value'].'</p>';
+                    $var['error-type'] = FormErrorType::DATE_INVALID;
+                    $hasErrors = true;
+                }
             }
         }
     }

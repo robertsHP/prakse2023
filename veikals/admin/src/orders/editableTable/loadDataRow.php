@@ -16,11 +16,11 @@
     </td>
     <td>
         <?php 
-            MiniImageSelectElement::load(
-                $dataKeys[2].'-'.$index,
-                $row[$rowKeys[3]],
-                $data['form-data'][$dataKeys[2]]['allowed_file_formats']
-            );
+            $tagName = $dataKeys[2].'-'.$index;
+            $elementValue = $row[$rowKeys[3]];
+            $allowedFileFormats = $data['form-data'][$dataKeys[2]]['allowed_file_formats'];
+
+            include 'miniImageSelectElement.php';
         ?>
     </td>
     <td>

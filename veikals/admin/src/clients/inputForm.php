@@ -11,7 +11,7 @@
         <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/header.php'; ?>
 
         <div class="main-container">
-            <h4><?php echo isset($page['title']) ? $page['title'] : ''; ?></h4>
+            <h4><?php echo isset($pageTitle) ? $pageTitle : ''; ?></h4>
 
             <form 
                 novalidate 
