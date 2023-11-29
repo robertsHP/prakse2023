@@ -12,9 +12,9 @@
         <div class="main-container">
             <h4><?php echo isset($pageTitle) ? $pageTitle : ''; ?></h4>
 
-            <form class="input-form" enctype="multipart/form-data">
-                <div class="row">
-                    <div class="col-sm-4">
+            <div class="row">
+                <div class="col-sm-4">
+                    <form class="input-form" enctype="multipart/form-data">
                         <?php 
                             $title = 'Numurs';
                             $tagName = 'number';
@@ -117,7 +117,7 @@
                                 name="<?php echo $tagName; ?>"
                                 id="<?php echo $tagName; ?>"
                                 placeholder="<?php echo $placeholder; ?>"
-                                step=".01"
+                                pattern="^\d+(\.\d{2})?$"
                                 value="<?php 
                                     if(isset($variableData))
                                         echo $variableData['value'];
@@ -167,19 +167,18 @@
                             ];
                             TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
-                    </div>
-                    <div class="col">
+                    </form>
+                </div>
+                <div class="col">
+                    <!-- <form class="input-form" enctype="multipart/form-data"> -->
                         <?php 
                             $title = 'Preces';
                             $tagName = 'products';
-                            $variableData = $data['form-data'][$tagName];
                         ?>
                         <?php 
-                            TagLoader::loadLabel($title, $tagName, $variableData);
-
-                            // include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/products/data.php';
-                            // $productsData = $data;
-                            // include 'editableTable/editableTable.php';
+                            TagLoader::loadLabel($title, $tagName, null);
+                            
+                            include 'editableTable/editableTable.php';
 
                             $data['error-tags'][$tagName] = [
                                 'id' => $tagName.'-alert',
@@ -187,20 +186,20 @@
                                     FormErrorType::EMPTY->value => 'Statuss nav norādīts'
                                 ]
                             ];
-                            TagLoader::loadInputErrorMessage($tagName, $variableData);
+                            TagLoader::loadInputErrorMessage($tagName, null);
                         ?>
-                    </div>
+                    <!-- </form> -->
                 </div>
-            </form>
+            </div>
             <?php
                 include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/hideErrorTags.php';
             ?>
             <div class="element-row">
                 <?php
                     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/backButton.php';
-                    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/saveButton.php';
                     if(isset($data['id']))
                         include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/deleteButton.php';
+                    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/saveButton.php';
                 ?>
             </div>
         </div>

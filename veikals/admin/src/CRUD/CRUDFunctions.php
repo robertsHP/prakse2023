@@ -14,7 +14,7 @@
                 $var['value'] = $tempVar;
 
                 VariableHandler::processVariable($key, $var, $hasErrors);
-                // echo '<p>'.'AAAA'.'</p>';
+
                 //Augšupielādē failu
                 if($var['type'] == FormDataType::FILE->value) {
                     // echo '<p>'.$var['error-type']->value.'</p>';

@@ -1,39 +1,28 @@
 
 <tr>
     <td>
-        <button id="editable-table-add-button">add</button>
+        <button id="editable-table-add-button">pievienot</button>
     </td>
 </tr>
 
+<div id="button-response"></div>
+
 <script>
-    function createCounter() {
-        let count = 0;
-
-        return function() {
-            return count++;
-        };
-    }
-    const editableTableAddCounter = createCounter();
-
     $(document).ready(function () {
+        var clickCount = <?php echo json_encode($rowCount); ?>
+
         $('#editable-table-add-button').click(function(){
+            clickCount++;
             $.ajax({
                 url: '/veikals/admin/src/orders/editableTable/loadEmptyRow.php',
                 method: 'POST',
                 data: { 
-                    'count': editableTableAddCounter(),
-                    'productData': <?php echo json_encode($data); ?>
+                    'rowCount': clickCount,
+                    'newData': <?php echo json_encode($newData); ?>
                 },
                 success: function(response) {
-                    // Update a specific element on your page with the Ajax response
+                    //Pievieno rindu
                     $('#editable-table tr:last').before(response);
-
-                    // Manually submit the form after the Ajax request
-                    //   form.unbind('submit').submit();
-
-
-                    // $('#editable-table tr:last').unbind('submit').submit();
-                    // $('#editable-table tr:last').before(response);
                 },
                 error: function(error) {
                     console.error('Error loading content:', error);

@@ -42,8 +42,8 @@
         $response['errorTags'] = $data['error-tags'];
     }
     // echo '<p>'.print_r($_FILES['photo_file_loc']).'</p>';
-    // echo '<p>'.print_r($data['form-data']['photo_file_loc']).'</p>';
+    // echo '<p>'.print_r($data['form-data']).'</p>';
 
-    header('Content-Type: application/json');
-    echo json_encode($response);
+    // header('Content-Type: application/json');
+    // echo json_encode($response);
 ?>
