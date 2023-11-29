@@ -66,7 +66,7 @@
                         if(isset($elementValue))
                             echo $elementValue;
                     ?>"
-                    name = <?php echo $thumbNailTagName; ?>
+                    name = "<?php echo $thumbNailTagName; ?>"
                     id ="<?php echo $thumbNailTagName; ?>"
                     class="img-thumbnail img-product-photo" 
                 >

@@ -4,8 +4,6 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
 
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/TagLoader.php';
-
-    $orderStatesData = $data['form-data'];
 ?>
 
 <!DOCTYPE html>
@@ -17,13 +15,13 @@
         <div class="main-container">
             <h4> <?php echo isset($page['title']) ? $page['title'] : ''; ?> </h4>
 
-            <form class="input-form">
+            <form class="input-form" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-sm-6">
                         <?php 
                             $title = 'Nosaukums';
                             $tagName = 'name';
-                            $variableData = $orderStatesData[$tagName];
+                            $variableData = $data['form-data'][$tagName];
                             $placeholder = 'Ievadi nosaukumu';
                         ?>
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>

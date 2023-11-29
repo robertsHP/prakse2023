@@ -5,10 +5,9 @@
 
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/TagLoader.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/FileUpload.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/Database.php';
 
-    include $_SERVER['DOCUMENT_ROOT'].'/veikals/global/ImageSelectElement.php';
-
-    $productsData = $data['form-data'];
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/ImageSelectElement.php';
 ?>
 
 <!DOCTYPE html>
@@ -20,13 +19,13 @@
         <div class="main-container">
             <h4><?php echo isset($pageTitle) ? $pageTitle : ''; ?></h4>
 
-            <form class="input-form">
+            <form class="input-form" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-sm-6">
                         <?php 
                             $title = 'Nosaukums';
                             $tagName = 'name';
-                            $variableData = $productsData[$tagName];
+                            $variableData = $data['form-data'][$tagName];
                             $placeholder = 'Ievadi nosaukumu';
                         ?>
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
@@ -54,7 +53,7 @@
                         <?php 
                             $title = 'Apraksts';
                             $tagName = 'description';
-                            $variableData = $productsData[$tagName];
+                            $variableData = $data['form-data'][$tagName];
                             $fieldRequired = true;
                             $placeholder = '...';
                         ?>
@@ -84,7 +83,7 @@
                         <?php 
                             $title = 'Bilde';
                             $tagName = 'photo_file_loc';
-                            $variableData = $productsData[$tagName];
+                            $variableData = $data['form-data'][$tagName];
                         ?>  
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
                             <div class="mb-3"> 
@@ -109,7 +108,7 @@
                         <?php 
                             $title = 'Cena (eiro)';
                             $tagName = 'price';
-                            $variableData = $productsData[$tagName];
+                            $variableData = $data['form-data'][$tagName];
                             $placeholder = 'Ievadi cenu';
                         ?>
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
@@ -137,7 +136,7 @@
                         <?php 
                             $title = 'Pieejamais daudzums';
                             $tagName = 'available_amount';
-                            $variableData = $productsData[$tagName];
+                            $variableData = $data['form-data'][$tagName];
                             $placeholder = 'Ievadi daudzumu';
                         ?>
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
@@ -165,7 +164,7 @@
                         <?php 
                             $title = 'Kategorija';
                             $tagName = 'category_id';
-                            $variableData = $productsData[$tagName];
+                            $variableData = $data['form-data'][$tagName];
                             $placeholder = 'Izvēlies kategoriju';
                         ?>
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
@@ -206,9 +205,9 @@
             <div class="element-row">
                 <?php
                     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/backButton.php';
-                    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/saveButton.php';
                     if(isset($data['id']))
                         include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/deleteButton.php';
+                    include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/saveButton.php';
                 ?>
             </div>
         </div>

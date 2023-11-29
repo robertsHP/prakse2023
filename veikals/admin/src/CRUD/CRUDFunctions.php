@@ -6,40 +6,30 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/enums/FormDataType.php';
 
     class CRUDFunctions {
-        public static function loopAndProcessFormData (&$tempFiles, &$data) {
+        public static function assignAndProcessFormData (&$formData, &$data) {
             $hasErrors = false;
-            $errorTags = &$data['error-tags'];
+            //Pievieno visas formas vērtības $data masīvam
+            foreach ($formData as $key => &$tempVar) {
+                $var = &$data['form-data'][$key];
+                $var['value'] = $tempVar;
 
-            foreach ($data['form-data'] as $key => &$var) {
-                VariableHandler::assignVariable($key, $var, $hasErrors, $errorTags);
-                
-                //Saglabā visus izslaicīgos failus un augšupielādē servera /temp mapē
-                if($var['type'] === FormDataType::FILE) {
-                    if($var['value'] != '') {
-                        $var['value'] = FileUpload::prepareFolderPath($var['value'], 'temp');
-                        $tempFiles[] = [
-                            'key' => $key, 
-                            'var' => &$var
-                        ];
+                VariableHandler::processVariable($key, $var, $hasErrors);
+                // echo '<p>'.'AAAA'.'</p>';
+                //Augšupielādē failu
+                if($var['type'] == FormDataType::FILE->value) {
+                    // echo '<p>'.$var['error-type']->value.'</p>';
+                    if($var['error-type']->value == FormErrorType::NONE->value) {
+                        $var['value'] = FileUpload::prepareFolderPath(
+                            $var['value'], 
+                            $data['table-name']);
+
+                        // echo '<p>'.$var['value'].'</p>';
                         FileUpload::uploadFile($key, $var, $hasErrors);
                     }
                 }
+                VariableHandler::assignErrorMessage($key, $var, $data['error-tags']);
             }
             return $hasErrors;
-        }
-        public static function loopAndMoveTempFiles ($tableName, &$tempFiles, &$formData) {
-            $filesUploaded = true;
-            foreach ($tempFiles as &$file) {
-                $newPath = FileUpload::prepareFolderPath(
-                    $file['var']['value'], 
-                    $tableName);
-                $success = FileUpload::moveFile(
-                    $_SERVER['CONTEXT_DOCUMENT_ROOT'].$file['var']['value'], 
-                    $_SERVER['CONTEXT_DOCUMENT_ROOT'].$newPath
-                );
-                $formData[$file['key']]['value'] = $newPath;
-            }
-            return $filesUploaded;
         }
 
         public static function setID (&$data) {

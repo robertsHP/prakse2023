@@ -4,8 +4,6 @@
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/tempCheck.php';
 
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/TagLoader.php';
-
-    $usersData = $data['form-data'];
 ?>
 
 <!DOCTYPE html>
@@ -17,13 +15,13 @@
         <div class="main-container">
             <h4> <?php echo isset($pageTitle) ? $pageTitle : ''; ?></h4>
 
-            <form class="input-form">
+            <form class="input-form" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-sm-6">
                         <?php 
                             $title = 'Vārds';
                             $tagName = 'name';
-                            $variableData = $usersData[$tagName];
+                            $variableData = $data['form-data'][$tagName];
                             $placeholder = 'Ievadi vārdu';
                         ?>
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
@@ -51,7 +49,7 @@
                         <?php 
                             $title = 'Uzvārds';
                             $tagName = 'surname';
-                            $variableData = $usersData[$tagName];
+                            $variableData = $data['form-data'][$tagName];
                             $placeholder = 'Ievadi uzvārdu';
                         ?>
                         <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>
@@ -80,7 +78,7 @@
                     <?php 
                         $title = 'E-pasts';
                         $tagName = 'email';
-                        $variableData = $usersData[$tagName];
+                        $variableData = $data['form-data'][$tagName];
                         $placeholder = 'name@example.com';
                     ?>
                     <?php TagLoader::loadLabel($title, $tagName, $variableData); ?>

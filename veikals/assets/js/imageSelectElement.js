@@ -66,8 +66,6 @@ function initImageSelect (elementValue, fileInputID, selectedImageID, deleteButt
         $(this).css('cursor', 'default');
     });
 
-    console.log(elementValue);
-
     if(elementValue === null || elementValue === '') {
         $(fileInputID).show();
         $(selectedImageID).hide();

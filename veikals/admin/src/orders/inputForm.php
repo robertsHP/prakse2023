@@ -12,7 +12,7 @@
         <div class="main-container">
             <h4><?php echo isset($pageTitle) ? $pageTitle : ''; ?></h4>
 
-            <form class="input-form">
+            <form class="input-form" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-sm-4">
                         <?php 

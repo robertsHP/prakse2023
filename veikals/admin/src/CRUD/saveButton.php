@@ -16,17 +16,20 @@
         
         $('#save-button').click(function () {
             var data = <?php echo json_encode($data); ?>;
-            $('.input-form').each(function() {
-                var tempFormData = $(this).serializeArray();
+
+            $('.input-form').each(function(index, form) {
+                var formData = new FormData(form);
+                formData.append('-data', JSON.stringify(data));
+
                 $.ajax({
                     type: 'POST',
                     url: '/veikals/admin/src/CRUD/savePageData.php',
+                    contentType: false,
+                    processData: false,
                     // dataType: 'json',
-                    data: {
-                        tempFormData: tempFormData,
-                        data: data
-                    },
+                    data: formData,
                     success: function (response) {
+                        // console.log(response);
                         if(response.success) {
                             window.location.href = redirectPath;
                         } else {
