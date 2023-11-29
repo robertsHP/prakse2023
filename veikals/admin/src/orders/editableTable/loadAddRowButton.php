@@ -18,7 +18,7 @@
                 method: 'POST',
                 data: { 
                     'rowCount': clickCount,
-                    'newData': <?php echo json_encode($newData); ?>
+                    'productsData': <?php echo json_encode($productsData); ?>
                 },
                 success: function(response) {
                     //Pievieno rindu

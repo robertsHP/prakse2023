@@ -3,11 +3,11 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/Database.php';
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (isset($_POST['newData']) && isset($_POST['rowCount'])) {
-            $newData = $_POST['newData'];
+        if (isset($_POST['productsData']) && isset($_POST['rowCount'])) {
+            $productsData = $_POST['productsData'];
             $rowCount = $_POST['rowCount'];
 
-            $rows = Database::getAllRowsFrom($newData['table-name']);
+            $rows = Database::getAllRowsFrom($productsData['table-name']);
             $keys = array_keys($rows[0]);
             $elementValue = null;
 

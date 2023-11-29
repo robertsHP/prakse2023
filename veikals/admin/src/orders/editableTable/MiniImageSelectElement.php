@@ -1,8 +1,8 @@
 
 <?php
-    $newDataKeys = array_keys($newData['form-data']);
+    $productsDataKeys = array_keys($productsData['form-data']);
 
-    $allowedFileFormats = $newData['form-data'][$newDataKeys[2]]['allowed_file_formats'];
+    $allowedFileFormats = $productsData['form-data'][$productsDataKeys[2]]['allowed_file_formats'];
     $allowedFileFormatsStr = implode(', ', $allowedFileFormats);
 
     $inputTagName = 'editable-table-row-image-input-'.$rowCount;

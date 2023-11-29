@@ -34,7 +34,7 @@
     <td>
         <?php 
             $elementValue = $row[$keys[3]];
-            $allowedFileFormats = $newData['form-data'][$newDataKeys[2]]['allowed_file_formats'];
+            $allowedFileFormats = $productsData['form-data'][$productsDataKeys[2]]['allowed_file_formats'];
 
             include 'miniImageSelectElement.php';
         ?>
