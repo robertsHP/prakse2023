@@ -91,6 +91,9 @@
                     'tmp_name' => $tmpName,
                     'name' => $name
                 ];
+            } else {
+                $var['error-type'] = FormErrorType::EMPTY;
+                $hasErrors = true;
             }
         }
         private static function phoneNumberVariableErrorCheck (&$key, &$var, &$hasErrors) {

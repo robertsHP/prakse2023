@@ -17,7 +17,7 @@
         }
         private static function isFileTypeCorrect (&$fileVar) {
             $valid = false;
-            $fileType = strtolower(pathinfo($fileVar['value'], PATHINFO_EXTENSION));
+            $fileType = strtolower(pathinfo($fileVar['value']['name'], PATHINFO_EXTENSION));
             foreach ($fileVar['allowed_file_formats'] as $fileTypeAllowed) {
                 if($fileType == $fileTypeAllowed) {
                     $valid = true;

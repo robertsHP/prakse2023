@@ -30,6 +30,7 @@
                     }
                 }
                 VariableHandler::assignErrorMessage($key, $var);
+                // echo '<p>'.$key.' = '.print_r($var).'</p>';
             }
             return $hasErrors;
         }

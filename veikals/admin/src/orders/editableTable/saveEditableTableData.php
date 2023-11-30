@@ -37,7 +37,6 @@
         'rowNumber' => isset($_POST['^rowNumber']) ? $_POST['^rowNumber'] : null,
     );
 
-
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $productsData = json_decode($_POST['^data'], true);
         unset($_POST['^data']);
@@ -50,8 +49,11 @@
             if(!str_contains($key, '^'))
                 $formData[$key] = $value;
         }
+
         foreach ($_FILES as $key => $value) {
             if(!str_contains($key, '^')) {
+                echo '<p>'.$key.' = '.print_r($value).'</p>';
+
                 if($productsData['db-process-type'] == 'create') {
                     $formData[$key] = $value;
                 } else if ($data['db-process-type'] == 'update') {
