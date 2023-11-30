@@ -16,7 +16,7 @@
 <script>
     $(document).ready(function () {
         function setErrorMessages (data, rowNumber) {
-            if(data['form-data'] !== null) {
+            if(data != null) {
                 $.each(data['form-data'], function(index, value) {
                     var tagStart = "#"+index;
                     if(rowNumber !== null) {
@@ -41,7 +41,6 @@
                 data: formData,
                 success: function (response) {
                     success = response.success;
-                    console.log("horraayy ordinary = "+success);
                     setErrorMessages(response.data, response.rowNumber);
                     $('#result').html(response);
                     if(success)
@@ -64,7 +63,6 @@
                 data: formData,
                 success: function (response) {
                     success = response.success;
-                    // console.log("succ inside = "+success);
                     setErrorMessages(response.productsData, response.rowNumber);
                     $('#result').html(response);
                 },
@@ -79,14 +77,17 @@
         var data = <?php echo json_encode($data); ?>;
 
         $('#save-button').click(function () {
-            $('.editable-table-row-form').each(function(index, form) {
+            $('.editable-table-row-form').each(function() {
                 var productsData = <?php echo json_encode($productsData); ?>;
                 productsData['order_id'] = data['id'];
+                productsData['db-process-type'] = data['db-process-type'];
             
                 var formData = new FormData();
                 var rowNumber = null;
 
-                $("td").each(function () {
+                console.log('rownumber GOOO In = '+rowNumber);
+
+                $(this).closest('tr').find('td').each(function () {
                     //Paņem pirmo tag, kas pieejams
                     var tag = $(this).find(':first-child');
                     var tagType = tag.prop("tagName");
@@ -95,6 +96,10 @@
                         tagType = tagType.toLowerCase();
                         if(tagType !== 'button') {
                             var id = tag.attr('id');
+
+                            console.log('id = '+id);
+                            console.log('rownumber = '+rowNumber);
+
                             if (typeof id !== 'undefined') {
                                 idSplit = id.split(/(\d+)/);
                                 if(rowNumber == null) {
@@ -113,9 +118,14 @@
                         }
                     }
                 });
+
+                console.log('rownumber OUT = '+rowNumber);
+
                 formData.append('^rowNumber', rowNumber);
                 formData.append('^data', JSON.stringify(productsData));
+
                 saveEditableTableRow(formData);
+                rowNumber = null;
             });
             $('.input-form').each(function(index, form) {
                 var formData = new FormData(form);

@@ -24,7 +24,6 @@
                                 $('#editable-table-delete-button-'+<?php echo json_encode($rowCount); ?>).click(function () {
                                     var clickCount = <?php echo json_encode($rowCount); ?>;
                                     $('#editable-table-row-'+clickCount).remove();
-                                    console.log(clickCount);
                                 });
                             </script>
                         </td>
@@ -125,7 +124,6 @@
 
                         $(document).ready(function () {
                             $.each(errorTags, function(index, value) {
-                                console.log("#"+index+rowCount+"-alert");
                                 $("#"+index+rowCount+"-alert").hide();
                             });
                         });

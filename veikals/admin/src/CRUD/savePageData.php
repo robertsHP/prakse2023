@@ -18,6 +18,7 @@
         'item_id' => null,
         'success' => false,
         'rowNumber' => isset($_POST['^rowNumber']) ? $_POST['^rowNumber'] : null,
+        'data' => null
     );
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -30,8 +31,18 @@
                 $formData[$key] = $value;
         }
         foreach ($_FILES as $key => $value) {
-            if(!str_contains($key, '^'))
-                $formData[$key] = $value;
+            if(!str_contains($key, '^')) {
+                if($data['db-process-type'] == 'create') {
+                    $formData[$key] = $value;
+                } else if ($data['db-process-type'] == 'update') {
+                    $oldPathEmpty = $data['form-data'][$key] == '' || empty($data['form-data'][$key]);
+                    $newFilePathEmpty = $value['name'] == '' || empty($value['name']);
+
+                    if (!$newFilePathEmpty || ($newFilePathEmpty && $oldPathEmpty)) {
+                        $formData[$key] = $value;
+                    }
+                }
+            }
         }
 
         $hasErrors = CRUDFunctions::assignAndProcessFormData($formData, $data);

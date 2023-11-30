@@ -51,8 +51,18 @@
                 $formData[$key] = $value;
         }
         foreach ($_FILES as $key => $value) {
-            if(!str_contains($key, '^'))
-                $formData[$key] = $value;
+            if(!str_contains($key, '^')) {
+                if($productsData['db-process-type'] == 'create') {
+                    $formData[$key] = $value;
+                } else if ($data['db-process-type'] == 'update') {
+                    $oldPathEmpty = $productsData['form-data'][$key] == '' || empty($productsData['form-data'][$key]);
+                    $newFilePathEmpty = $value['name'] == '' || empty($value['name']);
+
+                    if (!$newFilePathEmpty || ($newFilePathEmpty && $oldPathEmpty)) {
+                        $formData[$key] = $value;
+                    }
+                }
+            }
         }
 
         $hasErrors = CRUDFunctions::assignAndProcessFormData($formData, $productsData);

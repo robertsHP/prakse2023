@@ -19,12 +19,13 @@
                 //Augšupielādē failu
                 if($var['type'] == FormDataType::FILE->value) {
                     if($var['error-type']->value == FormErrorType::NONE->value) {
-                        if($var['value'] != null) {
+                        if(is_array($var['value'])) {
                             $var['value']['name'] = FileUpload::prepareFolderPath(
                                 $var['value']['name'], 
                                 $data['table-name']);
 
                             FileUpload::uploadFile($key, $var, $hasErrors);
+                            $var['value'] = $var['value']['name'];
                         }
                     }
                 }
@@ -43,7 +44,10 @@
         }
         public static function loadExistingVariables (&$data) {
             if(isset($data['id'])) {
-                $row = Database::getRowWithID($data['table-name'], $data['id-column-name'], $data['id']);
+                $row = Database::getRowWithID(
+                    $data['table-name'], 
+                    $data['id-column-name'], 
+                    $data['id']);
 
                 //Ja neatgreiž neko tad veic redirect uz index
                 if(empty($row)) {

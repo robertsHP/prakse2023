@@ -17,7 +17,6 @@
                 $('#editable-table-delete-button-'+<?php echo json_encode($rowCount); ?>).click(function () {
                     var clickCount = <?php echo json_encode($rowCount); ?>;
                     $('#editable-table-row-'+clickCount).remove();
-                    console.log(clickCount);
                 });
             </script>
         </td>

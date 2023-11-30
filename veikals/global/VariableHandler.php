@@ -13,7 +13,7 @@
         public static function processVariable (&$key, &$var, &$hasErrors) {
             $var['error-type'] = FormErrorType::NONE;
 
-            // echo '<p>'.print_r($var). '</p>';
+            // echo '<p>'.print_r($var['value']). '</p>';
 
             //Veic darbības atkarība no mainīgā tipa
             switch ($var['type']) {
@@ -91,8 +91,6 @@
                     'tmp_name' => $tmpName,
                     'name' => $name
                 ];
-            } else {
-                $var['value'] = null;
             }
         }
         private static function phoneNumberVariableErrorCheck (&$key, &$var, &$hasErrors) {
