@@ -77,16 +77,22 @@
                 $("td").each(function () {
                     //Paņem pirmo tag, kas pieejams
                     var tag = $(this).find(':first-child');
-                    var tagName = tag.prop("tagName");
+                    var tagType = tag.prop("tagName");
 
-                    if(typeof tagName !== 'undefined') {
-                        tagName = tagName.toLowerCase();
-                        if(tagName !== 'button') {
+                    if(typeof tagType !== 'undefined') {
+                        tagType = tagType.toLowerCase();
+                        if(tagType !== 'button') {
                             var id = tag.attr('id');
                             if (typeof id !== 'undefined') {
                                 id = id.split(/\d/)[0];
-                                console.log(id);
-                                formData.append(id, tag.val());
+                                var variable = null;
+                                if(tag.is(':file')) {
+                                    variable = tag[0].files[0];
+                                } else {
+                                    variable = tag.val();
+                                }
+                                // console.log(typeof variable);
+                                formData.append(id, variable);
                             }
                         }
                     }

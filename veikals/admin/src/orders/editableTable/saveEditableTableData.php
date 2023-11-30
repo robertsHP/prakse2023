@@ -55,7 +55,7 @@
             }
         }
         
-        // echo '<p>'.print_r($productsData). '</p>';
+        echo '<p>'.print_r($productsData). '</p>';
         // echo '<p>'.print_r($purchGoodsData). '</p>';
     }
 
