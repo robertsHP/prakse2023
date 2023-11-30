@@ -5,8 +5,6 @@
 
     class VariableHandler {
         private static function sanitizeValue (&$value) {
-            // echo '<p>'.$value.'</p>';
-
             $value = htmlspecialchars(
                 trim($value), 
                 ENT_QUOTES, 
@@ -75,17 +73,26 @@
             }
         }
         public static function fileVariableErrorCheck (&$key, &$var, &$hasErrors) {
-            $tmpName = $var['value']['tmp_name'];
-            $name = $var['value']['name'];
+            // echo '<p>'.print_r($var). '</p>';
 
-            $tempEmpty = empty($tmpName) || $tmpName == '';
-            $nameEmpty = empty($name) || $name == '';
-
-            if($tempEmpty || $nameEmpty) {
-                $var['error-type'] = FormErrorType::EMPTY;
-                $hasErrors = true;
+            if(isset($var['value']['tmp_name']) && isset($var['value']['name'])) {
+                $tmpName = $var['value']['tmp_name'];
+                $name = $var['value']['name'];
+    
+                $tempEmpty = empty($tmpName) || $tmpName == '';
+                $nameEmpty = empty($name) || $name == '';
+    
+                if($tempEmpty || $nameEmpty) {
+                    $var['error-type'] = FormErrorType::EMPTY;
+                    $hasErrors = true;
+                }
+                $var['value'] = [
+                    'tmp_name' => $tmpName,
+                    'name' => $name
+                ];
+            } else {
+                $var['value'] = null;
             }
-            $var['value'] = $name;
         }
         private static function phoneNumberVariableErrorCheck (&$key, &$var, &$hasErrors) {
             VariableHandler::sanitizeValue($var['value']);

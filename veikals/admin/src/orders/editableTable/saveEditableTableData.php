@@ -15,45 +15,49 @@
 
     // Create an associative array to hold variables
     $response = array(
-        'item_id' => null,
-        'db-process-type' => null,
         'success' => false,
         'errorTags' => []
     );
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $data = json_decode($_POST['-data'], true);
+        $productsData = json_decode($_POST['-data'], true);
         unset($_POST['-data']);
+
+        $purchGoodsData = json_decode($_POST['-purchGoodsData'], true);
+        unset($_POST['-purchGoodsData']);
 
         $formData = [];
         foreach ($_POST as $key => $value) {
+            echo '<p>'.$value. '</p>';
             $formData[$key] = $value;
         }
         foreach ($_FILES as $key => $value) {
+            // echo '<p>'.$value. '</p>';
             $formData[$key] = $value;
         }
 
+        // echo '<p>'.print_r($formData). '</p>';
+        // echo '<p>'.print_r($productsData). '</p>';
 
-        $hasErrors = CRUDFunctions::assignAndProcessFormData($formData, $data);
+        $hasErrors = CRUDFunctions::assignAndProcessFormData($formData, $productsData);
+
+        // echo '<p>'.print_r($productsData). '</p>';
+
         if(!$hasErrors) {
-            if($data['db-process-type'] === 'create') {
-                $response['success'] = Database::insert(
-                    $data['table-name'], 
-                    $data['form-data']);
-            } else if ($data['db-process-type'] === 'update') {
-                $response['success'] = Database::update(
-                    $data['table-name'], 
-                    $data['id-column-name'], 
-                    $data['id'],
-                    $data['form-data']);
+            if($productsData['id'] == null) {
+                $productsTableName = $productsData['table-name'];
+                $productsIdColumnName = $productsData['id-column-name'];
+
+                // echo '<p>'.$productsTableName. '</p>';
+                // echo '<p>'.$productsIdColumnName. '</p>';
+            } else {
+
             }
         }
-        if(isset($data['error-tags']))
-            $response['errorTags'] = $data['error-tags'];
+        
+        // echo '<p>'.print_r($productsData). '</p>';
+        // echo '<p>'.print_r($purchGoodsData). '</p>';
     }
-    // echo '<p>'.print_r($_FILES['photo_file_loc']).'</p>';
-    // echo '<p>DATA === '.print_r($data).'</p><bt>';
-    // echo '<p>RESPONSE === '.print_r($response).'</p><br>';
 
     // header('Content-Type: application/json');
     // echo json_encode($response);

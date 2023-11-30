@@ -8,6 +8,7 @@
     class CRUDFunctions {
         public static function assignAndProcessFormData (&$formData, &$data) {
             $hasErrors = false;
+
             //Pievieno visas formas vērtības $data masīvam
             foreach ($formData as $key => &$tempVar) {
                 $var = &$data['form-data'][$key];
@@ -17,14 +18,16 @@
 
                 //Augšupielādē failu
                 if($var['type'] == FormDataType::FILE->value) {
-                    // echo '<p>'.$var['error-type']->value.'</p>';
                     if($var['error-type']->value == FormErrorType::NONE->value) {
-                        $var['value'] = FileUpload::prepareFolderPath(
-                            $var['value'], 
-                            $data['table-name']);
+                        
 
-                        // echo '<p>'.$var['value'].'</p>';
-                        FileUpload::uploadFile($key, $var, $hasErrors);
+                        if($var['value'] != null) {
+                            $var['value']['name'] = FileUpload::prepareFolderPath(
+                                $var['value']['name'], 
+                                $data['table-name']);
+
+                            FileUpload::uploadFile($key, $var, $hasErrors);
+                        }
                     }
                 }
                 VariableHandler::assignErrorMessage($key, $var, $data['error-tags']);

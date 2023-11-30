@@ -170,25 +170,23 @@
                     </form>
                 </div>
                 <div class="col">
-                    <!-- <form class="input-form" enctype="multipart/form-data"> -->
-                        <?php 
-                            $title = 'Preces';
-                            $tagName = 'products';
-                        ?>
-                        <?php 
-                            TagLoader::loadLabel($title, $tagName, null);
-                            
-                            include 'editableTable/editableTable.php';
+                    <?php 
+                        $title = 'Preces';
+                        $tagName = 'products';
+                    ?>
+                    <?php 
+                        TagLoader::loadLabel($title, $tagName, null);
+                        
+                        include 'editableTable/editableTable.php';
 
-                            $data['error-tags'][$tagName] = [
-                                'id' => $tagName.'-alert',
-                                'error-conditions' => [
-                                    FormErrorType::EMPTY->value => 'Statuss nav norādīts'
-                                ]
-                            ];
-                            TagLoader::loadInputErrorMessage($tagName, null);
-                        ?>
-                    <!-- </form> -->
+                        $data['error-tags'][$tagName] = [
+                            'id' => $tagName.'-alert',
+                            'error-conditions' => [
+                                FormErrorType::EMPTY->value => 'Statuss nav norādīts'
+                            ]
+                        ];
+                        TagLoader::loadInputErrorMessage($tagName, null);
+                    ?>
                 </div>
             </div>
             <?php

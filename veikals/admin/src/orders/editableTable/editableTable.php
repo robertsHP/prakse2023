@@ -45,7 +45,6 @@
                             include 'loadDataRow.php';
                             $rowCount++;
                         }
-
                     } catch (PDOException $exception) {
                         echo "PDO Exception: " . $exception->getMessage();
                         echo "<br>";

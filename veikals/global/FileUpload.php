@@ -44,9 +44,9 @@
         public static function uploadFile (&$key, &$fileVar, &$hasErrors) {
             if(!$hasErrors) {
                 if($fileVar['error-type'] == FormErrorType::NONE) {
-                    $tempPath = $_FILES[$key]['tmp_name'];
+                    $tempPath = $fileVar['value']['tmp_name'];
 
-                    $fileVarFullPath = $_SERVER['CONTEXT_DOCUMENT_ROOT'].$fileVar['value'];
+                    $fileVarFullPath = $_SERVER['CONTEXT_DOCUMENT_ROOT'].$fileVar['value']['name'];
 
                     $existenceCheck = file_exists($tempPath) && !file_exists($fileVarFullPath);
                     $pathsAreNotTheSame = $tempPath != $fileVarFullPath;

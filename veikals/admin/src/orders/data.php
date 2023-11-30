@@ -47,55 +47,47 @@
                 'db_var_type' => PDO::PARAM_INT,
                 'error-type' => FormErrorType::NONE,
                 'required' => true
-            ],
-            // 'products' => [
-            //     'title' => 'Produkti',
-            //     'table-info' => [
-            //         'name' => 'purchased_goods',
-            //         'columns' => [
-            //             'purch_goods_id' => [
-            //                 'title' => 'ID',
-            //                 'value' => null,
-            //                 'type' => FormDataType::NUMBER,
-            //                 'db_var_type' => PDO::PARAM_INT,
-            //                 'errorType' => FormErrorType::NONE,
-            //                 'required' => true
-            //             ], 
-            //             'order_id' => [
-            //                 'title' => 'Pasūtījums',
-            //                 'value' => null,
-            //                 'type' => FormDataType::NUMBER,
-            //                 'db_var_type' => PDO::PARAM_INT,
-            //                 'errorType' => FormErrorType::NONE,
-            //                 'required' => true
-            //             ], 
-            //             'product_id' => [
-            //                 'title' => 'Produkts',
-            //                 'value' => null,
-            //                 'type' => FormDataType::NUMBER,
-            //                 'db_var_type' => PDO::PARAM_INT,
-            //                 'errorType' => FormErrorType::NONE,
-            //                 'required' => true
-            //             ], 
-            //             'amount' => [
-            //                 'title' => 'Daudzums',
-            //                 'value' => null,
-            //                 'type' => FormDataType::NUMBER,
-            //                 'db_var_type' => PDO::PARAM_INT,
-            //                 'errorType' => FormErrorType::NONE,
-            //                 'required' => true
-            //             ], 
-            //             'total_price' => [
-            //                 'title' => 'Cena',
-            //                 'value' => null,
-            //                 'type' => FormDataType::NUMBER,
-            //                 'db_var_type' => PDO::PARAM_INT,
-            //                 'errorType' => FormErrorType::NONE,
-            //                 'required' => true
-            //             ]
-            //         ]
-            //     ]
-            // ],
+            ]
+        ]
+    ];
+    $purchGoodsData = [
+        'id' => null,
+        'db-process-type' => null,
+        'table-name' => 'purchased_goods',
+        'id-column-name' => 'purch_goods_id',
+        'form-data' => [
+            'order_id' => [
+                'title' => 'Pasūtījums',
+                'value' => null,
+                'type' => FormDataType::NUMBER,
+                'db_var_type' => PDO::PARAM_INT,
+                'errorType' => FormErrorType::NONE,
+                'required' => true
+            ], 
+            'product_id' => [
+                'title' => 'Produkts',
+                'value' => null,
+                'type' => FormDataType::NUMBER,
+                'db_var_type' => PDO::PARAM_INT,
+                'errorType' => FormErrorType::NONE,
+                'required' => true
+            ], 
+            'amount' => [
+                'title' => 'Daudzums',
+                'value' => null,
+                'type' => FormDataType::NUMBER,
+                'db_var_type' => PDO::PARAM_INT,
+                'errorType' => FormErrorType::NONE,
+                'required' => true
+            ], 
+            'total_price' => [
+                'title' => 'Cena',
+                'value' => null,
+                'type' => FormDataType::NUMBER,
+                'db_var_type' => PDO::PARAM_INT,
+                'errorType' => FormErrorType::NONE,
+                'required' => true
+            ]
         ]
     ];
 ?>

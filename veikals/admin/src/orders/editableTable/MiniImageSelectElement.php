@@ -5,8 +5,8 @@
     $allowedFileFormats = $productsData['form-data'][$productsDataKeys[2]]['allowed_file_formats'];
     $allowedFileFormatsStr = implode(', ', $allowedFileFormats);
 
-    $inputTagName = 'editable-table-row-image-input-'.$rowCount;
-    $imageTagName = 'editable-table-row-image-'.$rowCount;
+    $inputTagName = $keys[3].$rowCount.'-image-input';
+    $imageTagName = $keys[3].$rowCount.'-image';
 ?>
     <input 
         type="file"  
@@ -31,18 +31,15 @@
 <script>
     //Bildes izvēlei
     $.getScript('/veikals/assets/js/imageSelectElement.js', function() {
-        var clickCount = <?php echo json_encode($rowCount); ?>;
-
-        var fileInputID = 'editable-table-row-image-input-'+clickCount;
-        var selectedImageID = 'editable-table-row-image-'+clickCount;
+        var fileInputID = <?php echo json_encode($inputTagName); ?>;
+        var selectedImageID = <?php echo json_encode($imageTagName); ?>;
         var elementValue = <?php echo json_encode($elementValue); ?>
 
         initFileInput('#'+fileInputID, '#'+selectedImageID, null);
         initImageSelect(elementValue, '#'+fileInputID, '#'+selectedImageID, null);
 
         $('#'+selectedImageID).click(function(){
-            var clickCount = <?php echo json_encode($rowCount); ?>;
-            var fileInputID = 'editable-table-row-image-input-'+clickCount;
+            var fileInputID = <?php echo json_encode($inputTagName); ?>;
             var fileInput = document.getElementById(fileInputID);
             fileInput.click();
         });
