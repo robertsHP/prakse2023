@@ -19,8 +19,6 @@
                 //Augšupielādē failu
                 if($var['type'] == FormDataType::FILE->value) {
                     if($var['error-type']->value == FormErrorType::NONE->value) {
-                        
-
                         if($var['value'] != null) {
                             $var['value']['name'] = FileUpload::prepareFolderPath(
                                 $var['value']['name'], 

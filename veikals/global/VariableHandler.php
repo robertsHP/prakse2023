@@ -13,6 +13,8 @@
         public static function processVariable (&$key, &$var, &$hasErrors) {
             $var['error-type'] = FormErrorType::NONE;
 
+            // echo '<p>'.print_r($var). '</p>';
+
             //Veic darbības atkarība no mainīgā tipa
             switch ($var['type']) {
                 case FormDataType::TEXT->value:

@@ -20,20 +20,22 @@
     );
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $productsData = json_decode($_POST['-data'], true);
-        unset($_POST['-data']);
+        $productsData = json_decode($_POST['^data'], true);
+        unset($_POST['^data']);
 
-        $purchGoodsData = json_decode($_POST['-purchGoodsData'], true);
-        unset($_POST['-purchGoodsData']);
+        $purchGoodsData = json_decode($_POST['^purchGoodsData'], true);
+        unset($_POST['^purchGoodsData']);
 
         $formData = [];
         foreach ($_POST as $key => $value) {
-            echo '<p>'.$value. '</p>';
-            $formData[$key] = $value;
+            // echo '<p>'.$value. '</p>';
+            if(!str_contains($key, '^'))
+                $formData[$key] = $value;
         }
         foreach ($_FILES as $key => $value) {
             // echo '<p>'.$value. '</p>';
-            $formData[$key] = $value;
+            if(!str_contains($key, '^'))
+                $formData[$key] = $value;
         }
 
         // echo '<p>'.print_r($formData). '</p>';
@@ -45,9 +47,13 @@
 
         if(!$hasErrors) {
             if($productsData['id'] == null) {
+                $orderID = $productsData['order_id'];
                 $productsTableName = $productsData['table-name'];
                 $productsIdColumnName = $productsData['id-column-name'];
 
+                
+
+                // echo '<p>'.$productsTableName. '</p>';
                 // echo '<p>'.$productsTableName. '</p>';
                 // echo '<p>'.$productsIdColumnName. '</p>';
             } else {
@@ -55,7 +61,7 @@
             }
         }
         
-        echo '<p>'.print_r($productsData). '</p>';
+        // echo '<p>'.print_r($productsData). '</p>';
         // echo '<p>'.print_r($purchGoodsData). '</p>';
     }
 

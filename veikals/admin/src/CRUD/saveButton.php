@@ -11,6 +11,8 @@
 <script>
     $(document).ready(function () {
         function saveFormData (formData) {
+            var success = false;
+
             $.ajax({
                 type: 'POST',
                 url: '/veikals/admin/src/CRUD/savePageData.php',
@@ -18,30 +20,36 @@
                 processData: false,
                 data: formData,
                 success: function (response) {
-                    if(response.success) {
-                        window.location.href = redirectPath;
-                    } else {
-                        if(response.errorTags) {
-                            $.each(response.errorTags, function(index, value) {
-                                if (value['error-message'] != null) {
-                                    $("#"+index+"-alert").text(value['error-message']).show();
-                                } else {
-                                    $("#"+index+"-alert").hide();
-                                }
-                            });
-                        }
+                    success = response.success;
+
+                    if(response.errorTags !== null) {
+                        $.each(response.errorTags, function(index, value) {
+                            var tagStart = "#"+index;
+                            if(response.rowNumber !== null) {
+                                tagStart += response.rowNumber;
+                            }
+                            var alertTag = tagStart+"-alert";
+
+                            if (value['error-message'] != null) {
+                                $(alertTag).text(value['error-message']).show();
+                            } else {
+                                $(alertTag).hide();
+                            }
+                        });
                     }
                     $('#result').html(response);
                 },
                 error: function(xhr, status, error) {
-                    console.error(xhr);
                     console.error('AJAX Error: ' + status + ' - ' + error);
                 }
             });
+            return success;
         }
         function saveEditableTableRow (formData) {
             var purchGoodsData = <?php echo json_encode($purchGoodsData); ?>;
-            formData.append('-purchGoodsData', JSON.stringify(purchGoodsData));
+            formData.append('^purchGoodsData', JSON.stringify(purchGoodsData));
+
+            var success = false;
 
             $.ajax({
                 type: 'POST',
@@ -50,12 +58,14 @@
                 processData: false,
                 data: formData,
                 success: function (response) {
+                    success = response.success;
                     $('#result').html(response);
                 },
                 error: function(xhr, status, error) {
                     console.error('AJAX Error: ' + status + ' - ' + error);
                 }
             });
+            return success;
         }
 
         var tableName = <?php echo json_encode($data['table-name']); ?>;
@@ -65,41 +75,51 @@
         $('#save-button').click(function () {
             $('.input-form').each(function(index, form) {
                 var formData = new FormData(form);
-                formData.append('-data', JSON.stringify(data));
-                saveFormData(formData);
-            });
-            $('.editable-table-row-form').each(function(index, form) {
-                var productsData = <?php echo json_encode($productsData); ?>;
-                productsData['order_id'] = data['id'];
-            
-                var formData = new FormData();
+                formData.append('^data', JSON.stringify(data));
+                success = saveFormData(formData);
+                // if(success) {
+                    $('.editable-table-row-form').each(function(index, form) {
+                        var productsData = <?php echo json_encode($productsData); ?>;
+                        productsData['order_id'] = data['id'];
+                    
+                        var formData = new FormData();
+                        var rowNumber = null;
 
-                $("td").each(function () {
-                    //Paņem pirmo tag, kas pieejams
-                    var tag = $(this).find(':first-child');
-                    var tagType = tag.prop("tagName");
+                        $("td").each(function () {
+                            //Paņem pirmo tag, kas pieejams
+                            var tag = $(this).find(':first-child');
+                            var tagType = tag.prop("tagName");
 
-                    if(typeof tagType !== 'undefined') {
-                        tagType = tagType.toLowerCase();
-                        if(tagType !== 'button') {
-                            var id = tag.attr('id');
-                            if (typeof id !== 'undefined') {
-                                id = id.split(/\d/)[0];
-                                var variable = null;
-                                if(tag.is(':file')) {
-                                    variable = tag[0].files[0];
-                                } else {
-                                    variable = tag.val();
+                            if(typeof tagType !== 'undefined') {
+                                tagType = tagType.toLowerCase();
+                                if(tagType !== 'button') {
+                                    var id = tag.attr('id');
+                                    if (typeof id !== 'undefined') {
+                                        idSplit = id.split(/(\d+)/);
+                                        if(rowNumber == null) {
+                                            rowNumber = idSplit[1];
+                                        }
+                                        id = idSplit[0];
+
+                                        var variable = null;
+                                        if(tag.is(':file')) {
+                                            variable = tag[0].files[0];
+                                        } else {
+                                            variable = tag.val();
+                                        }
+                                        formData.append(id, variable);
+                                    }
                                 }
-                                // console.log(typeof variable);
-                                formData.append(id, variable);
                             }
-                        }
-                    }
-                });
-                formData.append('-data', JSON.stringify(productsData));
-                saveFormData(formData);
-                saveEditableTableRow(formData);
+                        });
+                        formData.append('^rowNumber', rowNumber);
+                        formData.append('^data', JSON.stringify(productsData));
+                        success = saveFormData(formData);
+                        // if(success) {
+                            success = saveEditableTableRow(formData);
+                        // }
+                    });
+                // }
             });
         });
     });

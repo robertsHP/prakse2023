@@ -16,31 +16,34 @@
     // Create an associative array to hold variables
     $response = array(
         'item_id' => null,
-        'db-process-type' => null,
+        'dbProcessType' => null,
         'success' => false,
-        'errorTags' => []
+        'rowNumber' => isset($_POST['^rowNumber']) ? $_POST['^rowNumber'] : null,
+        'errorTags' => null
     );
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $data = json_decode($_POST['-data'], true);
-        unset($_POST['-data']);
+        $data = json_decode($_POST['^data'], true);
+        unset($_POST['^data']);
 
         $formData = [];
         foreach ($_POST as $key => $value) {
-            $formData[$key] = $value;
+            // echo '<p>'.$value. '</p>';
+            if(!str_contains($key, '^'))
+                $formData[$key] = $value;
         }
         foreach ($_FILES as $key => $value) {
-            $formData[$key] = $value;
+            if(!str_contains($key, '^'))
+                $formData[$key] = $value;
         }
-
 
         $hasErrors = CRUDFunctions::assignAndProcessFormData($formData, $data);
         if(!$hasErrors) {
-            if($data['db-process-type'] === 'create') {
+            if($data['dbProcessType'] === 'create') {
                 $response['success'] = Database::insert(
                     $data['table-name'], 
                     $data['form-data']);
-            } else if ($data['db-process-type'] === 'update') {
+            } else if ($data['dbProcessType'] === 'update') {
                 $response['success'] = Database::update(
                     $data['table-name'], 
                     $data['id-column-name'], 
