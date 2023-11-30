@@ -12,12 +12,31 @@
             $formData[$key] = $value;
         }
     }
+    function ifPurchGoodsHasOrderWithThisProduct ($purchGoodsData) {
+        $conn = Database::openConnection();
+    
+        $tableName = $purchGoodsData['table-name'];
 
-    // Create an associative array to hold variables
+        $stmt = $conn->prepare(
+            "SELECT * FROM $tableName WHERE order_id=:order_id AND product_id=:product_id"
+        );
+        $stmt->bindParam(':order_id', $purchGoodsData['form-data']['order_id'], PDO::PARAM_INT);
+        $stmt->bindParam(':product_id', $purchGoodsData['form-data']['product_id'], PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        Database::closeConnection($conn);
+
+        return !empty($result);
+    }
+
     $response = array(
+        'item_id' => null,
+        'dbProcessType' => null,
         'success' => false,
-        'errorTags' => []
+        'rowNumber' => isset($_POST['^rowNumber']) ? $_POST['^rowNumber'] : null,
     );
+
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $productsData = json_decode($_POST['^data'], true);
@@ -28,43 +47,68 @@
 
         $formData = [];
         foreach ($_POST as $key => $value) {
-            // echo '<p>'.$value. '</p>';
             if(!str_contains($key, '^'))
                 $formData[$key] = $value;
         }
         foreach ($_FILES as $key => $value) {
-            // echo '<p>'.$value. '</p>';
             if(!str_contains($key, '^'))
                 $formData[$key] = $value;
         }
 
-        // echo '<p>'.print_r($formData). '</p>';
-        // echo '<p>'.print_r($productsData). '</p>';
-
         $hasErrors = CRUDFunctions::assignAndProcessFormData($formData, $productsData);
 
-        // echo '<p>'.print_r($productsData). '</p>';
+        //iziet cauri visiem produktiem kuriem ir orders_id
+        //un atbilstoši veic darbības balstoties uz rezultātiem
+        //1. ja nav tad CREATE
+        //2. ja ir tad UPDATE
 
         if(!$hasErrors) {
-            if($productsData['id'] == null) {
-                $orderID = $productsData['order_id'];
-                $productsTableName = $productsData['table-name'];
-                $productsIdColumnName = $productsData['id-column-name'];
+            // $purchGoodsData['form-data']['order_id'] = $productsData['order_id'];
+            // $productsIdColumnName = $productsData['id-column-name'];
 
-                
+            // //Situācijās kad vada pilnīgi no jauna tabulā
+            // if($productsData['id'] == null) {
+            //     //Ievieto datubāzē produktu 
+            //     $insertedRowID = Database::insert(
+            //         $productsData['table-name'], 
+            //         $productsData);
+            //     //Piešķir produkta ID
+            //     $purchGoodsData['form-data']['product_id'] = $insertedRowID;
+            //     //Ievieto datubāzē purchased_goods savienojumu starp produktu un pasūtījumu 
 
-                // echo '<p>'.$productsTableName. '</p>';
-                // echo '<p>'.$productsTableName. '</p>';
-                // echo '<p>'.$productsIdColumnName. '</p>';
-            } else {
+            //     if(!ifPurchGoodsHasOrderWithThisProduct($purchGoodsData)) {
+            //         Database::insert(
+            //             $purchGoodsData['table-name'], 
+            //             $purchGoodsData);
+            //     }
 
-            }
+            //     Database::insert(
+            //         $purchGoodsData['table-name'], 
+            //         $purchGoodsData);
+            // //Situācijās kad tiek atjaunināts
+            // } else {
+            //     //$tableName, $idColumnName, $id, $data
+            //     $productRow = Database::getRowWithID(
+            //         $productsData['table-name'], 
+            //         $productsData['id-column-name'], 
+            //         $productsData['id']);
+            //     if(!empty($productRow)) {
+            //         //Adjauno informāciju datubāzē
+            //         Database::update(
+            //             $productsData['table-name'], 
+            //             $productsData['id-column-name'],
+            //             $productsData['id'],
+            //             $productsData);
+            //     }
+            // }
         }
         
         // echo '<p>'.print_r($productsData). '</p>';
         // echo '<p>'.print_r($purchGoodsData). '</p>';
+
+        $response['productsData'] = $productsData;
     }
 
-    // header('Content-Type: application/json');
-    // echo json_encode($response);
+    header('Content-Type: application/json');
+    echo json_encode($response);
 ?>

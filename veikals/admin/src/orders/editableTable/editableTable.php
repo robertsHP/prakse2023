@@ -47,9 +47,7 @@
                         }
                     } catch (PDOException $exception) {
                         echo "PDO Exception: " . $exception->getMessage();
-                        echo "<br>";
                         echo "Error Code: " . $exception->getCode();
-                        echo "<br>";
                     }
     
                 }

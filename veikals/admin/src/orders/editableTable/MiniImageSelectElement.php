@@ -1,12 +1,12 @@
 
 <?php
-    $productsDataKeys = array_keys($productsData['form-data']);
+    $dataKeys = array_keys($data['form-data']);
 
-    $allowedFileFormats = $productsData['form-data'][$productsDataKeys[2]]['allowed_file_formats'];
+    $allowedFileFormats = $data['form-data'][$dataKeys[2]]['allowed_file_formats'];
     $allowedFileFormatsStr = implode(', ', $allowedFileFormats);
 
-    $inputTagName = $keys[3].$rowCount.'-image-input';
-    $imageTagName = $keys[3].$rowCount.'-image';
+    $inputTagName = $tagName.'-image-input';
+    $imageTagName = $tagName.'-image';
 ?>
     <input 
         type="file"  

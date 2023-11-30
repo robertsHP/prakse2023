@@ -32,12 +32,6 @@
                                     echo $variableData['value'];
                         ?>">
                         <?php 
-                            $data['error-tags'][$tagName] = [
-                                'id' => $tagName.'-alert',
-                                'error-conditions' => [
-                                    FormErrorType::EMPTY->value => 'Kategorijas nosaukums ir nepieciešams'
-                                ]
-                            ];
                             TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
 
@@ -60,10 +54,6 @@
                                     echo $variableData['value'];
                         ?>">
                         <?php 
-                            $data['error-tags'][$tagName] = [
-                                'id' => $tagName.'-alert',
-                                'error-conditions' => FormTypeErrorConditions::EMAIL_DEFAULT
-                            ];
                             TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
 
@@ -103,10 +93,6 @@
                             </div>
                         </div> 
                         <?php 
-                            $data['error-tags'][$tagName] = [
-                                'id' => $tagName.'-alert',
-                                'error-conditions' => FormTypeErrorConditions::PHONE_NUMBER_DEFAULT
-                            ];
                             TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
 
@@ -129,12 +115,6 @@
                                         echo $variableData['value'];
                             ?>">
                         <?php 
-                            $data['error-tags'][$tagName] = [
-                                'id' => $tagName.'-alert',
-                                'error-conditions' => [
-                                    FormErrorType::EMPTY->value => 'Adrese ir nepieciešama'
-                                ]
-                            ];
                             TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
                     </div>

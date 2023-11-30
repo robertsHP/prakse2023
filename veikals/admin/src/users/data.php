@@ -13,7 +13,10 @@
                 'value' => null,
                 'type' => FormDataType::TEXT,
                 'db_var_type' => PDO::PARAM_STR,
-                'errorType' => FormErrorType::NONE,
+                'error-type' => FormErrorType::NONE,
+                'error-conditions' => [
+                    FormErrorType::EMPTY->value => 'Vārds ir nepieciešams'
+                ],
                 'required' => true
             ],
             'surname' => [
@@ -21,7 +24,10 @@
                 'value' => null,
                 'type' => FormDataType::TEXT,
                 'db_var_type' => PDO::PARAM_STR,
-                'errorType' => FormErrorType::NONE,
+                'error-type' => FormErrorType::NONE,
+                'error-conditions' => [
+                    FormErrorType::EMPTY->value => 'Uzvārds ir nepieciešams'
+                ],
                 'required' => true
             ],
             'email' => [
@@ -29,7 +35,8 @@
                 'value' => null,
                 'type' => FormDataType::EMAIL,
                 'db_var_type' => PDO::PARAM_STR,
-                'errorType' => FormErrorType::NONE,
+                'error-type' => FormErrorType::NONE,
+                'error-conditions' => FormTypeErrorConditions::EMAIL_DEFAULT,
                 'required' => true
             ]
         ]

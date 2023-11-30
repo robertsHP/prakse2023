@@ -28,7 +28,7 @@
                         }
                     }
                 }
-                VariableHandler::assignErrorMessage($key, $var, $data['error-tags']);
+                VariableHandler::assignErrorMessage($key, $var);
             }
             return $hasErrors;
         }

@@ -14,6 +14,9 @@
                 'type' => FormDataType::NUMBER,
                 'db_var_type' => PDO::PARAM_INT,
                 'error-type' => FormErrorType::NONE,
+                'error-conditions' => [
+                    FormErrorType::EMPTY->value => 'Numurs nav ievadīts'
+                ],
                 'required' => true
             ],
             'client_id' => [
@@ -22,6 +25,9 @@
                 'type' => FormDataType::NUMBER,
                 'db_var_type' => PDO::PARAM_INT,
                 'error-type' => FormErrorType::NONE,
+                'error-conditions' => [
+                    FormErrorType::EMPTY->value => 'Klients nav izvēlēts'
+                ],
                 'required' => true
             ],
             'date' => [
@@ -30,6 +36,7 @@
                 'type' => FormDataType::DATE,
                 'db_var_type' => PDO::PARAM_STR,
                 'error-type' => FormErrorType::NONE,
+                'error-conditions' => FormTypeErrorConditions::DATE_DEFAULT,
                 'required' => true
             ],
             'total_price' => [
@@ -38,6 +45,9 @@
                 'type' => FormDataType::NUMBER,
                 'db_var_type' => PDO::PARAM_INT,
                 'error-type' => FormErrorType::NONE,
+                'error-conditions' => [
+                    FormErrorType::EMPTY->value => 'Cena nav ievadīta'
+                ],
                 'required' => true
             ],
             'state_id' => [
@@ -46,6 +56,9 @@
                 'type' => FormDataType::NUMBER,
                 'db_var_type' => PDO::PARAM_INT,
                 'error-type' => FormErrorType::NONE,
+                'error-conditions' => [
+                    FormErrorType::EMPTY->value => 'Statuss nav norādīts'
+                ],
                 'required' => true
             ]
         ]
@@ -61,7 +74,7 @@
                 'value' => null,
                 'type' => FormDataType::NUMBER,
                 'db_var_type' => PDO::PARAM_INT,
-                'errorType' => FormErrorType::NONE,
+                'error-type' => FormErrorType::NONE,
                 'required' => true
             ], 
             'product_id' => [
@@ -69,7 +82,7 @@
                 'value' => null,
                 'type' => FormDataType::NUMBER,
                 'db_var_type' => PDO::PARAM_INT,
-                'errorType' => FormErrorType::NONE,
+                'error-type' => FormErrorType::NONE,
                 'required' => true
             ], 
             'amount' => [
@@ -77,7 +90,7 @@
                 'value' => null,
                 'type' => FormDataType::NUMBER,
                 'db_var_type' => PDO::PARAM_INT,
-                'errorType' => FormErrorType::NONE,
+                'error-type' => FormErrorType::NONE,
                 'required' => true
             ], 
             'total_price' => [
@@ -85,7 +98,7 @@
                 'value' => null,
                 'type' => FormDataType::NUMBER,
                 'db_var_type' => PDO::PARAM_INT,
-                'errorType' => FormErrorType::NONE,
+                'error-type' => FormErrorType::NONE,
                 'required' => true
             ]
         ]

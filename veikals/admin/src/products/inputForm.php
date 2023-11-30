@@ -40,12 +40,6 @@
                                         echo $variableData['value'];
                             ?>">
                         <?php 
-                            $data['error-tags'][$tagName] = [
-                                'id' => $tagName.'-alert',
-                                'error-conditions' => [
-                                    FormErrorType::EMPTY->value => 'Nosaukums nav ievadīts'
-                                ]
-                            ];
                             TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
 
@@ -70,12 +64,6 @@
                                     echo $variableData['value'];
                             ?></textarea>
                         <?php 
-                            $data['error-tags'][$tagName] = [
-                                'id' => $tagName.'-alert',
-                                'error-conditions' => [
-                                    FormErrorType::EMPTY->value => 'Apraksts nav ievadīts'
-                                ]
-                            ];
                             TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
 
@@ -96,10 +84,6 @@
                                 ?>
                             </div>
                         <?php 
-                            $data['error-tags'][$tagName] = [
-                                'id' => $tagName.'-alert',
-                                'error-conditions' => FormTypeErrorConditions::FILE_DEFAULT
-                            ];
                             TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
                         
@@ -124,12 +108,6 @@
                                         echo $variableData['value'];
                             ?>">
                         <?php 
-                            $data['error-tags'][$tagName] = [
-                                'id' => $tagName.'-alert',
-                                'error-conditions' => [
-                                    FormErrorType::EMPTY->value => 'Cena nav ievadīta'
-                                ]
-                            ];
                             TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
 
@@ -151,12 +129,6 @@
                                         echo $variableData['value'];
                             ?>">
                         <?php 
-                            $data['error-tags'][$tagName] = [
-                                'id' => $tagName.'-alert',
-                                'error-conditions' => [
-                                    FormErrorType::EMPTY->value => 'Daudzums nav ievadīts'
-                                ]
-                            ];
                             TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
 
@@ -188,12 +160,6 @@
                                 ?>
                             </select>
                         <?php 
-                            $data['error-tags'][$tagName] = [
-                                'id' => $tagName.'-alert',
-                                'error-conditions' => [
-                                    FormErrorType::EMPTY->value => 'Kategorija nav izvēlēta'
-                                ]
-                            ];
                             TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
                     </div>

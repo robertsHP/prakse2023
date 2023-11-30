@@ -13,7 +13,7 @@
         <?php include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/header.php'; ?>
 
         <div class="main-container">
-            <h4> <?php echo isset($page['title']) ? $page['title'] : ''; ?> </h4>
+            <h4> <?php echo isset($pageTitle) ? $pageTitle : ''; ?> </h4>
 
             <form class="input-form" enctype="multipart/form-data">
                 <div class="row">
@@ -36,12 +36,6 @@
                                         echo $variableData['value'];
                             ?>">
                         <?php 
-                            $data['error-tags'][$tagName] = [
-                                'id' => $tagName.'-alert',
-                                'error-conditions' => [
-                                    FormErrorType::EMPTY->value => 'Statusa nosaukums ir nepieciešams'
-                                ]
-                            ];
                             TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
                     </div>

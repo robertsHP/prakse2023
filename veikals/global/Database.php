@@ -19,9 +19,7 @@
                 return $con;
             } catch (PDOException $exception) {
                 echo "PDO Exception: " . $exception->getMessage();
-                echo "<br>";
                 echo "Error Code: " . $exception->getCode();
-                echo "<br>";
             }
             return null;
         }
@@ -41,9 +39,7 @@
                 Database::closeConnection($conn);
             } catch (PDOException $exception) {
                 echo "PDO Exception: " . $exception->getMessage();
-                echo "<br>";
                 echo "Error Code: " . $exception->getCode();
-                echo "<br>";
             }
             return $result;
         }
@@ -62,14 +58,12 @@
                 Database::closeConnection($conn);
             } catch (PDOException $exception) {
                 echo "PDO Exception: " . $exception->getMessage();
-                echo "<br>";
                 echo "Error Code: " . $exception->getCode();
-                echo "<br>";
             }
             return $result;
         }
         public static function insert ($tableName, $data) {
-            $success = false;
+            $id = null;
             try {
                 $keys = array_keys($data);
                 $keysString = implode(', ', $keys);
@@ -83,16 +77,15 @@
                         $stmt->bindParam(':'.$key, $var['value'], $var['db_var_type']);
                     }
                     $stmt->execute();
+
+                $id = $conn->lastInsertId();
     
                 Database::closeConnection($conn);
-                $success = true;
             } catch (PDOException $exception) {
                 echo "PDO Exception: " . $exception->getMessage();
-                echo "<br>";
                 echo "Error Code: " . $exception->getCode();
-                echo "<br>";
             }
-            return $success;
+            return $id;
         }
         public static function deleteWithID ($tableName, $idColumnName, $id) {
             try {
@@ -105,9 +98,7 @@
                 Database::closeConnection($conn);
             } catch (PDOException $exception) {
                 echo "PDO Exception: " . $exception->getMessage();
-                echo "<br>";
                 echo "Error Code: " . $exception->getCode();
-                echo "<br>";
             }
         }
         public static function update ($tableName, $idColumnName, $id, $data) {
@@ -132,9 +123,7 @@
                 $success = true;
             } catch (PDOException $exception) {
                 echo "PDO Exception: " . $exception->getMessage();
-                echo "<br>";
                 echo "Error Code: " . $exception->getCode();
-                echo "<br>";
             }
             return $success;
         }

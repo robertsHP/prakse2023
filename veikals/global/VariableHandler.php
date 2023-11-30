@@ -37,13 +37,12 @@
             }
         }
 
-        public static function assignErrorMessage (&$key, &$var, &$errorTags) {
-            $errorTag = &$errorTags[$key];
+        public static function assignErrorMessage (&$key, &$var) {
             $errorCondition = $var['error-type'];
 
             if($errorCondition->value != FormErrorType::NONE->value) {
-                if(isset($errorTag['error-conditions'][$errorCondition->value])) {
-                    $errorTag['error-message'] = $errorTag['error-conditions'][$errorCondition->value];
+                if(isset($var['error-conditions'][$errorCondition->value])) {
+                    $var['error-message'] = $var['error-conditions'][$errorCondition->value];
                     return;
                 }
             }

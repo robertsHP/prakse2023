@@ -36,12 +36,6 @@
                                         echo $variableData['value'];
                             ?>">
                         <?php 
-                            $data['error-tags'][$tagName] = [
-                                'id' => $tagName.'-alert',
-                                'error-conditions' => [
-                                    FormErrorType::EMPTY->value => 'Vārds ir nepieciešams'
-                                ]
-                            ];
                             TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
                     </div>
@@ -64,12 +58,6 @@
                                         echo $variableData['value'];
                             ?>">
                         <?php 
-                            $data['error-tags'][$tagName] = [
-                                'id' => $tagName.'-alert',
-                                'error-conditions' => [
-                                    FormErrorType::EMPTY->value => 'Uzvārds ir nepieciešams'
-                                ]
-                            ];
                             TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
                     </div>
@@ -93,10 +81,6 @@
                                     echo $variableData['value'];
                         ?>">
                     <?php 
-                        $data['error-tags'][$tagName] = [
-                            'id' => $tagName.'-alert',
-                            'error-conditions' => FormTypeErrorConditions::EMAIL_DEFAULT
-                        ];
                         TagLoader::loadInputErrorMessage($tagName, $variableData);
                     ?>
                 </div>

@@ -1,13 +1,16 @@
 
 <?php
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/enums/FormErrorType.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/enums/FormDataType.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/TagLoader.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/Database.php';
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['productsData']) && isset($_POST['rowCount'])) {
-            $productsData = $_POST['productsData'];
+            $data = $_POST['productsData'];
             $rowCount = $_POST['rowCount'];
 
-            $rows = Database::getAllRowsFrom($productsData['table-name']);
+            $rows = Database::getAllRowsFrom($data['table-name']);
             $keys = array_keys($rows[0]);
             $elementValue = null;
 
@@ -27,42 +30,81 @@
                         </td>
                         <td></td>
                         <td>
+                            <?php
+                                $tagName = $keys[1].$rowCount;
+                                $variableData = $data['form-data'][$keys[1]];
+                            ?>
                             <input 
                                 type="text" 
-                                id="<?php echo $keys[1].$rowCount; ?>"
+                                id="<?php echo $tagName; ?>"
                                 value="">
-                        </td>
-                        <td>
-                            <textarea 
-                                rows="6" 
-                                cols="30"
-                                id="<?php echo $keys[2].$rowCount; ?>"
-                            ></textarea>
-                        </td>
-                        <td>
                             <?php 
-                                include 'miniImageSelectElement.php';
+                                TagLoader::loadInputErrorMessage($tagName, $variableData);
                             ?>
                         </td>
                         <td>
+                            <?php
+                                $tagName = $keys[2].$rowCount;
+                                $variableData = $data['form-data'][$keys[2]];
+                            ?>
+                            <textarea 
+                                rows="6" 
+                                cols="30"
+                                id="<?php echo $tagName; ?>"
+                            ></textarea>
+                            <?php 
+                                TagLoader::loadInputErrorMessage($tagName, $variableData);
+                            ?>
+                        </td>
+                        <td>
+                            <?php
+                                $tagName = $keys[3].$rowCount;
+                                $variableData = $data['form-data'][$keys[3]];
+                            ?>
+                            <?php 
+                                include 'miniImageSelectElement.php';
+                            ?>
+                            <?php 
+                                TagLoader::loadInputErrorMessage($tagName, $variableData);
+                            ?>
+                        </td>
+                        <td>
+                            <?php
+                                $tagName = $keys[4].$rowCount;
+                                $variableData = $data['form-data'][$keys[4]];
+                            ?>
                             <input 
                                 type="number" 
                                 value=""
                                 step=".01"
-                                id="<?php echo $keys[4].$rowCount; ?>"
+                                id="<?php echo $tagName; ?>"
                             >
+                            <?php 
+                                TagLoader::loadInputErrorMessage($tagName, $variableData);
+                            ?>
                         </td>
                         <td>
+                            <?php
+                                $tagName = $keys[5].$rowCount;
+                                $variableData = $data['form-data'][$keys[5]];
+                            ?>
                             <input 
                                 type="number" 
                                 value=""
-                                id="<?php echo $keys[5].$rowCount; ?>"
+                                id="<?php echo $tagName; ?>"
                             >
+                            <?php 
+                                TagLoader::loadInputErrorMessage($tagName, $variableData);
+                            ?>
                         </td>
                         <td>
+                            <?php
+                                $tagName = $keys[6].$rowCount;
+                                $variableData = $data['form-data'][$keys[6]];
+                            ?>
                             <select 
                                 value=""
-                                id="<?php echo $keys[6].$rowCount; ?>">
+                                id="<?php echo $tagName; ?>">
                                 <?php
                                     $catRows = Database::getAllRowsFrom('product_categories');
                                     foreach ($catRows as $row) {
@@ -72,11 +114,27 @@
                                     }
                                 ?>
                             </select>
+                            <?php 
+                                TagLoader::loadInputErrorMessage($tagName, $variableData);
+                            ?>
                         </td>
                     </form>
+                    <script>
+                        var errorTags = <?php echo json_encode($data['form-data']); ?>;
+                        var rowCount = <?php echo json_encode($rowCount); ?>;
+
+                        $(document).ready(function () {
+                            $.each(errorTags, function(index, value) {
+                                console.log("#"+index+rowCount+"-alert");
+                                $("#"+index+rowCount+"-alert").hide();
+                            });
+                        });
+                    </script>
                 </tr>
             <?php
 
         }
     }
+    // header('Content-Type: application/json');
+    // echo json_encode($response);
 ?>
