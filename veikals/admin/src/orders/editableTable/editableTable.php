@@ -1,14 +1,17 @@
 
 <?php
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/enums/FormErrorType.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/enums/FormDataType.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/TagLoader.php';
+    include 'rowLoader.php';
+
     //Iegūst produktu datus
     $originalData = $data;
     include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/products/data.php';
     $productsData = $data;
     $data = $originalData;
 
-    $productsDataKeys = array_keys($productsData['form-data']);
-
-    $rowCount = 0;
+    $rowCount = 1;
 ?>
 
 <div style="overflow-y: scroll; height:300px;">
@@ -41,9 +44,18 @@
 
                         Database::closeConnection($conn);
 
-                        foreach ($rows as $row) {
-                            include 'loadDataRow.php';
-                            $rowCount++;
+                        if(count($rows) != 0) {
+                            $tempProductsData = $productsData;
+                            $keys = array_keys($rows[0]);
+                            
+                            foreach ($rows as $row) {
+                                $tempProductsData['id'] = $row[$tempProductsData['id-column-name']];
+                                foreach ($tempProductsData['form-data'] as $key => &$var) {
+                                    $var['value'] = $row[$key];
+                                }
+                                loadRow($tempProductsData, $keys, $rowCount);
+                                $rowCount++;
+                            }
                         }
                     } catch (PDOException $exception) {
                         echo "PDO Exception: " . $exception->getMessage();

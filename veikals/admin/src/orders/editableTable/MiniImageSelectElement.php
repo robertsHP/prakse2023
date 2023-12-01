@@ -1,8 +1,8 @@
 
 <?php
-    $dataKeys = array_keys($data['form-data']);
+    $rowDataKeys = array_keys($rowData['form-data']);
 
-    $allowedFileFormats = $data['form-data'][$dataKeys[2]]['allowed_file_formats'];
+    $allowedFileFormats = $rowData['form-data'][$rowDataKeys[2]]['allowed_file_formats'];
     $allowedFileFormatsStr = implode(', ', $allowedFileFormats);
 
     $inputTagName = $tagName.'-image-input';
@@ -15,14 +15,14 @@
         id="<?php echo $inputTagName; ?>"
         accept="<?php echo $allowedFileFormats; ?>"
         value="<?php 
-            if(isset($elementValue))
-                echo $elementValue;
+            if(isset($variableData['value']))
+                echo $variableData['value'];
         ?>"
     >
     <img 
         src="<?php 
-            if(isset($elementValue))
-                echo $elementValue;
+            if(isset($variableData['value']))
+                echo $variableData['value'];
         ?>"
         width="100"
         name="<?php echo $imageTagName; ?>"
@@ -33,10 +33,10 @@
     $.getScript('/veikals/assets/js/imageSelectElement.js', function() {
         var fileInputID = <?php echo json_encode($inputTagName); ?>;
         var selectedImageID = <?php echo json_encode($imageTagName); ?>;
-        var elementValue = <?php echo json_encode($elementValue); ?>
+        var value = <?php echo json_encode($variableData['value']); ?>
 
         initFileInput('#'+fileInputID, '#'+selectedImageID, null);
-        initImageSelect(elementValue, '#'+fileInputID, '#'+selectedImageID, null);
+        initImageSelect(value, '#'+fileInputID, '#'+selectedImageID, null);
 
         $('#'+selectedImageID).click(function(){
             var fileInputID = <?php echo json_encode($inputTagName); ?>;
