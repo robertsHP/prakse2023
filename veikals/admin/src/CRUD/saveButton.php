@@ -19,7 +19,8 @@
         var tableName = data['table-name'];
         var redirectPath = '/veikals/admin/src/'+tableName+'/index.php';
 
-        var deferreds = [];
+        var checkPromises = [];
+        var savePromises = [];
 
         function setErrorMessages (data, rowNumber) {
             if(data != null) {
@@ -38,9 +39,31 @@
                 });
             }
         }
+        function checkFormData (formData) {
+            var promise = $.ajax({
+                type: 'POST',
+                url: '/veikals/admin/src/CRUD/checkPageData.php',
+                contentType: false,
+                processData: false,
+                data: formData,
+            })
+            .done(function(response) {
+                console.log('form check = '+response.success);
+                setErrorMessages(response.data, response.rowNumber);
+                $('#result').html(response);
+
+                if(response.success) {
+                    formData.set('^data', JSON.stringify(response.data));
+                    saveFormData(formData);
+                }
+            })
+            .fail(function(error) {
+                
+            });
+            checkPromises.push(promise);
+        }
         function saveFormData (formData) {
-            var deferred = $.Deferred();
-            $.ajax({
+            var promise = $.ajax({
                 type: 'POST',
                 url: '/veikals/admin/src/CRUD/savePageData.php',
                 contentType: false,
@@ -48,23 +71,43 @@
                 data: formData,
             })
             .done(function(response) {
-                setErrorMessages(response.data, response.rowNumber);
                 $('#result').html(response);
-                deferred.resolve(response);
+                console.log('form save = '+response.success);
+            })
+            .fail(function(error) {
+                
+            });
+            savePromises.push(promise);
+        }
+        function checkEditableTableRow (formData) {
+            var promise = $.ajax({
+                type: 'POST',
+                url: '/veikals/admin/src/orders/editableTable/checkEditableTableData.php',
+                contentType: false,
+                processData: false,
+                data: formData,
+            })
+            .done(function(response) {
+                console.log('editable check = '+response.success);
+                setErrorMessages(response.productsData, response.rowNumber);
+                $('#result').html(response);
+
+                if(response.success) {
+                    var purchGoodsData = <?php echo json_encode($purchGoodsData); ?>;
+
+                    formData.set('^data', JSON.stringify(response.productsData));
+                    formData.set('^purchGoodsData', JSON.stringify(purchGoodsData));
+
+                    saveEditableTableRow(formData);
+                }
             })
             .fail(function(error) {
                 // Manually reject the deferred object
-                deferred.reject(error);
             });
-            return deferred.promise();
+            checkPromises.push(promise);
         }
         function saveEditableTableRow (formData) {
-            var purchGoodsData = <?php echo json_encode($purchGoodsData); ?>;
-            formData.append('^purchGoodsData', JSON.stringify(purchGoodsData));
-
-            var deferred = $.Deferred();
-
-            $.ajax({
+            var promise = $.ajax({
                 type: 'POST',
                 url: '/veikals/admin/src/orders/editableTable/saveEditableTableData.php',
                 contentType: false,
@@ -72,24 +115,22 @@
                 data: formData,
             })
             .done(function(response) {
-                setErrorMessages(response.productsData, response.rowNumber);
-                $('#result').html(response);
-                deferred.resolve(response);
+                console.log('editable save = '+response.success);
             })
             .fail(function(error) {
                 // Manually reject the deferred object
-                deferred.reject(error);
             });
-            return deferred.promise();
+            savePromises.push(promise);
         }
 
         $('#save-button').click(function () {
-            deferreds = [];
+            checkPromises = [];
+            savePromises = [];
 
             $('.input-form').each(function(index, form) {
                 var formData = new FormData(form);
                 formData.append('^data', JSON.stringify(data));
-                deferreds.push(saveFormData(formData));
+                checkFormData(formData);
             });
             $('.editable-table-row-form').each(function() {
                 var productsData = <?php echo json_encode($productsData); ?>;
@@ -98,8 +139,6 @@
             
                 var formData = new FormData();
                 var rowNumber = null;
-
-                console.log('rownumber GOOO In = '+rowNumber);
 
                 $(this).closest('tr').find('td').each(function () {
                     //Paņem pirmo tag, kas pieejams
@@ -132,30 +171,52 @@
                 formData.append('^rowNumber', rowNumber);
                 formData.append('^data', JSON.stringify(productsData));
 
-                saveEditableTableRow(formData);
+                checkEditableTableRow(formData);
                 rowNumber = null;
             });
 
-            $.when.apply($, deferreds)
-            .done(function() {
-                var redirect = true;
-                $.each(arguments, function(index, response) {
-                    console.log(response.success);
+            Promise.all(checkPromises)
+            .then(function(responses) {
+                console.log('---CHECK---');
+                var success = true;
+                $.each(responses, function(index, response) {
+                    console.log(index+" = "+response.success);
                     if(!response.success) {
-                        redirect = false;
+                        console.log('FAIL');
+                        success = false;
                         return false;
                     }
                 });
-                // if(redirect)
-                    // window.location.href = redirectPath;
+                console.log('Check success???? - '+success);
+                if(success) {
+                    console.log('Check Successfull');
+                    Promise.all(savePromises)
+                    .then(function(responses) {
+                        console.log('---SAVE---');
+                        var success = true;
+                        $.each(responses, function(index, response) {
+                            console.log(index+" = "+response.success);
+                            if(!response.success) {
+                                console.log('FAIL');
+                                success = false;
+                                return false;
+                            }
+                        });
+                        console.log('Save success???? - '+success);
+                        if(success) {
+                            window.location.href = redirectPath;
+                        }
+                    })
+                    .catch(function(errors) {
+                        console.log('At least one AJAX request failed');
+                        console.log('Errors:', errors);
+                    });
+                }
             })
-            .fail(function() {
+            .catch(function(errors) {
                 console.log('At least one AJAX request failed');
-
-                var errors = Array.prototype.slice.call(arguments);
                 console.log('Errors:', errors);
             });
-
         });
     });
 </script>

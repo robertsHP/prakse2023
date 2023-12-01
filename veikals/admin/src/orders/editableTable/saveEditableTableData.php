@@ -7,11 +7,6 @@
 
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDFunctions.php';
 
-    function assignToFormData (&$arr, &$formData) {
-        foreach ($arr as $key => $value) {
-            $formData[$key] = $value;
-        }
-    }
     function ifPurchGoodsHasOrderWithThisProduct ($purchGoodsData) {
         $conn = Database::openConnection();
     
@@ -31,6 +26,7 @@
     }
 
     $response = array(
+        'name' => 'editable-table',
         'item_id' => null,
         'dbProcessType' => null,
         'success' => false,
@@ -44,75 +40,51 @@
         $purchGoodsData = json_decode($_POST['^purchGoodsData'], true);
         unset($_POST['^purchGoodsData']);
 
-        $formData = [];
-        foreach ($_POST as $key => $value) {
-            if(!str_contains($key, '^'))
-                $formData[$key] = $value;
-        }
-
-        foreach ($_FILES as $key => $value) {
-            if(!str_contains($key, '^')) {
-                echo '<p>'.$key.' = '.print_r($value).'</p>';
-
-                if($productsData['db-process-type'] == 'create') {
-                    $formData[$key] = $value;
-                } else if ($data['db-process-type'] == 'update') {
-                    $oldPathEmpty = $productsData['form-data'][$key] == '' || empty($productsData['form-data'][$key]);
-                    $newFilePathEmpty = $value['name'] == '' || empty($value['name']);
-
-                    if (!$newFilePathEmpty || ($newFilePathEmpty && $oldPathEmpty)) {
-                        $formData[$key] = $value;
-                    }
-                }
-            }
-        }
-
-        $hasErrors = CRUDFunctions::assignAndProcessFormData($formData, $productsData);
-
         //iziet cauri visiem produktiem kuriem ir orders_id
         //un atbilstoši veic darbības balstoties uz rezultātiem
         //1. ja nav tad CREATE
         //2. ja ir tad UPDATE
 
-        if(!$hasErrors) {
-            // $purchGoodsData['form-data']['order_id'] = $productsData['order_id'];
-            // $productsIdColumnName = $productsData['id-column-name'];
+        $purchGoodsData['form-data']['order_id'] = $productsData['order_id'];
+        $productsIdColumnName = $productsData['id-column-name'];
 
-            // //Situācijās kad vada pilnīgi no jauna tabulā
-            // if($productsData['id'] == null) {
-            //     //Ievieto datubāzē produktu 
-            //     $insertedRowID = Database::insert(
-            //         $productsData['table-name'], 
-            //         $productsData);
-            //     //Piešķir produkta ID
-            //     $purchGoodsData['form-data']['product_id'] = $insertedRowID;
-            //     //Ievieto datubāzē purchased_goods savienojumu starp produktu un pasūtījumu 
+        //Situācijās kad vada pilnīgi no jauna tabulā
+        if($productsData['id'] == null) {
+            //Ievieto datubāzē produktu 
+            $insertedRowID = Database::insert(
+                $productsData['table-name'], 
+                $productsData);
+            //Piešķir produkta ID
+            $purchGoodsData['form-data']['product_id'] = $insertedRowID;
+            //Ievieto datubāzē purchased_goods savienojumu starp produktu un pasūtījumu 
 
-            //     if(!ifPurchGoodsHasOrderWithThisProduct($purchGoodsData)) {
-            //         Database::insert(
-            //             $purchGoodsData['table-name'], 
-            //             $purchGoodsData);
-            //     }
+            if(!ifPurchGoodsHasOrderWithThisProduct($purchGoodsData)) {
+                Database::insert(
+                    $purchGoodsData['table-name'], 
+                    $purchGoodsData);
+            }
 
-            //     Database::insert(
-            //         $purchGoodsData['table-name'], 
-            //         $purchGoodsData);
-            // //Situācijās kad tiek atjaunināts
-            // } else {
-            //     //$tableName, $idColumnName, $id, $data
-            //     $productRow = Database::getRowWithID(
-            //         $productsData['table-name'], 
-            //         $productsData['id-column-name'], 
-            //         $productsData['id']);
-            //     if(!empty($productRow)) {
-            //         //Adjauno informāciju datubāzē
-            //         Database::update(
-            //             $productsData['table-name'], 
-            //             $productsData['id-column-name'],
-            //             $productsData['id'],
-            //             $productsData);
-            //     }
-            // }
+            Database::insert(
+                $purchGoodsData['table-name'], 
+                $purchGoodsData);
+            
+            $response['success'] = true;
+        //Situācijās kad tiek atjaunināts
+        } else {
+            //$tableName, $idColumnName, $id, $data
+            $productRow = Database::getRowWithID(
+                $productsData['table-name'], 
+                $productsData['id-column-name'], 
+                $productsData['id']);
+            if(!empty($productRow)) {
+                //Adjauno informāciju datubāzē
+                Database::update(
+                    $productsData['table-name'], 
+                    $productsData['id-column-name'],
+                    $productsData['id'],
+                    $productsData);
+            }
+            $response['success'] = true;
         }
         
         // echo '<p>'.print_r($productsData). '</p>';
