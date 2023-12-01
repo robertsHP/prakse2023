@@ -12,7 +12,7 @@
                 'title' => 'Numurs',
                 'value' => null,
                 'type' => FormDataType::NUMBER,
-                'db_var_type' => PDO::PARAM_INT,
+                'db-var-type' => PDO::PARAM_INT,
                 'error-type' => FormErrorType::NONE,
                 'error-conditions' => [
                     FormErrorType::EMPTY->value => 'Numurs nav ievadīts'
@@ -23,7 +23,7 @@
                 'title' => 'Klients',
                 'value' => null,
                 'type' => FormDataType::NUMBER,
-                'db_var_type' => PDO::PARAM_INT,
+                'db-var-type' => PDO::PARAM_INT,
                 'error-type' => FormErrorType::NONE,
                 'error-conditions' => [
                     FormErrorType::EMPTY->value => 'Klients nav izvēlēts'
@@ -34,7 +34,7 @@
                 'title' => 'Datums',
                 'value' => null,
                 'type' => FormDataType::DATE,
-                'db_var_type' => PDO::PARAM_STR,
+                'db-var-type' => PDO::PARAM_STR,
                 'error-type' => FormErrorType::NONE,
                 'error-conditions' => FormTypeErrorConditions::DATE_DEFAULT,
                 'required' => true
@@ -43,7 +43,7 @@
                 'title' => 'Cena',
                 'value' => null,
                 'type' => FormDataType::NUMBER,
-                'db_var_type' => PDO::PARAM_INT,
+                'db-var-type' => PDO::PARAM_INT,
                 'error-type' => FormErrorType::NONE,
                 'error-conditions' => [
                     FormErrorType::EMPTY->value => 'Cena nav ievadīta'
@@ -54,7 +54,7 @@
                 'title' => 'Pasūtījuma statuss',
                 'value' => null,
                 'type' => FormDataType::NUMBER,
-                'db_var_type' => PDO::PARAM_INT,
+                'db-var-type' => PDO::PARAM_INT,
                 'error-type' => FormErrorType::NONE,
                 'error-conditions' => [
                     FormErrorType::EMPTY->value => 'Statuss nav norādīts'
@@ -73,7 +73,7 @@
                 'title' => 'Pasūtījums',
                 'value' => null,
                 'type' => FormDataType::NUMBER,
-                'db_var_type' => PDO::PARAM_INT,
+                'db-var-type' => PDO::PARAM_INT,
                 'error-type' => FormErrorType::NONE,
                 'required' => true
             ], 
@@ -81,7 +81,7 @@
                 'title' => 'Produkts',
                 'value' => null,
                 'type' => FormDataType::NUMBER,
-                'db_var_type' => PDO::PARAM_INT,
+                'db-var-type' => PDO::PARAM_INT,
                 'error-type' => FormErrorType::NONE,
                 'required' => true
             ], 
@@ -89,7 +89,7 @@
                 'title' => 'Daudzums',
                 'value' => null,
                 'type' => FormDataType::NUMBER,
-                'db_var_type' => PDO::PARAM_INT,
+                'db-var-type' => PDO::PARAM_INT,
                 'error-type' => FormErrorType::NONE,
                 'required' => true
             ], 
@@ -97,7 +97,7 @@
                 'title' => 'Cena',
                 'value' => null,
                 'type' => FormDataType::NUMBER,
-                'db_var_type' => PDO::PARAM_INT,
+                'db-var-type' => PDO::PARAM_INT,
                 'error-type' => FormErrorType::NONE,
                 'required' => true
             ]

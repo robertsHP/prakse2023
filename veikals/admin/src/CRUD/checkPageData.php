@@ -7,19 +7,12 @@
 
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDFunctions.php';
 
-    function assignToFormData (&$arr, &$formData) {
-        foreach ($arr as $key => $value) {
-            $formData[$key] = $value;
-        }
-    }
-
     // Create an associative array to hold variables
     $response = array(
         'name' => 'page',
-        'item_id' => null,
         'success' => false,
         'rowNumber' => isset($_POST['^rowNumber']) ? $_POST['^rowNumber'] : null,
-        'data' => null
+        'data' => []
     );
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -47,6 +40,7 @@
         }
 
         $hasErrors = CRUDFunctions::assignAndProcessFormData($formData, $data);
+
         $response['success'] = !$hasErrors;
         $response['data'] = $data;
     }

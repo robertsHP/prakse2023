@@ -12,7 +12,7 @@
                 'title' => 'Vārds',
                 'value' => null,
                 'type' => FormDataType::TEXT,
-                'db_var_type' => PDO::PARAM_STR,
+                'db-var-type' => PDO::PARAM_STR,
                 'error-type' => FormErrorType::NONE,
                 'error-conditions' => [
                     FormErrorType::EMPTY->value => 'Vārds ir nepieciešams'
@@ -23,7 +23,7 @@
                 'title' => 'Uzvārds',
                 'value' => null,
                 'type' => FormDataType::TEXT,
-                'db_var_type' => PDO::PARAM_STR,
+                'db-var-type' => PDO::PARAM_STR,
                 'error-type' => FormErrorType::NONE,
                 'error-conditions' => [
                     FormErrorType::EMPTY->value => 'Uzvārds ir nepieciešams'
@@ -34,7 +34,7 @@
                 'title' => 'E-pasts',
                 'value' => null,
                 'type' => FormDataType::EMAIL,
-                'db_var_type' => PDO::PARAM_STR,
+                'db-var-type' => PDO::PARAM_STR,
                 'error-type' => FormErrorType::NONE,
                 'error-conditions' => FormTypeErrorConditions::EMAIL_DEFAULT,
                 'required' => true

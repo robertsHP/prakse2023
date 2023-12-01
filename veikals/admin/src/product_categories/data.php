@@ -12,7 +12,7 @@
                 'title' => 'Nosaukums',
                 'value' => null,
                 'type' => FormDataType::TEXT,
-                'db_var_type' => PDO::PARAM_STR,
+                'db-var-type' => PDO::PARAM_STR,
                 'error-type' => FormErrorType::NONE,
                 'error-conditions' => [
                     FormErrorType::EMPTY->value => 'Kategorijas nosaukums ir nepieciešams'

@@ -7,18 +7,11 @@
 
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDFunctions.php';
 
-    function assignToFormData (&$arr, &$formData) {
-        foreach ($arr as $key => $value) {
-            $formData[$key] = $value;
-        }
-    }
-
     $response = array(
         'name' => 'editable-table',
-        'item_id' => null,
-        'dbProcessType' => null,
         'success' => false,
         'rowNumber' => isset($_POST['^rowNumber']) ? $_POST['^rowNumber'] : null,
+        'data' => []
     );
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -33,7 +26,7 @@
 
         foreach ($_FILES as $key => $value) {
             if(!str_contains($key, '^')) {
-                echo '<p>'.$key.' = '.print_r($value).'</p>';
+                // echo '<p>'.$key.' = '.print_r($value).'</p>';
 
                 if($productsData['db-process-type'] == 'create') {
                     $formData[$key] = $value;
@@ -51,7 +44,8 @@
         $hasErrors = CRUDFunctions::assignAndProcessFormData($formData, $productsData);
 
         $response['success'] = !$hasErrors;
-        $response['productsData'] = $productsData;
+        $response['data'] = $productsData;
+        $response['rowNumber'] = isset($_POST['^rowNumber']) ? $_POST['^rowNumber'] : null;
     }
 
     header('Content-Type: application/json');

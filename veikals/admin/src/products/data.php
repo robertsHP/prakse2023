@@ -12,7 +12,7 @@
                 'title' => 'Nosaukums',
                 'value' => null,
                 'type' => FormDataType::TEXT,
-                'db_var_type' => PDO::PARAM_STR,
+                'db-var-type' => PDO::PARAM_STR,
                 'error-type' => FormErrorType::NONE,
                 'error-conditions' => [
                     FormErrorType::EMPTY->value => 'Nosaukums nav ievadīts'
@@ -23,7 +23,7 @@
                 'title' => 'Apraksts',
                 'value' => null,
                 'type' => FormDataType::TEXT,
-                'db_var_type' => PDO::PARAM_STR,
+                'db-var-type' => PDO::PARAM_STR,
                 'error-type' => FormErrorType::NONE,
                 'error-conditions' => [
                     FormErrorType::EMPTY->value => 'Apraksts nav ievadīts'
@@ -35,7 +35,7 @@
                 'value' => null,
                 'type' => FormDataType::FILE,
                 'allowed_file_formats' => ['png', 'jpg'],
-                'db_var_type' => PDO::PARAM_STR,
+                'db-var-type' => PDO::PARAM_STR,
                 'error-type' => FormErrorType::NONE,
                 'error-conditions' => FormTypeErrorConditions::FILE_DEFAULT,
                 'required' => true
@@ -44,7 +44,7 @@
                 'title' => 'Cena',
                 'value' => null,
                 'type' => FormDataType::DECIMAL,
-                'db_var_type' => PDO::PARAM_STR,
+                'db-var-type' => PDO::PARAM_STR,
                 'error-type' => FormErrorType::NONE,
                 'error-conditions' => [
                     FormErrorType::EMPTY->value => 'Cena nav ievadīta'
@@ -55,7 +55,7 @@
                 'title' => 'Pieejamais daudzums',
                 'value' => null,
                 'type' => FormDataType::NUMBER,
-                'db_var_type' => PDO::PARAM_INT,
+                'db-var-type' => PDO::PARAM_INT,
                 'error-type' => FormErrorType::NONE,
                 'error-conditions' => [
                     FormErrorType::EMPTY->value => 'Daudzums nav ievadīts'
@@ -66,7 +66,7 @@
                 'title' => 'Kategorija',
                 'value' => null,
                 'type' => FormDataType::NUMBER,
-                'db_var_type' => PDO::PARAM_INT,
+                'db-var-type' => PDO::PARAM_INT,
                 'error-type' => FormErrorType::NONE,
                 'error-conditions' => [
                     FormErrorType::EMPTY->value => 'Kategorija nav izvēlēta'

@@ -9,24 +9,20 @@
 
     // Create an associative array to hold variables
     $response = array(
-        'name' => 'page',
-        'item_id' => null,
+        'orderID' => null,
         'success' => false,
-        'rowNumber' => isset($_POST['^rowNumber']) ? $_POST['^rowNumber'] : null,
-        'data' => null
     );
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $data = json_decode($_POST['^data'], true);
-        unset($_POST['^data']);
+        $data = json_decode($_POST['data'], true);
 
-        if($data['db-process-type'] === 'create') {
-            Database::insert(
+        $response['orderID'] = isset($_POST['id']) ? $_POST['id'] : null;
+        if($data['db-process-type'] == 'create') {
+            $response['orderID'] = Database::insert(
                 $data['table-name'], 
                 $data['form-data']);
             $response['success'] = true;
-
-        } else if ($data['db-process-type'] === 'update') {
+        } else if ($data['db-process-type'] == 'update') {
             Database::update(
                 $data['table-name'], 
                 $data['id-column-name'], 

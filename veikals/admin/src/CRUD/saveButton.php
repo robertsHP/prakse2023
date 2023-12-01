@@ -39,102 +39,67 @@
                 });
             }
         }
-        function checkFormData (formData) {
+
+        function callCheckDataPromise (formData, url) {
             var promise = $.ajax({
                 type: 'POST',
-                url: '/veikals/admin/src/CRUD/checkPageData.php',
+                url: url,
                 contentType: false,
                 processData: false,
                 data: formData,
             })
             .done(function(response) {
-                console.log('form check = '+response.success);
+                console.log('check = '+response.success);
                 setErrorMessages(response.data, response.rowNumber);
                 $('#result').html(response);
-
-                if(response.success) {
-                    formData.set('^data', JSON.stringify(response.data));
-                    saveFormData(formData);
-                }
             })
             .fail(function(error) {
-                
+                console.error("AJAX request failed:", error);
             });
             checkPromises.push(promise);
         }
-        function saveFormData (formData) {
-            var promise = $.ajax({
+        function getSaveAJAXRequest (formData, url) {
+            return $.ajax({
                 type: 'POST',
-                url: '/veikals/admin/src/CRUD/savePageData.php',
+                url: url,
                 contentType: false,
                 processData: false,
                 data: formData,
             })
             .done(function(response) {
+                console.log('check = '+response.success);
+                setErrorMessages(response.data, response.rowNumber);
                 $('#result').html(response);
-                console.log('form save = '+response.success);
             })
             .fail(function(error) {
-                
+                console.error("AJAX request failed:", error);
             });
+        }
+
+        function callSaveDataPromise (formData, url) {
+            var promise = getSaveAJAXRequest(formData, url);
             savePromises.push(promise);
         }
-        function checkEditableTableRow (formData) {
-            var promise = $.ajax({
-                type: 'POST',
-                url: '/veikals/admin/src/orders/editableTable/checkEditableTableData.php',
-                contentType: false,
-                processData: false,
-                data: formData,
-            })
-            .done(function(response) {
-                console.log('editable check = '+response.success);
-                setErrorMessages(response.productsData, response.rowNumber);
-                $('#result').html(response);
-
-                if(response.success) {
-                    var purchGoodsData = <?php echo json_encode($purchGoodsData); ?>;
-
-                    formData.set('^data', JSON.stringify(response.productsData));
-                    formData.set('^purchGoodsData', JSON.stringify(purchGoodsData));
-
-                    saveEditableTableRow(formData);
-                }
-            })
-            .fail(function(error) {
-                // Manually reject the deferred object
-            });
-            checkPromises.push(promise);
+        function saveDataDirectCall (formData, url) {
+            return getSaveAJAXRequest(formData, url);
         }
-        function saveEditableTableRow (formData) {
-            var promise = $.ajax({
-                type: 'POST',
-                url: '/veikals/admin/src/orders/editableTable/saveEditableTableData.php',
-                contentType: false,
-                processData: false,
-                data: formData,
-            })
-            .done(function(response) {
-                console.log('editable save = '+response.success);
-            })
-            .fail(function(error) {
-                // Manually reject the deferred object
-            });
-            savePromises.push(promise);
+        function createFormDataWithResponse (response) {
+            var formData = new FormData();
+            for (var key in response) {
+                var variable = response[key];
+                formData.append(key, JSON.stringify(variable));
+            }
+            return formData;
         }
 
         $('#save-button').click(function () {
-            checkPromises = [];
-            savePromises = [];
-
             $('.input-form').each(function(index, form) {
                 var formData = new FormData(form);
                 formData.append('^data', JSON.stringify(data));
-                checkFormData(formData);
+                callCheckDataPromise(formData, '/veikals/admin/src/CRUD/checkPageData.php');
             });
             $('.editable-table-row-form').each(function() {
                 var productsData = <?php echo json_encode($productsData); ?>;
-                productsData['order_id'] = data['id'];
                 productsData['db-process-type'] = data['db-process-type'];
             
                 var formData = new FormData();
@@ -171,40 +136,67 @@
                 formData.append('^rowNumber', rowNumber);
                 formData.append('^data', JSON.stringify(productsData));
 
-                checkEditableTableRow(formData);
+                callCheckDataPromise(formData, '/veikals/admin/src/orders/editableTable/checkEditableTableData.php');
                 rowNumber = null;
             });
+
+            var success = true;
 
             Promise.all(checkPromises)
             .then(function(responses) {
                 console.log('---CHECK---');
-                var success = true;
                 $.each(responses, function(index, response) {
                     console.log(index+" = "+response.success);
                     if(!response.success) {
                         console.log('FAIL');
                         success = false;
-                        return false;
                     }
                 });
                 console.log('Check success???? - '+success);
                 if(success) {
+                    var formData = createFormDataWithResponse(responses[0]);
+                    var ajaxCall = saveDataDirectCall(
+                        formData, 
+                        '/veikals/admin/src/CRUD/savePageData.php');
+
+                    $.when(ajaxCall).then(function (data) {
+                        $.each(responses, function(index, response) {
+                            if (response.name == "editable-table") {
+                                console.log(JSON.stringify(data));
+
+                                var orderID = data.orderID;
+                                var purchGoodsData = <?php echo json_encode($purchGoodsData); ?>;
+                                var formData = createFormDataWithResponse(response);
+
+                                console.log('orderID = '+orderID);
+                            
+                                formData.set('purchGoodsData', JSON.stringify(purchGoodsData));
+                                formData.set('orderID', orderID);
+                                callSaveDataPromise(
+                                    formData, 
+                                    '/veikals/admin/src/orders/editableTable/saveEditableTableData.php');
+                            }
+                        });
+                    }).fail(function (error) {
+                        console.log('At least one AJAX request failed');
+                        console.log('Errors:', errors);
+                    });
+
                     console.log('Check Successfull');
                     Promise.all(savePromises)
                     .then(function(responses) {
                         console.log('---SAVE---');
-                        var success = true;
                         $.each(responses, function(index, response) {
                             console.log(index+" = "+response.success);
                             if(!response.success) {
                                 console.log('FAIL');
                                 success = false;
-                                return false;
                             }
                         });
                         console.log('Save success???? - '+success);
                         if(success) {
-                            window.location.href = redirectPath;
+                            console.log('REDIRECT');
+                            // window.location.href = redirectPath;
                         }
                     })
                     .catch(function(errors) {
@@ -212,6 +204,8 @@
                         console.log('Errors:', errors);
                     });
                 }
+                checkPromises = [];
+                savePromises = [];
             })
             .catch(function(errors) {
                 console.log('At least one AJAX request failed');

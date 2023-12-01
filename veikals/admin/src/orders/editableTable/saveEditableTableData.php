@@ -26,73 +26,53 @@
     }
 
     $response = array(
-        'name' => 'editable-table',
-        'item_id' => null,
-        'dbProcessType' => null,
-        'success' => false,
-        'rowNumber' => isset($_POST['^rowNumber']) ? $_POST['^rowNumber'] : null,
+        'success' => false
     );
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $productsData = json_decode($_POST['^data'], true);
-        unset($_POST['^data']);
+        $productsData = json_decode($_POST['data'], true);
+        $purchGoodsData = json_decode($_POST['purchGoodsData'], true);
+        $orderID = $_POST['orderID'];
 
-        $purchGoodsData = json_decode($_POST['^purchGoodsData'], true);
-        unset($_POST['^purchGoodsData']);
+        $purchGoodsData['form-data']['order_id']['value'] = $orderID;
 
-        //iziet cauri visiem produktiem kuriem ir orders_id
-        //un atbilstoši veic darbības balstoties uz rezultātiem
-        //1. ja nav tad CREATE
-        //2. ja ir tad UPDATE
-
-        $purchGoodsData['form-data']['order_id'] = $productsData['order_id'];
-        $productsIdColumnName = $productsData['id-column-name'];
-
-        //Situācijās kad vada pilnīgi no jauna tabulā
-        if($productsData['id'] == null) {
-            //Ievieto datubāzē produktu 
-            $insertedRowID = Database::insert(
-                $productsData['table-name'], 
-                $productsData);
-            //Piešķir produkta ID
-            $purchGoodsData['form-data']['product_id'] = $insertedRowID;
-            //Ievieto datubāzē purchased_goods savienojumu starp produktu un pasūtījumu 
-
-            if(!ifPurchGoodsHasOrderWithThisProduct($purchGoodsData)) {
-                Database::insert(
-                    $purchGoodsData['table-name'], 
-                    $purchGoodsData);
-            }
-
-            Database::insert(
-                $purchGoodsData['table-name'], 
-                $purchGoodsData);
-            
-            $response['success'] = true;
-        //Situācijās kad tiek atjaunināts
-        } else {
-            //$tableName, $idColumnName, $id, $data
-            $productRow = Database::getRowWithID(
-                $productsData['table-name'], 
-                $productsData['id-column-name'], 
-                $productsData['id']);
-            if(!empty($productRow)) {
-                //Adjauno informāciju datubāzē
-                Database::update(
+        if($orderID != null) {
+            //Situācijās kad vada pilnīgi no jauna tabulā
+            if($productsData['id'] == null) {
+                //Ievieto datubāzē produktu 
+                $insertedRowID = Database::insert(
                     $productsData['table-name'], 
-                    $productsData['id-column-name'],
-                    $productsData['id'],
-                    $productsData);
-            }
-            $response['success'] = true;
-        }
-        
-        // echo '<p>'.print_r($productsData). '</p>';
-        // echo '<p>'.print_r($purchGoodsData). '</p>';
+                    $productsData['form-data']);
+                //Piešķir produkta ID
+                $purchGoodsData['form-data']['product_id']['value'] = $insertedRowID;
 
-        $response['productsData'] = $productsData;
+                //Ievieto datubāzē purchased_goods savienojumu starp produktu un pasūtījumu 
+                if(!ifPurchGoodsHasOrderWithThisProduct($purchGoodsData)) {
+                    Database::insert(
+                        $purchGoodsData['table-name'], 
+                        $purchGoodsData['form-data']);
+                }
+                
+                $response['success'] = true;
+            //Situācijās kad tiek atjaunināts
+            } else {
+                $productRow = Database::getRowWithID(
+                    $productsData['table-name'], 
+                    $productsData['id-column-name'], 
+                    $productsData['id']);
+                if(!empty($productRow)) {
+                    //Adjauno informāciju datubāzē
+                    Database::update(
+                        $productsData['table-name'], 
+                        $productsData['id-column-name'],
+                        $productsData['id'],
+                        $productsData['form-data']);
+                }
+                $response['success'] = true;
+            }
+        }
     }
 
-    header('Content-Type: application/json');
-    echo json_encode($response);
+    // header('Content-Type: application/json');
+    // echo json_encode($response);
 ?>

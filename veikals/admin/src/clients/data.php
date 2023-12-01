@@ -12,7 +12,7 @@
                 'title' => 'Vārds/Nosaukums',
                 'value' => null,
                 'type' => FormDataType::TEXT,
-                'db_var_type' => PDO::PARAM_STR,
+                'db-var-type' => PDO::PARAM_STR,
                 'error-type' => FormErrorType::NONE,
                 'error-conditions' => [
                     FormErrorType::EMPTY->value => 'Kategorijas nosaukums ir nepieciešams'
@@ -23,7 +23,7 @@
                 'title' => 'E-pasts',
                 'value' => null,
                 'type' => FormDataType::EMAIL,
-                'db_var_type' => PDO::PARAM_STR,
+                'db-var-type' => PDO::PARAM_STR,
                 'error-type' => FormErrorType::NONE,
                 'error-conditions' => FormTypeErrorConditions::EMAIL_DEFAULT,
                 'required' => true
@@ -32,7 +32,7 @@
                 'title' => 'Telefona numurs',
                 'value' => null,
                 'type' => FormDataType::PHONE_NUMBER,
-                'db_var_type' => PDO::PARAM_STR,
+                'db-var-type' => PDO::PARAM_STR,
                 'error-type' => FormErrorType::NONE,
                 'error-conditions' => FormTypeErrorConditions::PHONE_NUMBER_DEFAULT,
                 'required' => true
@@ -41,7 +41,7 @@
                 'title' => 'Adrese',
                 'value' => null,
                 'type' => FormDataType::TEXT,
-                'db_var_type' => PDO::PARAM_STR,
+                'db-var-type' => PDO::PARAM_STR,
                 'error-type' => FormErrorType::NONE,
                 'error-conditions' => [
                     FormErrorType::EMPTY->value => 'Adrese ir nepieciešama'
