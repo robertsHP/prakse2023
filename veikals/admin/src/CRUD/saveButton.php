@@ -134,7 +134,7 @@
             });
         }
         function redirect () {
-            // window.location.href = redirectPath;
+            window.location.href = redirectPath;
         }
 
         $('#save-button').click(function () {
@@ -247,7 +247,6 @@
                                 console.log('rowIDArr = '+rowIDArr);
                                 console.log('Save success???? - '+success);
                                 if(success) {
-                                    console.log('SUCCesss');
                                     callEditableTableClear();
                                 }
                             })

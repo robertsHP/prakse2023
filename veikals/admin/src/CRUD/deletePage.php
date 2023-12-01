@@ -5,7 +5,7 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/Database.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDFunctions.php';
 
-    include 'data.php';
+    require_once 'data.php';
 
     CRUDFunctions::setID($data);
 
