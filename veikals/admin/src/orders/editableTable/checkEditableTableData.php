@@ -18,19 +18,20 @@
         $productsData = json_decode($_POST['^data'], true);
         unset($_POST['^data']);
 
+        $productsData['id'] = $_POST['product_id'];
+        unset($_POST['product_id']);
+
         $formData = [];
         foreach ($_POST as $key => $value) {
-            if(!str_contains($key, '^'))
+            if(!str_contains($key, '^')) {
                 $formData[$key] = $value;
+            }
         }
-
         foreach ($_FILES as $key => $value) {
             if(!str_contains($key, '^')) {
-                // echo '<p>'.$key.' = '.print_r($value).'</p>';
-
                 if($productsData['db-process-type'] == 'create') {
                     $formData[$key] = $value;
-                } else if ($data['db-process-type'] == 'update') {
+                } else if ($productsData['db-process-type'] == 'update') {
                     $oldPathEmpty = $productsData['form-data'][$key] == '' || empty($productsData['form-data'][$key]);
                     $newFilePathEmpty = $value['name'] == '' || empty($value['name']);
 

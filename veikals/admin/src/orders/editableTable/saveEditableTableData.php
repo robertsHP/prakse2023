@@ -38,6 +38,7 @@
 
         if($orderID != null) {
             //Situācijās kad vada pilnīgi no jauna tabulā
+
             if($productsData['id'] == null) {
                 //Ievieto datubāzē produktu 
                 $insertedRowID = Database::insert(
@@ -73,6 +74,6 @@
         }
     }
 
-    // header('Content-Type: application/json');
-    // echo json_encode($response);
+    header('Content-Type: application/json');
+    echo json_encode($response);
 ?>

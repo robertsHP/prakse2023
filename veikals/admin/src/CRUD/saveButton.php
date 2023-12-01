@@ -120,15 +120,20 @@
                                 if(rowNumber == null) {
                                     rowNumber = idSplit[1];
                                 }
-                                id = idSplit[0];
+                                var filteredID = idSplit[0];
 
-                                var variable = null;
+                                var variable = tag.val();
                                 if(tag.is(':file')) {
                                     variable = tag[0].files[0];
-                                } else {
-                                    variable = tag.val();
+                                    if(typeof variable === 'undefined') {
+                                        var img = $("#"+id).next();
+                                        variable = img.attr('src');
+                                    }
+                                } else if (variable == "") {
+                                    variable = $.trim(tag.text());
                                 }
-                                formData.append(id, variable);
+                                formData.append(filteredID, variable);
+                                console.log('HELLLLLL  '+filteredID+' = '+variable);
                             }
                         }
                     }
@@ -155,6 +160,7 @@
                 console.log('Check success???? - '+success);
                 if(success) {
                     var formData = createFormDataWithResponse(responses[0]);
+                    formData.append('id', data['id']);
                     var ajaxCall = saveDataDirectCall(
                         formData, 
                         '/veikals/admin/src/CRUD/savePageData.php');
@@ -162,16 +168,14 @@
                     $.when(ajaxCall).then(function (data) {
                         $.each(responses, function(index, response) {
                             if (response.name == "editable-table") {
-                                console.log(JSON.stringify(data));
-
                                 var orderID = data.orderID;
+                                var purchaseData = response.data;
                                 var purchGoodsData = <?php echo json_encode($purchGoodsData); ?>;
                                 var formData = createFormDataWithResponse(response);
 
-                                console.log('orderID = '+orderID);
-                            
                                 formData.set('purchGoodsData', JSON.stringify(purchGoodsData));
                                 formData.set('orderID', orderID);
+                                formData.set('data', JSON.stringify(purchaseData));
                                 callSaveDataPromise(
                                     formData, 
                                     '/veikals/admin/src/orders/editableTable/saveEditableTableData.php');

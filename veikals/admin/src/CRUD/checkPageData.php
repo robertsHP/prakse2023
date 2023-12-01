@@ -21,8 +21,19 @@
 
         $formData = [];
         foreach ($_POST as $key => $value) {
-            if(!str_contains($key, '^'))
-                $formData[$key] = $value;
+            // echo '<p>'.$key.' = '.print_r(($value)).'</p>';
+            if(!str_contains($key, '^')) {
+                if($data['db-process-type'] == 'create') {
+                    $formData[$key] = $value;
+                } else if ($data['db-process-type'] == 'update') {
+                    $oldPathEmpty = $data['form-data'][$key] == '' || empty($data['form-data'][$key]);
+                    $newFilePathEmpty = $value == '' || empty($value) || $value == null;
+
+                    if (!$newFilePathEmpty || ($newFilePathEmpty && $oldPathEmpty)) {
+                        $formData[$key] = $value;
+                    }
+                }
+            }
         }
         foreach ($_FILES as $key => $value) {
             if(!str_contains($key, '^')) {

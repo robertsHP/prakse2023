@@ -15,13 +15,13 @@
         id="<?php echo $inputTagName; ?>"
         accept="<?php echo $allowedFileFormats; ?>"
         value="<?php 
-            if(isset($variableData['value']))
+            if(isset($variableData))
                 echo $variableData['value'];
         ?>"
     >
     <img 
         src="<?php 
-            if(isset($variableData['value']))
+            if(isset($variableData))
                 echo $variableData['value'];
         ?>"
         width="100"

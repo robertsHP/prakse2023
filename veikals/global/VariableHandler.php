@@ -13,8 +13,6 @@
         public static function processVariable (&$key, &$var, &$hasErrors) {
             $var['error-type'] = FormErrorType::NONE;
 
-            // echo '<p>'.print_r($var['value']). '</p>';
-
             //Veic darbības atkarība no mainīgā tipa
             switch ($var['type']) {
                 case FormDataType::TEXT->value:
@@ -74,23 +72,23 @@
             }
         }
         public static function fileVariableErrorCheck (&$key, &$var, &$hasErrors) {
-            // echo '<p>'.print_r($var). '</p>';
-
-            if(isset($var['value']['tmp_name']) && isset($var['value']['name'])) {
-                $tmpName = $var['value']['tmp_name'];
-                $name = $var['value']['name'];
-    
-                $tempEmpty = empty($tmpName) || $tmpName == '';
-                $nameEmpty = empty($name) || $name == '';
-    
-                if($tempEmpty || $nameEmpty) {
-                    $var['error-type'] = FormErrorType::EMPTY;
-                    $hasErrors = true;
+            if(isset($var['value'])) {
+                if(isset($var['value']['tmp_name']) && isset($var['value']['name'])) {
+                    $tmpName = $var['value']['tmp_name'];
+                    $name = $var['value']['name'];
+        
+                    $tempEmpty = empty($tmpName) || $tmpName == '';
+                    $nameEmpty = empty($name) || $name == '';
+        
+                    if($tempEmpty || $nameEmpty) {
+                        $var['error-type'] = FormErrorType::EMPTY;
+                        $hasErrors = true;
+                    }
+                    $var['value'] = [
+                        'tmp_name' => $tmpName,
+                        'name' => $name
+                    ];
                 }
-                $var['value'] = [
-                    'tmp_name' => $tmpName,
-                    'name' => $name
-                ];
             } else {
                 $var['error-type'] = FormErrorType::EMPTY;
                 $hasErrors = true;
