@@ -26,12 +26,13 @@
                 if($data['db-process-type'] == 'create') {
                     $formData[$key] = $value;
                 } else if ($data['db-process-type'] == 'update') {
-                    $oldPathEmpty = $data['form-data'][$key] == '' || empty($data['form-data'][$key]);
-                    $newFilePathEmpty = $value == '' || empty($value) || $value == null;
+                    // $oldPathEmpty = $data['form-data'][$key] == '' || empty($data['form-data'][$key]);
+                    // $newFilePathEmpty = $value == '' || empty($value) || $value == null;
 
-                    if (!$newFilePathEmpty || ($newFilePathEmpty && $oldPathEmpty)) {
-                        $formData[$key] = $value;
-                    }
+                    // if (!$newFilePathEmpty || ($newFilePathEmpty && $oldPathEmpty)) {
+                    //     $formData[$key] = $value;
+                    // }
+                    $formData[$key] = $value;
                 }
             }
         }

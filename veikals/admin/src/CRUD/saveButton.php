@@ -22,13 +22,21 @@
         var checkPromises = [];
         var savePromises = [];
         var rowIDArr = [];
-        var orderID = null;
+        var originalRowCount = $('.editable-table-row-form').length;
+        var orderID = data['id'];
 
         function resetGlobalVariables () {
+            $.each(checkPromises, function(_, promise) {
+                promise.abort();
+            });
+            $.each(savePromises, function(_, promise) {
+                promise.abort();
+            });
+
             checkPromises = [];
             savePromises = [];
             rowIDArr = [];
-            orderID = null;
+            originalRowCount = $('.editable-table-row-form').length;
         }
 
         function setErrorMessages (data, rowNumber) {
@@ -77,7 +85,6 @@
             })
             .done(function(response) {
                 console.log('check = '+response.success);
-                setErrorMessages(response.data, response.rowNumber);
                 $('#result').html(response);
             })
             .fail(function(error) {
@@ -123,19 +130,19 @@
 
             $.when(deleteCall).then(function () {
                 resetGlobalVariables();
-                // window.location.href = redirectPath;
+                redirect();
             });
+        }
+        function redirect () {
+            // window.location.href = redirectPath;
         }
 
         $('#save-button').click(function () {
+            resetGlobalVariables();
             $('.input-form').each(function(index, form) {
                 var formData = new FormData(form);
                 formData.append('^data', JSON.stringify(data));
                 callCheckDataPromise(formData, '/veikals/admin/src/CRUD/checkPageData.php');
-                if($('.editable-table-row-form').length == 0) {
-                    resetGlobalVariables();
-                    callEditableTableClear();
-                }
             });
             $('.editable-table-row-form').each(function() {
                 var productsData = <?php echo json_encode($productsData); ?>;
@@ -204,50 +211,61 @@
                         formData, 
                         '/veikals/admin/src/CRUD/savePageData.php');
 
-                    $.when(ajaxCall).done(function (data) {
-                        $.each(responses, function(index, response) {
-                            if (response.name == "editable-table") {
-                                var purchaseData = response.data;
-                                var purchGoodsData = <?php echo json_encode($purchGoodsData); ?>;
-                                var formData = createFormDataWithResponse(response);
-
-                                rowIDArr.push(purchaseData.id);
-                                orderID = data.orderID;
-
-                                formData.set('purchGoodsData', JSON.stringify(purchGoodsData));
-                                formData.set('orderID', orderID);
-                                formData.set('data', JSON.stringify(purchaseData));
-                                callSaveDataPromise(
-                                    formData, 
-                                    '/veikals/admin/src/orders/editableTable/saveEditableTableData.php');
-                            }
-                        });
-                        console.log('Check Successfull');
-                        Promise.all(savePromises)
-                        .then(function(responses) {
-                            console.log('---SAVE---');
+                    if($('#editable-table').length != 0) {
+                        $.when(ajaxCall).done(function (data) {
                             $.each(responses, function(index, response) {
-                                console.log(index+" = "+response.success);
-                                if(!response.success) {
-                                    console.log('FAIL');
-                                    success = false;
-                                    return false;
+                                if (response.name == "editable-table") {
+                                    var purchaseData = response.data;
+                                    var purchGoodsData = <?php echo json_encode($purchGoodsData); ?>;
+                                    var formData = createFormDataWithResponse(response);
+
+                                    console.log('orderID = '+orderID);
+
+                                    formData.set('purchGoodsData', JSON.stringify(purchGoodsData));
+                                    formData.set('orderID', orderID);
+                                    formData.set('data', JSON.stringify(purchaseData));
+                                    callSaveDataPromise(
+                                        formData, 
+                                        '/veikals/admin/src/orders/editableTable/saveEditableTableData.php');
                                 }
                             });
-                            console.log('Save success???? - '+success);
-                            if(success) {
-                                callEditableTableClear();
-                            }
-                        })
-                        .catch(function(errors) {
+                            console.log('Check Successfull');
+                            Promise.all(savePromises)
+                            .then(function(responses) {
+                                console.log('---SAVE---');
+                                $.each(responses, function(index, response) {
+                                    console.log(index+" = "+response.success);
+                                    if(!response.success) {
+                                        console.log('FAIL');
+                                        success = false;
+                                        return false;
+                                    } else {
+                                        console.log('response id = '+response.id);
+                                        rowIDArr.push(response.id);
+                                    }
+                                });
+                                console.log('rowIDArr = '+rowIDArr);
+                                console.log('Save success???? - '+success);
+                                if(success) {
+                                    console.log('SUCCesss');
+                                    callEditableTableClear();
+                                }
+                            })
+                            .catch(function(errors) {
+                                console.log('At least one AJAX request failed');
+                                console.log('Errors:', errors);
+                                resetGlobalVariables();
+                            });
+                        }).fail(function (error) {
                             console.log('At least one AJAX request failed');
                             console.log('Errors:', errors);
-                            resetGlobalVariables();
                         });
-                    }).fail(function (error) {
-                        console.log('At least one AJAX request failed');
-                        console.log('Errors:', errors);
-                    });
+                    } else {
+                        $.when(ajaxCall).done(function (data) {
+                            resetGlobalVariables();
+                            redirect();
+                        });
+                    }
                 }
             })
             .catch(function(errors) {

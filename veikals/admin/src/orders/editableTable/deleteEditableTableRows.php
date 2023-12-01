@@ -28,6 +28,10 @@
             $stmt->execute();
             $productsFromDB = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+            echo '<p>BEFORE</p>';
+            echo '<p>'.print_r($productsFromDB).'</p>';
+            echo '<p>'.print_r($rowIDArr).'</p>';
+
             foreach ($productsFromDB as $key => $product) {
                 foreach ($rowIDArr as $rowID) {
                     if($product['product_id'] == $rowID) {
@@ -35,6 +39,11 @@
                     }
                 }
             }
+
+            echo '<p>AFTER</p>';
+            echo '<p>'.print_r($productsFromDB).'</p>';
+            echo '<p>'.print_r($rowIDArr).'</p>';
+
             if(count($productsFromDB) != 0) {
                 foreach ($productsFromDB as $product) {
                     $id = $product['product_id'];
@@ -57,6 +66,6 @@
         }
     }
 
-    header('Content-Type: application/json');
-    echo json_encode($response);
+    // header('Content-Type: application/json');
+    // echo json_encode($response);
 ?>

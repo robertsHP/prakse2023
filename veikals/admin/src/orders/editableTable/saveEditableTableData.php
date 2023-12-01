@@ -41,11 +41,11 @@
 
             if($productsData['id'] == null) {
                 //Ievieto datubāzē produktu 
-                $insertedRowID = Database::insert(
+                $productsData['id'] = Database::insert(
                     $productsData['table-name'], 
                     $productsData['form-data']);
                 //Piešķir produkta ID
-                $purchGoodsData['form-data']['product_id']['value'] = $insertedRowID;
+                $purchGoodsData['form-data']['product_id']['value'] = $productsData['id'];
 
                 //Ievieto datubāzē purchased_goods savienojumu starp produktu un pasūtījumu 
                 if(!ifPurchGoodsHasOrderWithThisProduct($purchGoodsData)) {
@@ -72,6 +72,7 @@
                 $response['success'] = true;
             }
         }
+        $response['id'] = $productsData['id'];
     }
 
     header('Content-Type: application/json');
