@@ -7,12 +7,11 @@
 
     $pageTitle = null;
 
-    $id = null;
     if (isset($_GET['id'])) {
-        $id = $_GET['id'];
+        $data['id'] = $_GET['id'];
         $pageTitle = "Lietotāja informācija";
     } else {
-        $id = $_SESSION["id"];
+        $data['id'] = $_SESSION["id"];
         $pageTitle = "Konts";
     }
 

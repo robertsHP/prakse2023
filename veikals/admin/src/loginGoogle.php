@@ -8,8 +8,8 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/Config.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/Database.php';
 
-    $usersTableName = $tableName;
-    $usersIDColumnName = $idColumnName;
+    $usersTableName = $data['table-name'];
+    $usersIDColumnName = $data['id-column-name'];
 
     if (!isset($_POST['credential'])) {
         header('Location: /veikals/admin/index.php');

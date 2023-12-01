@@ -4,83 +4,105 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/FileUpload.php';
 
     class VariableHandler {
-        public static function assignVariable (&$key, &$var, &$hasErrors) {
+        private static function sanitizeValue (&$value) {
+            $value = htmlspecialchars(
+                trim($value), 
+                ENT_QUOTES, 
+                'UTF-8');
+        }
+        public static function processVariable (&$key, &$var, &$hasErrors) {
+            $var['error-type'] = FormErrorType::NONE;
+
             //Veic darbības atkarība no mainīgā tipa
             switch ($var['type']) {
-                case FormDataType::TEXT:
-                case FormDataType::NUMBER:
-                case FormDataType::DECIMAL:
-                    VariableHandler::assignDefaultVariable($key, $var, $hasErrors);
+                case FormDataType::TEXT->value:
+                case FormDataType::NUMBER->value:
+                case FormDataType::DECIMAL->value:
+                    VariableHandler::defaultVariableErrorCheck($key, $var, $hasErrors);
                     break;
-                case FormDataType::EMAIL:
-                    VariableHandler::assignEmailVariable($key, $var, $hasErrors);
+                case FormDataType::EMAIL->value:
+                    VariableHandler::emailVariableErrorCheck($key, $var, $hasErrors);
                     break;
-                case FormDataType::FILE:
-                    VariableHandler::assignFileVariable($key, $var, $hasErrors);
+                case FormDataType::FILE->value:
+                    VariableHandler::fileVariableErrorCheck($key, $var, $hasErrors);
                     break;
-                case FormDataType::PHONE_NUMBER:
-                    VariableHandler::assignPhoneNumberVariable($key, $var, $hasErrors);
+                case FormDataType::PHONE_NUMBER->value:
+                    VariableHandler::phoneNumberVariableErrorCheck($key, $var, $hasErrors);
                     break;
-                case FormDataType::DATE:
-                    VariableHandler::assignDateVariable($key, $var, $hasErrors);
+                case FormDataType::DATE->value:
+                    VariableHandler::dateVariableErrorCheck($key, $var, $hasErrors);
                     break;
             }
         }
 
-        public static function getSanitizedValue ($value) {
-            $value = trim($value);
-            return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+        public static function assignErrorMessage (&$key, &$var) {
+            $errorCondition = $var['error-type'];
+
+            if($errorCondition->value != FormErrorType::NONE->value) {
+                if(isset($var['error-conditions'][$errorCondition->value])) {
+                    $var['error-message'] = $var['error-conditions'][$errorCondition->value];
+                    return;
+                }
+            }
+            $errorTag['error-message'] = null;
         }
 
-        private static function assignDefaultVariable (&$key, &$var, &$hasErrors) {
-            if(isset($_POST[$key]))
-                $var['value'] = VariableHandler::getSanitizedValue($_POST[$key]);
-
-            if(empty($var['value'])) {
-                $var['errorType'] = FormErrorType::EMPTY;
-                $hasErrors = true;
-            }
-        }
-        private static function assignEmailVariable (&$key, &$var, &$hasErrors) {
-            if(isset($_POST[$key]))
-                $var['value'] = VariableHandler::getSanitizedValue($_POST[$key]);
-
-            if(empty($var['value'])) {
-                $var['errorType'] = FormErrorType::EMPTY;
-                $hasErrors = true;
-            }
-
-            if(!filter_var($var['value'], FILTER_VALIDATE_EMAIL)) {
-                $var['errorType'] = FormErrorType::EMAIL_INVALID;
-                $hasErrors = true;
-            }
-        }
-        public static function assignFileVariable (&$key, &$var, &$hasErrors) {
-            //Pārbauda vai session mainīgajā faila nosaukums ir saglabāts
-            if(isset($_SESSION['temp']['paths'][$key])) {
-                $var['value'] = VariableHandler::getSanitizedValue($_SESSION['temp']['paths'][$key]);
-            //Ja nav tad iegūst no $_FILES
-            } else if($var['value'] == '') {
-                $var['value'] = VariableHandler::getSanitizedValue($_FILES[$key]['name']);
-                //Un piešķir $_SESSION filePaths masīvam
-                $_SESSION['temp']['paths'][$key] = $var['value'];
-            }
-
+        private static function checkIfEmpty (&$var, &$hasErrors) {
             if(empty($var['value']) || $var['value'] == '') {
-                $var['errorType'] = FormErrorType::EMPTY;
+                $var['error-type'] = FormErrorType::EMPTY;
+                $hasErrors = true;
+                return true;
+            }
+            return false;
+        }
+
+        private static function defaultVariableErrorCheck (&$key, &$var, &$hasErrors) {
+            VariableHandler::sanitizeValue($var['value']);
+            VariableHandler::checkIfEmpty($var, $hasErrors);
+        }
+        private static function emailVariableErrorCheck (&$key, &$var, &$hasErrors) {
+            VariableHandler::sanitizeValue($var['value']);
+            $empty = VariableHandler::checkIfEmpty($var, $hasErrors);
+
+            if(!$empty) {
+                if(!filter_var($var['value'], FILTER_VALIDATE_EMAIL)) {
+                    $var['error-type'] = FormErrorType::EMAIL_INVALID;
+                    $hasErrors = true;
+                }
+            }
+        }
+        public static function fileVariableErrorCheck (&$key, &$var, &$hasErrors) {
+            if(isset($var['value'])) {
+                if(isset($var['value']['tmp_name']) && isset($var['value']['name'])) {
+                    $tmpName = $var['value']['tmp_name'];
+                    $name = $var['value']['name'];
+        
+                    $tempEmpty = empty($tmpName) || $tmpName == '';
+                    $nameEmpty = empty($name) || $name == '';
+        
+                    if($tempEmpty || $nameEmpty) {
+                        $var['error-type'] = FormErrorType::EMPTY;
+                        $hasErrors = true;
+                    }
+                    $var['value'] = [
+                        'tmp_name' => $tmpName,
+                        'name' => $name
+                    ];
+                }
+            } else {
+                $var['error-type'] = FormErrorType::EMPTY;
                 $hasErrors = true;
             }
         }
-        private static function assignPhoneNumberVariable (&$key, &$var, &$hasErrors) {
-            if(isset($_POST[$key]))
-                $var['value'] = VariableHandler::getSanitizedValue($_POST[$key]);
-
-            if(empty($var['value']) || $var['value'] == '') {
-                $var['errorType'] = FormErrorType::EMPTY;
-                $hasErrors = true; 
-            } else if($var['value'][0] !== '+') {
-                $var['errorType'] = FormErrorType::PHONE_NUMBER_INVALID;
-                $hasErrors = true;
+        private static function phoneNumberVariableErrorCheck (&$key, &$var, &$hasErrors) {
+            VariableHandler::sanitizeValue($var['value']);
+            $empty = VariableHandler::checkIfEmpty($var, $hasErrors);
+            
+            if(!$empty) {
+                if($var['value'][0] !== '+') {
+                    $var['error-type'] = FormErrorType::PHONE_NUMBER_INVALID;
+                    $hasErrors = true;
+                }
             }
         }
         private static function isValidDate($dateString) {
@@ -101,18 +123,15 @@
             }
             return false;
         }
-        private static function assignDateVariable (&$key, &$var, &$hasErrors) {
-            if(isset($_POST[$key]))
-                $var['value'] = VariableHandler::getSanitizedValue($_POST[$key]);
+        private static function dateVariableErrorCheck (&$key, &$var, &$hasErrors) {
+            VariableHandler::sanitizeValue($var['value']);
+            $empty = VariableHandler::checkIfEmpty($var, $hasErrors);
 
-            if(empty($var['value'])) {
-                $var['errorType'] = FormErrorType::EMPTY;
-                $hasErrors = true;
-            }
-
-            if (!VariableHandler::isValidDate($var['value'])) {
-                $var['errorType'] = FormErrorType::DATE_INVALID;
-                $hasErrors = true;
+            if(!$empty) {
+                if (!VariableHandler::isValidDate($var['value'])) {
+                    $var['error-type'] = FormErrorType::DATE_INVALID;
+                    $hasErrors = true;
+                }
             }
         }
     }

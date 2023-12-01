@@ -1,5 +1,5 @@
 
-function initAJAX (fileInputID, selectedImageID, deleteButtonID) {
+function initDeleteButton (fileInputID, selectedImageID, deleteButtonID) {
     // Attach a click event handler to the button
     $(deleteButtonID).on("click", function() {
         // Send an AJAX POST request
@@ -20,6 +20,9 @@ function initAJAX (fileInputID, selectedImageID, deleteButtonID) {
             }
         });
     });
+}
+
+function initFileInput (fileInputID, selectedImageID, deleteButtonID) {
     $(fileInputID).change(function() {
         var fileInput = this;
 
@@ -41,7 +44,8 @@ function initAJAX (fileInputID, selectedImageID, deleteButtonID) {
                         // console.log(response);
                         $(fileInputID).hide();
                         $(selectedImageID).show();
-                        $(deleteButtonID).show();
+                        if(deleteButtonID !== null)
+                            $(deleteButtonID).show();
                     },
                     error: function(xhr, status, error) {
                         // Handle the error
@@ -62,15 +66,15 @@ function initImageSelect (elementValue, fileInputID, selectedImageID, deleteButt
         $(this).css('cursor', 'default');
     });
 
-    console.log(elementValue);
-
     if(elementValue === null || elementValue === '') {
         $(fileInputID).show();
         $(selectedImageID).hide();
-        $(deleteButtonID).hide();
+        if(deleteButtonID !== null)
+            $(deleteButtonID).hide();
     } else {
         $(fileInputID).hide();
         $(selectedImageID).show();
-        $(deleteButtonID).show();
+        if(deleteButtonID !== null)
+            $(deleteButtonID).show();
     }
 }

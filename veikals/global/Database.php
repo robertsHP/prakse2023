@@ -19,9 +19,7 @@
                 return $con;
             } catch (PDOException $exception) {
                 echo "PDO Exception: " . $exception->getMessage();
-                echo "<br>";
                 echo "Error Code: " . $exception->getCode();
-                echo "<br>";
             }
             return null;
         }
@@ -41,9 +39,7 @@
                 Database::closeConnection($conn);
             } catch (PDOException $exception) {
                 echo "PDO Exception: " . $exception->getMessage();
-                echo "<br>";
                 echo "Error Code: " . $exception->getCode();
-                echo "<br>";
             }
             return $result;
         }
@@ -62,37 +58,34 @@
                 Database::closeConnection($conn);
             } catch (PDOException $exception) {
                 echo "PDO Exception: " . $exception->getMessage();
-                echo "<br>";
                 echo "Error Code: " . $exception->getCode();
-                echo "<br>";
             }
             return $result;
         }
-        public static function insert ($tableName, $data) {
-            $success = false;
+        public static function insert ($tableName, $formData) {
+            $id = null;
             try {
-                $keys = array_keys($data);
+                $keys = array_keys($formData);
                 $keysString = implode(', ', $keys);
                 $valuesString = ':'.implode(', :', $keys);
     
                 $conn = Database::openConnection();
     
                     $stmt = $conn->prepare("INSERT INTO $tableName ($keysString) VALUES ($valuesString)");
-                    foreach ($data as $key => &$var) {
+                    foreach ($formData as $key => &$var) {
                         $value = &$var['value'];
-                        $stmt->bindParam(':'.$key, $var['value'], $var['db_var_type']);
+                        $stmt->bindParam(':'.$key, $var['value'], $var['db-var-type']);
                     }
                     $stmt->execute();
+
+                $id = $conn->lastInsertId();
     
                 Database::closeConnection($conn);
-                $success = true;
             } catch (PDOException $exception) {
                 echo "PDO Exception: " . $exception->getMessage();
-                echo "<br>";
                 echo "Error Code: " . $exception->getCode();
-                echo "<br>";
             }
-            return $success;
+            return $id;
         }
         public static function deleteWithID ($tableName, $idColumnName, $id) {
             try {
@@ -105,15 +98,13 @@
                 Database::closeConnection($conn);
             } catch (PDOException $exception) {
                 echo "PDO Exception: " . $exception->getMessage();
-                echo "<br>";
                 echo "Error Code: " . $exception->getCode();
-                echo "<br>";
             }
         }
-        public static function update ($tableName, $idColumnName, $id, $data) {
+        public static function update ($tableName, $idColumnName, $id, $formData) {
             $success = false;
             try {
-                $keys = array_keys($data);
+                $keys = array_keys($formData);
                 foreach ($keys as &$key)
                     $key = $key.' = :'.$key;
                 $setString = implode(', ', $keys);
@@ -121,9 +112,9 @@
                 $conn = Database::openConnection();
 
                     $stmt = $conn->prepare("UPDATE $tableName SET $setString WHERE $idColumnName = :id");
-                    foreach ($data as $key => &$var) {
+                    foreach ($formData as $key => &$var) {
                         $value = &$var['value'];
-                        $stmt->bindParam(':'.$key, $value, $var['db_var_type']);
+                        $stmt->bindParam(':'.$key, $value, $var['db-var-type']);
                     }
                     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
                     $stmt->execute();
@@ -132,9 +123,7 @@
                 $success = true;
             } catch (PDOException $exception) {
                 echo "PDO Exception: " . $exception->getMessage();
-                echo "<br>";
                 echo "Error Code: " . $exception->getCode();
-                echo "<br>";
             }
             return $success;
         }

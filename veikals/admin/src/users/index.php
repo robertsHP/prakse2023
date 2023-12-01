@@ -4,19 +4,19 @@
     $pageTitle = 'Lietotāji';
     $redirectPath = '/veikals/admin/index.php';
 
-    $keys = array_keys($data);
+    $keys = array_keys($data['form-data']);
 
     $columns = [
         'ID' => [
-            'col-name' => $idColumnName
+            'col-name' => $data['id-column-name']
         ],
-        'Vārds' => [
+        $data['form-data'][$keys[0]]['title'] => [
             'col-name' => $keys[0]
         ],
-        'Uzvārds' => [
+        $data['form-data'][$keys[1]]['title'] => [
             'col-name' => $keys[1]
         ],
-        'E-pasts' => [
+        $data['form-data'][$keys[2]]['title'] => [
             'col-name' => $keys[2]
         ]
     ];

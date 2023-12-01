@@ -1,7 +1,7 @@
 <?php
     class ImageSelectElement {
-        public static function load (string $title, string $tagName, $elementValue, array $allowedFileFormats) {
-            $thumbNailTagName = $tagName.'-thumbnail';
+        public static function load (string $tagName, $elementValue, array $allowedFileFormats) {
+            $thumbNailTagName = $tagName.'-image-sel';
             $deleteButtonTagName = $tagName.'-delete';
             $allowedFileFormatsStr = implode(', ', $allowedFileFormats);
 
@@ -11,7 +11,7 @@
             ImageSelectElement::loadDeleteButton($deleteButtonTagName);
 
             ?> 
-                <script src="/veikals/assets/elements/imageSelectElement.js"></script>
+                <script src="/veikals/assets/js/imageSelectElement.js"></script>
                 <script>
                     var fileInputID = <?php echo json_encode($tagName); ?>;
                     var deleteButtonID = <?php echo json_encode($deleteButtonTagName); ?>;
@@ -19,7 +19,8 @@
 
                     var elementValue = <?php echo json_encode($elementValue); ?>;
 
-                    initAJAX('#'+fileInputID, '#'+selectedImageID, '#'+deleteButtonID);
+                    initDeleteButton('#'+fileInputID, '#'+selectedImageID, '#'+deleteButtonID);
+                    initFileInput('#'+fileInputID, '#'+selectedImageID, '#'+deleteButtonID);
                     initImageSelect(elementValue, '#'+fileInputID, '#'+selectedImageID, '#'+deleteButtonID);
 
                     document.getElementById(selectedImageID).onclick = function () {
@@ -65,7 +66,7 @@
                         if(isset($elementValue))
                             echo $elementValue;
                     ?>"
-                    name = <?php echo $thumbNailTagName; ?>
+                    name = "<?php echo $thumbNailTagName; ?>"
                     id ="<?php echo $thumbNailTagName; ?>"
                     class="img-thumbnail img-product-photo" 
                 >

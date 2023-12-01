@@ -7,9 +7,8 @@
 
     $pageTitle = 'Statusa informācija';
 
-    $id = null;
     if (isset($_GET['id'])) {
-        $id = $_GET['id'];
+        $data['id'] = $_GET['id'];
     }
 
     function displayData ($idColumnName, $data, $row) {

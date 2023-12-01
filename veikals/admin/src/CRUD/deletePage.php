@@ -5,11 +5,33 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/Database.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDFunctions.php';
 
-    include 'data.php';
+    require_once 'data.php';
 
-    CRUDFunctions::delete(
-        $tableName, 
-        $idColumnName);
+    CRUDFunctions::setID($data);
+
+    $tableName = $data['table-name'];
+    $idColumnName = $data['id-column-name']; 
+    $id = $data['id'];
+
+    //Ja nav nekas tad veic redirect uz index
+    if(empty(Database::getRowWithID($tableName, $idColumnName, $id))) {
+        header('Location: index.php');
+        exit();
+    }
+
+    //Formas pogu funkcijas
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        //Pārbauda vai delete poga nospiesta
+        if (isset($_POST['delete'])) {
+            Database::deleteWithID($tableName, $idColumnName, $id);
+            header('Location: index.php');
+        //Pārbauda vai back poga nospiesta
+        } else if (isset($_POST['back'])) {
+            header('Location: index.php');
+        }
+        exit();
+    }
+
 ?>
 
 <!DOCTYPE html>
