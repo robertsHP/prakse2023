@@ -61,7 +61,6 @@
                         echo "PDO Exception: " . $exception->getMessage();
                         echo "Error Code: " . $exception->getCode();
                     }
-    
                 }
                 include 'loadAddRowButton.php';
             ?> 

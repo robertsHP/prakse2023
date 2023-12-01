@@ -21,6 +21,15 @@
 
         var checkPromises = [];
         var savePromises = [];
+        var rowIDArr = [];
+        var orderID = null;
+
+        function resetGlobalVariables () {
+            checkPromises = [];
+            savePromises = [];
+            rowIDArr = [];
+            orderID = null;
+        }
 
         function setErrorMessages (data, rowNumber) {
             if(data != null) {
@@ -91,12 +100,42 @@
             }
             return formData;
         }
+        function callEditableTableClear () {
+            var formData = new FormData();
+            formData.append('rowIDArr', JSON.stringify(rowIDArr));
+            formData.append('orderID', JSON.stringify(orderID));
+
+            var deleteCall = $.ajax({
+                type: 'POST',
+                url: '/veikals/admin/src/orders/editableTable/deleteEditableTableRows.php',
+                contentType: false,
+                processData: false,
+                data: formData,
+            })
+            .done(function(response) {
+                console.log('delete = '+response.success);
+                $('#result').html(response);
+            })
+            .fail(function(error) {
+                console.error("AJAX request failed:", error);
+                resetGlobalVariables();
+            });
+
+            $.when(deleteCall).then(function () {
+                resetGlobalVariables();
+                // window.location.href = redirectPath;
+            });
+        }
 
         $('#save-button').click(function () {
             $('.input-form').each(function(index, form) {
                 var formData = new FormData(form);
                 formData.append('^data', JSON.stringify(data));
                 callCheckDataPromise(formData, '/veikals/admin/src/CRUD/checkPageData.php');
+                if($('.editable-table-row-form').length == 0) {
+                    resetGlobalVariables();
+                    callEditableTableClear();
+                }
             });
             $('.editable-table-row-form').each(function() {
                 var productsData = <?php echo json_encode($productsData); ?>;
@@ -133,11 +172,11 @@
                                     variable = $.trim(tag.text());
                                 }
                                 formData.append(filteredID, variable);
-                                console.log('HELLLLLL  '+filteredID+' = '+variable);
                             }
                         }
                     }
                 });
+
                 formData.append('^rowNumber', rowNumber);
                 formData.append('^data', JSON.stringify(productsData));
 
@@ -165,13 +204,15 @@
                         formData, 
                         '/veikals/admin/src/CRUD/savePageData.php');
 
-                    $.when(ajaxCall).then(function (data) {
+                    $.when(ajaxCall).done(function (data) {
                         $.each(responses, function(index, response) {
                             if (response.name == "editable-table") {
-                                var orderID = data.orderID;
                                 var purchaseData = response.data;
                                 var purchGoodsData = <?php echo json_encode($purchGoodsData); ?>;
                                 var formData = createFormDataWithResponse(response);
+
+                                rowIDArr.push(purchaseData.id);
+                                orderID = data.orderID;
 
                                 formData.set('purchGoodsData', JSON.stringify(purchGoodsData));
                                 formData.set('orderID', orderID);
@@ -181,39 +222,38 @@
                                     '/veikals/admin/src/orders/editableTable/saveEditableTableData.php');
                             }
                         });
+                        console.log('Check Successfull');
+                        Promise.all(savePromises)
+                        .then(function(responses) {
+                            console.log('---SAVE---');
+                            $.each(responses, function(index, response) {
+                                console.log(index+" = "+response.success);
+                                if(!response.success) {
+                                    console.log('FAIL');
+                                    success = false;
+                                    return false;
+                                }
+                            });
+                            console.log('Save success???? - '+success);
+                            if(success) {
+                                callEditableTableClear();
+                            }
+                        })
+                        .catch(function(errors) {
+                            console.log('At least one AJAX request failed');
+                            console.log('Errors:', errors);
+                            resetGlobalVariables();
+                        });
                     }).fail(function (error) {
                         console.log('At least one AJAX request failed');
                         console.log('Errors:', errors);
                     });
-
-                    console.log('Check Successfull');
-                    Promise.all(savePromises)
-                    .then(function(responses) {
-                        console.log('---SAVE---');
-                        $.each(responses, function(index, response) {
-                            console.log(index+" = "+response.success);
-                            if(!response.success) {
-                                console.log('FAIL');
-                                success = false;
-                            }
-                        });
-                        console.log('Save success???? - '+success);
-                        if(success) {
-                            console.log('REDIRECT');
-                            // window.location.href = redirectPath;
-                        }
-                    })
-                    .catch(function(errors) {
-                        console.log('At least one AJAX request failed');
-                        console.log('Errors:', errors);
-                    });
                 }
-                checkPromises = [];
-                savePromises = [];
             })
             .catch(function(errors) {
                 console.log('At least one AJAX request failed');
                 console.log('Errors:', errors);
+                resetGlobalVariables();
             });
         });
     });
