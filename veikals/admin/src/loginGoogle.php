@@ -3,13 +3,8 @@
 
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/include/googleApiClient/vendor/autoload.php';
 
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/users/data.php';
-
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/Config.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/Database.php';
-
-    $usersTableName = $data['table-name'];
-    $usersIDColumnName = $data['id-column-name'];
 
     if (!isset($_POST['credential'])) {
         header('Location: /veikals/admin/index.php');
@@ -31,7 +26,7 @@
     }
 
     $row = Database::getRowFrom(
-        $usersTableName, 
+        'users', 
         'email', 
         $payload['email'], 
         PDO::PARAM_STR);
@@ -41,7 +36,7 @@
         exit();
     }
 
-    $_SESSION["id"] = $row[$usersIDColumnName];
+    $_SESSION["id"] = $row['user_id'];
     $_SESSION["name"] = $row['name'];
     $_SESSION["surname"] = $row['surname'];
     $_SESSION["email"] = $row['email'];

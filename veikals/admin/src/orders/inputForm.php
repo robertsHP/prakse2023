@@ -29,7 +29,7 @@
                                 id="<?php echo $tagName; ?>"
                                 placeholder="<?php echo $placeholder; ?>"
                                 value="<?php 
-                                    if(isset($variableData))
+                                    if(isset($variableData['value']))
                                         echo $variableData['value'];
                             ?>">
                         <?php 
@@ -48,7 +48,7 @@
                                 name="<?php echo $tagName; ?>"
                                 id="<?php echo $tagName; ?>"
                                 value="<?php 
-                                    if(isset($variableData))
+                                    if(isset($variableData['value']))
                                         echo $variableData['value'];
                             ?>">
                                 <?php
@@ -80,8 +80,11 @@
                                 id="<?php echo $tagName; ?>"
                                 step=".01"
                                 value="<?php 
-                                    if(isset($variableData))
+                                    if(!isset($variableData['value']) || $variableData['value'] == '') {
+                                        echo date('Y-m-d');
+                                    } else {
                                         echo date('Y-m-d', strtotime($variableData['value']));
+                                    }
                             ?>">
                         <?php 
                             TagLoader::loadInputErrorMessage($tagName, $variableData);
@@ -103,7 +106,7 @@
                                 placeholder="<?php echo $placeholder; ?>"
                                 pattern="^\d+(\.\d{2})?$"
                                 value="<?php 
-                                    if(isset($variableData))
+                                    if(isset($variableData['value']))
                                         echo $variableData['value'];
                             ?>">
                         <?php 
@@ -122,7 +125,7 @@
                                 name="<?php echo $tagName; ?>"
                                 id="<?php echo $tagName; ?>"
                                 value="<?php 
-                                    if(isset($variableData))
+                                    if(isset($variableData['value']))
                                         echo $variableData['value'];
                             ?>">
                                 <?php
