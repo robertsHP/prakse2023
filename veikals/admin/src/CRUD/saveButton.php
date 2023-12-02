@@ -177,9 +177,11 @@
                                     } else if (variable == "") {
                                         variable = $.trim(tag.text());
                                     }
+                                } else if (tag.is('p')) {
+                                    variable = $.trim(tag.text());
                                 }
                                 formData.append(filteredID, variable);
-                                console.log('#'+filteredID+' = '+variable);
+                                // console.log('#'+filteredID+' = '+variable);
                             }
                         }
                     }
