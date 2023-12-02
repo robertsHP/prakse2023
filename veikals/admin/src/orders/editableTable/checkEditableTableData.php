@@ -24,6 +24,7 @@
         $formData = [];
         foreach ($_POST as $key => $value) {
             if(!str_contains($key, '^')) {
+                // echo '<p>'.$key.' = '.$value.'</p>';
                 $formData[$key] = $value;
             }
         }
