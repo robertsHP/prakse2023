@@ -13,7 +13,7 @@
         class="form-control-file" 
         name="<?php echo $inputTagName; ?>"
         id="<?php echo $inputTagName; ?>"
-        accept="<?php echo $allowedFileFormats; ?>"
+        accept="<?php echo $allowedFileFormatsStr; ?>"
         value="<?php 
             if(isset($variableData))
                 echo $variableData['value'];

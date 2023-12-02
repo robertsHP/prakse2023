@@ -51,7 +51,7 @@
                     class="form-control-file" 
                     name="<?php echo $tagName; ?>"
                     id="<?php echo $tagName; ?>"
-                    accept="<?php echo $allowedFileFormats; ?>"
+                    accept="<?php echo $allowedFileFormatsStr; ?>"
                     value="<?php 
                         if(isset($elementValue))
                             echo $elementValue;
