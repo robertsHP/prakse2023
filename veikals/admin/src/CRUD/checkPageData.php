@@ -23,6 +23,7 @@
         foreach ($_POST as $key => $value) {
             // echo '<p>'.$key.' = '.print_r(($value)).'</p>';
             if(!str_contains($key, '^')) {
+                // echo '<p>'.$key.' = '.$value.'</p>';
                 if($data['db-process-type'] == 'create') {
                     $formData[$key] = $value;
                 } else if ($data['db-process-type'] == 'update') {

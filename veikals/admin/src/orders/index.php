@@ -28,7 +28,7 @@
         ],
         $data['form-data'][$keys[4]]['title'] => [
             'col-name' => $keys[4],
-            'link-info' => [
+            'value-swap-info' => [
                 'swap-table' => 'order_states',
                 'swap-col-name' => 'name'
             ]
