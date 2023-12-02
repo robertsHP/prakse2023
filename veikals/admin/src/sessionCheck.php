@@ -10,8 +10,9 @@
         // $token = $_SESSION['token'];
 
         if(!isset($_SESSION["id"])) {
-            header('Location: '.$redirectPath);
-            exit();
+            // header('Location: '.$redirectPath);
+            // exit();
+            echo '!!!!!!!!!!redirect!!!!!!!!!!!!!!';
         }
     }
 ?>
