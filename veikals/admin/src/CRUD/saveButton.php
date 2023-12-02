@@ -84,7 +84,7 @@
                 data: formData,
             })
             .done(function(response) {
-                console.log('check = '+response.success);
+                console.log('save = '+response.success);
                 $('#result').html(response);
             })
             .fail(function(error) {
@@ -174,11 +174,12 @@
                                     if(typeof variable === 'undefined') {
                                         var img = $("#"+id).next();
                                         variable = img.attr('src');
+                                    } else if (variable == "") {
+                                        variable = $.trim(tag.text());
                                     }
-                                } else if (variable == "") {
-                                    variable = $.trim(tag.text());
                                 }
                                 formData.append(filteredID, variable);
+                                console.log('#'+filteredID+' = '+variable);
                             }
                         }
                     }
@@ -206,13 +207,13 @@
                 console.log('Check success???? - '+success);
                 if(success) {
                     var formData = createFormDataWithResponse(responses[0]);
-                    formData.append('id', data['id']);
                     var ajaxCall = saveDataDirectCall(
                         formData, 
                         '/veikals/admin/src/CRUD/savePageData.php');
 
                     if($('#editable-table').length != 0) {
                         $.when(ajaxCall).done(function (data) {
+                            orderID = data.orderID;
                             $.each(responses, function(index, response) {
                                 if (response.name == "editable-table") {
                                     var purchaseData = response.data;

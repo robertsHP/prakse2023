@@ -11,7 +11,7 @@
         case FILE_UPLOAD_UNSUCCESSFUL = 7;
         case FILE_NOT_FOUND = 8;
         case FILE_COULDNT_BE_MOVED = 9;
-        case FILE_UPLOAD_FAILED = 10;
+        case FILE_INFO_PASSAGE_INVALID = 10;
 
         case DATE_INVALID = 11;
 
@@ -28,7 +28,8 @@
             FormErrorType::FILE_FORMAT_INCORRECT->value     => 'Faila formāts nav pareizs',
             FormErrorType::FILE_UPLOAD_UNSUCCESSFUL->value  => 'Faila augšupielāde nebija veiksmīga',
             FormErrorType::FILE_NOT_FOUND->value            => 'Fails nebija atrasts',
-            FormErrorType::FILE_COULDNT_BE_MOVED->value     => 'Failu nevarējā pārcelt'
+            FormErrorType::FILE_COULDNT_BE_MOVED->value     => 'Failu nevarējā pārcelt',
+            FormErrorType::FILE_INFO_PASSAGE_INVALID->value     => 'Padotā faila informācija ir nepareiza'
         ];
         public const EMAIL_DEFAULT = [
             FormErrorType::EMPTY->value => 'E-pasts ir nepieciešams',

@@ -16,7 +16,7 @@
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data = json_decode($_POST['data'], true);
 
-        $response['orderID'] = isset($_POST['id']) ? $_POST['id'] : null;
+        $response['orderID'] = $data['id'];
         if($data['db-process-type'] == 'create') {
             $response['orderID'] = Database::insert(
                 $data['table-name'], 

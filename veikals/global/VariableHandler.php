@@ -73,21 +73,31 @@
         }
         public static function fileVariableErrorCheck (&$key, &$var, &$hasErrors) {
             if(isset($var['value'])) {
-                if(isset($var['value']['tmp_name']) && isset($var['value']['name'])) {
-                    $tmpName = $var['value']['tmp_name'];
-                    $name = $var['value']['name'];
-        
-                    $tempEmpty = empty($tmpName) || $tmpName == '';
-                    $nameEmpty = empty($name) || $name == '';
-        
-                    if($tempEmpty || $nameEmpty) {
+                if(is_string($var['value'])) {
+                    if($var['value'] == '') {
                         $var['error-type'] = FormErrorType::EMPTY;
                         $hasErrors = true;
                     }
-                    $var['value'] = [
-                        'tmp_name' => $tmpName,
-                        'name' => $name
-                    ];
+                } else if (is_array($var['value'])) {
+                    if(isset($var['value']['tmp_name']) && isset($var['value']['name'])) {
+                        $tmpName = $var['value']['tmp_name'];
+                        $name = $var['value']['name'];
+            
+                        $tempEmpty = empty($tmpName) || $tmpName == '';
+                        $nameEmpty = empty($name) || $name == '';
+            
+                        if($tempEmpty || $nameEmpty) {
+                            $var['error-type'] = FormErrorType::EMPTY;
+                            $hasErrors = true;
+                        }
+                        $var['value'] = [
+                            'tmp_name' => $tmpName,
+                            'name' => $name
+                        ];
+                    }
+                } else {
+                    $var['error-type'] = FormErrorType::FILE_INFO_PASSAGE_INVALID;
+                    $hasErrors = true;    
                 }
             } else {
                 $var['error-type'] = FormErrorType::EMPTY;

@@ -53,7 +53,6 @@
                         $purchGoodsData['table-name'], 
                         $purchGoodsData['form-data']);
                 }
-                
                 $response['success'] = true;
             //Situācijās kad tiek atjaunināts
             } else {
