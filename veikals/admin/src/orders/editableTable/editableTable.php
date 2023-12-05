@@ -53,7 +53,7 @@
                                 foreach ($tempProductsData['form-data'] as $key => &$var) {
                                     $var['value'] = $row[$key];
                                 }
-                                loadRow($tempProductsData, $keys, $rowCount);
+                                loadEditableRow($tempProductsData, $keys, $rowCount);
                                 $rowCount++;
                             }
                         }

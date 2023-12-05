@@ -1,6 +1,6 @@
 
 <?php
-    function loadRow (&$rowData, &$keys, &$rowCount) {
+    function loadEditableRow (&$data, &$keys, &$rowCount) {
         ?>
             <tr id="editable-table-row-<?php echo $rowCount; ?>">
                 <form class="editable-table-row-form" enctype="multipart/form-data">
@@ -17,7 +17,7 @@
                     <td>
                         <?php
                             $tagName = $keys[0].$rowCount;
-                            $variableData = isset($rowData['id']) ? $rowData['id'] : '';
+                            $variableData = isset($data['id']) ? $data['id'] : '';
                         ?>
                         <p id="<?php echo $tagName; ?>">
                             <?php echo $variableData; ?>
@@ -26,7 +26,7 @@
                     <td>
                         <?php
                             $tagName = $keys[1].$rowCount;
-                            $variableData = $rowData['form-data'][$keys[1]];
+                            $variableData = $data['form-data'][$keys[1]];
                         ?>
                         <input 
                             type="text" 
@@ -42,7 +42,7 @@
                     <td>
                         <?php
                             $tagName = $keys[2].$rowCount;
-                            $variableData = $rowData['form-data'][$keys[2]];
+                            $variableData = $data['form-data'][$keys[2]];
                         ?>
                         <textarea 
                             rows="6" 
@@ -59,7 +59,7 @@
                     <td>
                         <?php
                             $tagName = $keys[3].$rowCount;
-                            $variableData = $rowData['form-data'][$keys[3]];
+                            $variableData = $data['form-data'][$keys[3]];
                         ?>
                         <?php 
                             include 'miniImageSelectElement.php';
@@ -71,7 +71,7 @@
                     <td>
                         <?php
                             $tagName = $keys[4].$rowCount;
-                            $variableData = $rowData['form-data'][$keys[4]];
+                            $variableData = $data['form-data'][$keys[4]];
                         ?>
                         <input 
                             type="number" 
@@ -89,7 +89,7 @@
                     <td>
                         <?php
                             $tagName = $keys[5].$rowCount;
-                            $variableData = $rowData['form-data'][$keys[5]];
+                            $variableData = $data['form-data'][$keys[5]];
                         ?>
                         <input 
                             type="number" 
@@ -106,7 +106,7 @@
                     <td>
                         <?php
                             $tagName = $keys[6].$rowCount;
-                            $variableData = $rowData['form-data'][$keys[6]];
+                            $variableData = $data['form-data'][$keys[6]];
                         ?>
                         <select 
                             value="<?php 
@@ -132,13 +132,73 @@
                     </td>
                 </form>
                 <script>
-                    var errorTags = <?php echo json_encode($rowData['form-data']); ?>;
+                    var errorTags = <?php echo json_encode($data['form-data']); ?>;
                     var rowCount = <?php echo json_encode($rowCount); ?>;
                     
                     $.each(errorTags, function(index, value) {
                         $("#"+index+rowCount+"-alert").hide();
                     });
                 </script>
+            </tr>
+        <?php 
+    }
+
+    function loadUneditableRow (&$data, &$keys, &$rowCount) {
+        ?>
+            <tr id="editable-table-row-<?php echo $rowCount; ?>">
+                <td>
+                    <?php
+                        if(isset($data['id']))
+                            echo $data['id'];
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        print_r($data['form-data'][$keys[1]]['value']);
+
+                        if(isset($data['form-data'][$keys[1]]))
+                            echo $data['form-data'][$keys[1]]['value'];
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        if(isset($data['form-data'][$keys[2]]))
+                            echo $data['form-data'][$keys[2]]['value'];
+                    ?>
+                </td>
+                <td>
+                    <img 
+                        src="<?php 
+                            if(isset($data['form-data'][$keys[3]]))
+                                echo $data['form-data'][$keys[3]]['value'];
+                        ?>" 
+                        name="photo_file_loc"
+                        id="photo_file_loc"
+                        class="img-thumbnail img-product-photo" 
+                        alt="">
+                </td>
+                <td>
+                    <?php
+                        if(isset($data['form-data'][$keys[4]]))
+                            echo $data['form-data'][$keys[4]]['value'];
+                    ?>
+                </td>
+                <td>
+                <?php
+                        if(isset($data['form-data'][$keys[5]]))
+                            echo $data['form-data'][$keys[5]]['value'];
+                    ?>
+                </td>
+                <td>
+                    <?php 
+                        $catRow = Database::getRowWithID(
+                            'product_categories', 
+                            $keys[6], 
+                            $data['form-data'][$keys[6]]['value']);
+                        echo $catRow['name'];
+                    ?>
+
+                </td>
             </tr>
         <?php
     }

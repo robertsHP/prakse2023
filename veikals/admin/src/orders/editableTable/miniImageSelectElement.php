@@ -1,8 +1,8 @@
 
 <?php
-    $rowDataKeys = array_keys($rowData['form-data']);
+    $formDataKeys = array_keys($data['form-data']);
 
-    $allowedFileFormats = $rowData['form-data'][$rowDataKeys[2]]['allowed_file_formats'];
+    $allowedFileFormats = $data['form-data'][$formDataKeys[2]]['allowed_file_formats'];
     $allowedFileFormatsStr = implode(', ', $allowedFileFormats);
 
     $inputTagName = $tagName.'-image-input';

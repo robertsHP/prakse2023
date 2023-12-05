@@ -14,7 +14,7 @@
             $keys = array_keys($rows[0]);
 
             include 'rowLoader.php';
-            loadRow($data, $keys, $rowCount);
+            loadEditableRow($data, $keys, $rowCount);
         }
     }
     // header('Content-Type: application/json');
