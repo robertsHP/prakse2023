@@ -15,8 +15,8 @@
         $stmt = $conn->prepare(
             "SELECT * FROM $tableName WHERE order_id=:order_id AND product_id=:product_id"
         );
-        $stmt->bindParam(':order_id', $purchGoodsData['form-data']['order_id'], PDO::PARAM_INT);
-        $stmt->bindParam(':product_id', $purchGoodsData['form-data']['product_id'], PDO::PARAM_INT);
+        $stmt->bindParam(':order_id', $purchGoodsData['form-data']['order_id']['value'], PDO::PARAM_INT);
+        $stmt->bindParam(':product_id', $purchGoodsData['form-data']['product_id']['value'], PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -46,13 +46,6 @@
                     $productsData['form-data']);
                 //Piešķir produkta ID
                 $purchGoodsData['form-data']['product_id']['value'] = $productsData['id'];
-
-                //Ievieto datubāzē purchased_goods savienojumu starp produktu un pasūtījumu 
-                if(!ifPurchGoodsHasOrderWithThisProduct($purchGoodsData)) {
-                    Database::insert(
-                        $purchGoodsData['table-name'], 
-                        $purchGoodsData['form-data']);
-                }
                 $response['success'] = true;
             //Situācijās kad tiek atjaunināts
             } else {
@@ -61,6 +54,7 @@
                     $productsData['id-column-name'], 
                     $productsData['id']);
                 if(!empty($productRow)) {
+                    $purchGoodsData['form-data']['product_id']['value'] = $productsData['id'];
                     //Adjauno informāciju datubāzē
                     Database::update(
                         $productsData['table-name'], 
@@ -69,6 +63,12 @@
                         $productsData['form-data']);
                 }
                 $response['success'] = true;
+            }
+            //Ievieto datubāzē purchased_goods savienojumu starp produktu un pasūtījumu 
+            if(!ifPurchGoodsHasOrderWithThisProduct($purchGoodsData)) {
+                Database::insert(
+                    $purchGoodsData['table-name'], 
+                    $purchGoodsData['form-data']);
             }
         }
         $response['id'] = $productsData['id'];

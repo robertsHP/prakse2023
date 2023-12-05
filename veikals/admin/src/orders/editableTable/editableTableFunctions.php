@@ -1,5 +1,77 @@
-
 <?php
+    function populateDataWithRow (&$data, &$row) {
+        $data['id'] = $row[$data['id-column-name']];
+        foreach ($data['form-data'] as $key => &$var) {
+            $var['value'] = $row[$key];
+        }
+    }
+    function getProductRow ($productID) {
+        $row = null;
+        try {
+            $conn = Database::openConnection();
+
+            $stmt = $conn->prepare(
+                "SELECT * FROM products WHERE product_id=:id"
+            );
+            $stmt->bindParam(':id', $productID, PDO::PARAM_INT);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            Database::closeConnection($conn);
+        } catch (PDOException $exception) {
+            echo "PDO Exception: " . $exception->getMessage();
+            echo "Error Code: " . $exception->getCode();
+        }
+        return $row;
+    }
+    function getOrderProducts ($orderID) {
+        $rows = null;
+        try {
+            $conn = Database::openConnection();
+
+            $stmt = $conn->prepare(
+                "SELECT * FROM products WHERE product_id IN 
+                    (SELECT product_id FROM purchased_goods WHERE order_id=:id);"
+            );
+            $stmt->bindParam(':id', $orderID, PDO::PARAM_INT);
+            $stmt->execute();
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            Database::closeConnection($conn);
+        } catch (PDOException $exception) {
+            echo "PDO Exception: " . $exception->getMessage();
+            echo "Error Code: " . $exception->getCode();
+        }
+        return $rows;
+    }
+    function getProductsThatArentLinkedWithOrder ($orderID) {
+        $rows = null;
+        try {
+            $conn = Database::openConnection();
+
+            $stmt = $conn->prepare(
+                "SELECT * FROM products WHERE NOT EXISTS (
+                    SELECT 1 FROM purchased_goods 
+                    WHERE purchased_goods.product_id = products.product_id 
+                    AND purchased_goods.order_id = :orderID);"
+            );
+            $stmt->bindParam(':orderID', $orderID, PDO::PARAM_INT);
+            $stmt->execute();
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            Database::closeConnection($conn);
+        } catch (PDOException $exception) {
+            echo "PDO Exception: " . $exception->getMessage();
+            echo "Error Code: " . $exception->getCode();
+        }
+        return $rows;
+    }
+    function loadProductColumns ($formData) {
+        foreach ($formData as $column)
+            if (isset($column['title']))
+                echo '<th>'.$column['title'].'</th>';
+        echo '<th></th>';
+    }
     function loadEditableRow (&$data, &$keys, &$rowCount) {
         ?>
             <tr id="editable-table-row-<?php echo $rowCount; ?>">
@@ -10,7 +82,15 @@
                             //Dzēšanas poga
                             $('#editable-table-delete-button-'+<?php echo json_encode($rowCount); ?>).click(function () {
                                 var clickCount = <?php echo json_encode($rowCount); ?>;
-                                $('#editable-table-row-'+clickCount).remove();
+                                var id = "<?php echo $data['id'] ?>";
+                                var text = "<?php echo $data['form-data'][$keys[1]]['value'] ?>";
+
+                                if(id != "") {
+                                    $('#editable-table-row-'+clickCount).remove();
+                                    $('editable-table-add-selection').append(
+                                        $("<option>").val(id).text(text)
+                                    );
+                                }
                             });
                         </script>
                     </td>
