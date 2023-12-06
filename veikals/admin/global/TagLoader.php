@@ -28,18 +28,15 @@
             ?>
                 <div id="<?php echo $finalTagName; ?>" class="alert alert-danger"></div>
             <?php
-            return $finalTagName;
         }
         public static function loadInputErrorMessage ($tagName, $variableData) {
-            $finalTagName = null;
             if(isset($variableData)) {
                 if(array_key_exists('required', $variableData)) {
                     if($variableData['required']) {
-                        $finalTagName = TagLoader::loadAlert($tagName);
+                        TagLoader::loadAlert($tagName);
                     }
                 }
             }
-            return $finalTagName;
         }
         public static function loadLabel ($title, $fieldName, $variableData) {
             ?>

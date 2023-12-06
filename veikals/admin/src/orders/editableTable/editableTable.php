@@ -3,7 +3,7 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/enums/FormErrorType.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/enums/FormDataType.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/TagLoader.php';
-    include 'rowLoader.php';
+    include 'editableTableFunctions.php';
 
     //Iegūst produktu datus
     $originalData = $data;
@@ -19,50 +19,28 @@
         <thead class="thead-custom">
             <tr>
                 <th></th>
-                <th>ID</th>
-                <?php
-                    foreach ($productsData['form-data'] as $column)
-                        if (isset($column['title']))
-                            echo '<th>'.$column['title'].'</th>';
-                    echo '<th></th>';
-                ?>
+                <?php loadProductColumns($productsData['form-data']); ?>
             </tr>
         </thead>
         <tbody>
             <?php
-                if($originalData['id'] != null) {
-                    $rows = null;
-                    try {
-                        $conn = Database::openConnection();
-    
-                        $stmt = $conn->prepare(
-                            "SELECT * FROM products WHERE product_id IN (SELECT product_id FROM purchased_goods WHERE order_id=:id);"
-                        );
-                        $stmt->bindParam(':id', $data['id'], PDO::PARAM_INT);
-                        $stmt->execute();
-                        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                if($data['id'] != null) {
+                    $rows = getOrderProducts($data['id']);
 
-                        Database::closeConnection($conn);
-
-                        if(count($rows) != 0) {
-                            $tempProductsData = $productsData;
-                            $keys = array_keys($rows[0]);
-                            
-                            foreach ($rows as $row) {
-                                $tempProductsData['id'] = $row[$tempProductsData['id-column-name']];
-                                foreach ($tempProductsData['form-data'] as $key => &$var) {
-                                    $var['value'] = $row[$key];
-                                }
-                                loadRow($tempProductsData, $keys, $rowCount);
-                                $rowCount++;
+                    if(count($rows) != 0) {
+                        $tempProductsData = $productsData;
+                        
+                        foreach ($rows as $row) {
+                            populateProductDataWithRow($tempProductsData, $row);
+                            if($data['id'] != null) {
+                                populatePurchGoods($data['id'], $row['product_id'], $purchGoodsData);
                             }
+                            loadEditableRow($tempProductsData, $purchGoodsData, $rowCount, false);
+                            $rowCount++;
                         }
-                    } catch (PDOException $exception) {
-                        echo "PDO Exception: " . $exception->getMessage();
-                        echo "Error Code: " . $exception->getCode();
                     }
                 }
-                include 'loadAddRowButton.php';
+                include 'loadAddRow.php';
             ?> 
         </tbody>
     </table>

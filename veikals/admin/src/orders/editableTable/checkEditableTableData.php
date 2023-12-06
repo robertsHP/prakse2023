@@ -11,43 +11,54 @@
         'name' => 'editable-table',
         'success' => false,
         'rowNumber' => isset($_POST['^rowNumber']) ? $_POST['^rowNumber'] : null,
-        'data' => []
+        'productsData' => []
     );
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $productsData = json_decode($_POST['^data'], true);
-        unset($_POST['^data']);
+        $productsData = json_decode($_POST['^productsData'], true);
+        unset($_POST['^productsData']);
+
+        $purchGoodsData = json_decode($_POST['^purchGoodsData'], true);
+        unset($_POST['^purchGoodsData']);
 
         $productsData['id'] = $_POST['product_id'];
         unset($_POST['product_id']);
 
-        $formData = [];
+        $rowNumber = isset($_POST['^rowNumber']) ? $_POST['^rowNumber'] : null;
+        unset($_POST['^rowNumber']);
+
+        $productFormData = [];
+        $purchGoodsFormData = [];
+
         foreach ($_POST as $key => $value) {
-            if(!str_contains($key, '^')) {
-                // echo '<p>'.$key.' = '.$value.'</p>';
-                $formData[$key] = $value;
+            if(array_key_exists($key, $productsData['form-data'])) {
+                $productFormData[$key] = $value;
+            } else {
+                $purchGoodsFormData[$key] = $value;
             }
         }
         foreach ($_FILES as $key => $value) {
             if(!str_contains($key, '^')) {
                 if($productsData['db-process-type'] == 'create') {
-                    $formData[$key] = $value;
+                    $productFormData[$key] = $value;
                 } else if ($productsData['db-process-type'] == 'update') {
                     $oldPathEmpty = $productsData['form-data'][$key] == '' || empty($productsData['form-data'][$key]);
                     $newFilePathEmpty = $value['name'] == '' || empty($value['name']);
 
                     if (!$newFilePathEmpty || ($newFilePathEmpty && $oldPathEmpty)) {
-                        $formData[$key] = $value;
+                        $productFormData[$key] = $value;
                     }
                 }
             }
         }
 
-        $hasErrors = CRUDFunctions::assignAndProcessFormData($formData, $productsData);
+        $hasErrors = CRUDFunctions::assignAndProcessFormData($productFormData, $productsData);
+        $hasErrors = CRUDFunctions::assignAndProcessFormData($purchGoodsFormData, $purchGoodsData);
 
         $response['success'] = !$hasErrors;
-        $response['data'] = $productsData;
-        $response['rowNumber'] = isset($_POST['^rowNumber']) ? $_POST['^rowNumber'] : null;
+        $response['productsData'] = $productsData;
+        $response['purchGoodsData'] = $purchGoodsData;
+        $response['rowNumber'] = $rowNumber;
     }
 
     header('Content-Type: application/json');

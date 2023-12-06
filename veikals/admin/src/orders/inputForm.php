@@ -151,7 +151,8 @@
                     ?>
                     <?php 
                         TagLoader::loadLabel($title, $tagName, null);
-                        
+
+                        $editable = true;
                         include 'editableTable/editableTable.php';
 
                         $data['error-tags'][$tagName] = [
