@@ -85,7 +85,7 @@
                                             
                                             foreach ($rows as $row) {
                                                 populateDataWithRow($productsData, $row);
-                                                loadUneditableRow($productsData, $keys, $rowCount);
+                                                loadUneditableRow($productsData, $purchGoodsData, $keys, $rowCount);
                                                 $rowCount++;
                                             }
                                         ?>

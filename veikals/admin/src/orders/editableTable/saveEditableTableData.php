@@ -7,7 +7,7 @@
 
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDFunctions.php';
 
-    function ifPurchGoodsHasOrderWithThisProduct ($purchGoodsData) {
+    function getPurchGoodsRow ($purchGoodsData) {
         $conn = Database::openConnection();
     
         $tableName = $purchGoodsData['table-name'];
@@ -22,7 +22,7 @@
 
         Database::closeConnection($conn);
 
-        return !empty($result);
+        return $result;
     }
 
     $response = array(
@@ -30,11 +30,14 @@
     );
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $productsData = json_decode($_POST['data'], true);
+        $productsData = json_decode($_POST['productsData'], true);
         $purchGoodsData = json_decode($_POST['purchGoodsData'], true);
         $orderID = $_POST['orderID'];
 
         $purchGoodsData['form-data']['order_id']['value'] = $orderID;
+
+        // echo '<p>'.print_r($productsData).'</p>';
+        // echo '<p>'.print_r($purchGoodsData).'</p>';
 
         if($orderID != null) {
             //Situācijās kad vada pilnīgi no jauna tabulā
@@ -43,7 +46,8 @@
                 //Ievieto datubāzē produktu 
                 $productsData['id'] = Database::insert(
                     $productsData['table-name'], 
-                    $productsData['form-data']);
+                    $productsData['form-data']
+                );
                 //Piešķir produkta ID
                 $purchGoodsData['form-data']['product_id']['value'] = $productsData['id'];
                 $response['success'] = true;
@@ -60,15 +64,28 @@
                         $productsData['table-name'], 
                         $productsData['id-column-name'],
                         $productsData['id'],
-                        $productsData['form-data']);
+                        $productsData['form-data']
+                    );
                 }
                 $response['success'] = true;
             }
+            
+            $purchGoodsRow = getPurchGoodsRow($purchGoodsData);
+
             //Ievieto datubāzē purchased_goods savienojumu starp produktu un pasūtījumu 
-            if(!ifPurchGoodsHasOrderWithThisProduct($purchGoodsData)) {
+            if($purchGoodsRow == null) {
+                //aprēķina total price
                 Database::insert(
                     $purchGoodsData['table-name'], 
                     $purchGoodsData['form-data']);
+            } else {
+                $purchGoodsData['id'] = $purchGoodsRow['purch_goods_id'];
+                Database::update(
+                    $purchGoodsData['table-name'], 
+                    $purchGoodsData['id-column-name'],
+                    $purchGoodsData['id'], 
+                    $purchGoodsData['form-data']
+                );
             }
         }
         $response['id'] = $productsData['id'];

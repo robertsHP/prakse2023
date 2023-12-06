@@ -29,6 +29,7 @@
             var formData = new FormData();
 
             var selectedValue = selectTag.val();
+            var orderID = <?php echo json_encode($data['id']); ?>;
             var productsData = <?php echo json_encode($productsData); ?>;
 
             if(selectedValue == 'empty') {
@@ -39,6 +40,7 @@
 
             formData.append("rowCount", JSON.stringify(clickCount));
             formData.append("id", JSON.stringify(selectedValue));
+            formData.append("orderID", JSON.stringify(orderID));
             formData.append("productsData", JSON.stringify(productsData));
             $.ajax({
                 url: '/veikals/admin/src/orders/editableTable/loadRowAJAX.php',

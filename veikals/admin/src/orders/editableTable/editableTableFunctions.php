@@ -1,5 +1,40 @@
 <?php
-    function populateDataWithRow (&$data, &$row) {
+    function populateProductDataWithRow (&$data, $row) {
+        $data['id'] = $row[$data['id-column-name']];
+        foreach ($data['form-data'] as $key => &$var) {
+            $var['value'] = $row[$key];
+        }
+    }
+    function populatePurchGoods ($orderID, $productID, &$data) {
+        $rows = null;
+        try {
+            $conn = Database::openConnection();
+
+            $stmt = $conn->prepare(
+                "SELECT * FROM purchased_goods WHERE order_id=:order_id AND product_id=:product_id"
+            );
+            $stmt->bindParam(':order_id', $orderID, PDO::PARAM_INT);
+            $stmt->bindParam(':product_id', $productID, PDO::PARAM_INT);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            Database::closeConnection($conn);
+
+            if($row != null) {
+                $data['id'] = $row['purch_goods_id'];
+                foreach ($data['form-data'] as $key => &$var) {
+                    $var['value'] = $row[$key];
+                }
+            }
+
+        } catch (PDOException $exception) {
+            echo "PDO Exception: " . $exception->getMessage();
+            echo "Error Code: " . $exception->getCode();
+        }
+        return $rows;
+        
+
+
         $data['id'] = $row[$data['id-column-name']];
         foreach ($data['form-data'] as $key => &$var) {
             $var['value'] = $row[$key];
@@ -70,9 +105,12 @@
         foreach ($formData as $column)
             if (isset($column['title']))
                 echo '<th>'.$column['title'].'</th>';
-        echo '<th></th>';
     }
-    function loadEditableRow (&$data, &$keys, &$rowCount) {
+    function loadEditableRow (&$productsData, &$purchGoodsData, &$rowCount, $editable) {
+        $productsKeys = array_keys($productsData['form-data']);
+        $purchGoodsKeys = array_keys($purchGoodsData['form-data']);
+        $errorTags = [];
+
         ?>
             <tr id="editable-table-row-<?php echo $rowCount; ?>">
                 <form class="editable-table-row-form" enctype="multipart/form-data">
@@ -82,22 +120,22 @@
                             //Dzēšanas poga
                             $('#editable-table-delete-button-'+<?php echo json_encode($rowCount); ?>).click(function () {
                                 var clickCount = <?php echo json_encode($rowCount); ?>;
-                                var id = "<?php echo $data['id'] ?>";
-                                var text = "<?php echo $data['form-data'][$keys[1]]['value'] ?>";
+                                var id = "<?php echo $productsData['id'] ?>";
+                                var text = "<?php echo $productsData['form-data'][$productsKeys[1]]['value'] ?>";
 
                                 if(id != "") {
-                                    $('#editable-table-row-'+clickCount).remove();
                                     $('editable-table-add-selection').append(
                                         $("<option>").val(id).text(text)
                                     );
                                 }
+                                $('#editable-table-row-'+clickCount).remove();
                             });
                         </script>
                     </td>
                     <td>
                         <?php
-                            $tagName = $keys[0].$rowCount;
-                            $variableData = isset($data['id']) ? $data['id'] : '';
+                            $tagName = $productsData['id-column-name'].$rowCount;
+                            $variableData = isset($productsData['id']) ? $productsData['id'] : '';
                         ?>
                         <p id="<?php echo $tagName; ?>">
                             <?php echo $variableData; ?>
@@ -105,10 +143,12 @@
                     </td>
                     <td>
                         <?php
-                            $tagName = $keys[1].$rowCount;
-                            $variableData = $data['form-data'][$keys[1]];
+                            $tagName = $productsKeys[0].$rowCount;
+                            $variableData = $productsData['form-data'][$productsKeys[0]];
                         ?>
                         <input 
+                            <?php echo $editable ? '' : 'disabled' ?>
+                            style="width: 150px;"
                             type="text" 
                             id="<?php echo $tagName; ?>"
                             value="<?php 
@@ -116,15 +156,16 @@
                                     echo $variableData['value'];
                             ?>">
                         <?php 
-                            TagLoader::loadInputErrorMessage($tagName, $variableData);
+                            $errorTags[] = TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
                     </td>
                     <td>
                         <?php
-                            $tagName = $keys[2].$rowCount;
-                            $variableData = $data['form-data'][$keys[2]];
+                            $tagName = $productsKeys[1].$rowCount;
+                            $variableData = $productsData['form-data'][$productsKeys[1]];
                         ?>
                         <textarea 
+                            <?php echo $editable ? '' : 'disabled' ?>
                             rows="6" 
                             cols="30"
                             id="<?php echo $tagName; ?>"
@@ -133,27 +174,29 @@
                                     echo $variableData['value'];
                         ?></textarea>
                         <?php 
-                            TagLoader::loadInputErrorMessage($tagName, $variableData);
+                            $errorTags[] = TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
                     </td>
                     <td>
                         <?php
-                            $tagName = $keys[3].$rowCount;
-                            $variableData = $data['form-data'][$keys[3]];
+                            $tagName = $productsKeys[2].$rowCount;
+                            $variableData = $productsData['form-data'][$productsKeys[2]];
                         ?>
                         <?php 
                             include 'miniImageSelectElement.php';
                         ?>
                         <?php 
-                            TagLoader::loadInputErrorMessage($tagName, $variableData);
+                            $errorTags[] = TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
                     </td>
                     <td>
                         <?php
-                            $tagName = $keys[4].$rowCount;
-                            $variableData = $data['form-data'][$keys[4]];
+                            $tagName = $productsKeys[3].$rowCount;
+                            $variableData = $productsData['form-data'][$productsKeys[3]];
                         ?>
                         <input 
+                            <?php echo $editable ? '' : 'disabled' ?>
+                            style="width: 80px;"
                             type="number" 
                             value="<?php 
                                 if(isset($variableData['value']))
@@ -163,15 +206,17 @@
                             id="<?php echo $tagName; ?>"
                         >
                         <?php 
-                            TagLoader::loadInputErrorMessage($tagName, $variableData);
+                            $errorTags[] = TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
                     </td>
                     <td>
                         <?php
-                            $tagName = $keys[5].$rowCount;
-                            $variableData = $data['form-data'][$keys[5]];
+                            $tagName = $productsKeys[4].$rowCount;
+                            $variableData = $productsData['form-data'][$productsKeys[4]];
                         ?>
                         <input 
+                            <?php echo $editable ? '' : 'disabled' ?>
+                            style="width: 150px;"
                             type="number" 
                             value="<?php 
                                 if(isset($variableData['value']))
@@ -180,15 +225,17 @@
                             id="<?php echo $tagName; ?>"
                         >
                         <?php 
-                            TagLoader::loadInputErrorMessage($tagName, $variableData);
+                            $errorTags[] = TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
                     </td>
                     <td>
                         <?php
-                            $tagName = $keys[6].$rowCount;
-                            $variableData = $data['form-data'][$keys[6]];
+                            $tagName = $productsKeys[5].$rowCount;
+                            $variableData = $productsData['form-data'][$productsKeys[5]];
                         ?>
                         <select 
+                            <?php echo $editable ? '' : 'disabled' ?>
+                            style="width: 150px;"
                             value="<?php 
                                 if(isset($variableData['value']))
                                     echo $variableData['value'];
@@ -197,7 +244,7 @@
                             <?php
                                 $catRows = Database::getAllRowsFrom('product_categories');
                                 foreach ($catRows as $row) {
-                                    $selected = $row[$keys[6]] == $variableData['value'] ? ' selected' : '';
+                                    $selected = $row[$productsKeys[6]] == $variableData['value'] ? ' selected' : '';
                                     echo $selected;
                                     echo '<option 
                                         value="'.$row['category_id'].'"
@@ -207,22 +254,58 @@
                             ?>
                         </select>
                         <?php 
-                            TagLoader::loadInputErrorMessage($tagName, $variableData);
+                            $errorTags[] = TagLoader::loadInputErrorMessage($tagName, $variableData);
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                            $tagName = $purchGoodsKeys[2].$rowCount;
+                            $variableData = $purchGoodsData['form-data'][$purchGoodsKeys[2]];
+                        ?>
+                        <input 
+                            style="width: 150px;"
+                            type="number" 
+                            value="<?php 
+                                if(isset($variableData['value']))
+                                    echo $variableData['value'];
+                            ?>"
+                            id="<?php echo $tagName; ?>"
+                        >
+                        <?php 
+                            $errorTags[] = TagLoader::loadInputErrorMessage($tagName, $variableData);
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                            $tagName = $purchGoodsKeys[3].$rowCount;
+                            $variableData = $purchGoodsData['form-data'][$purchGoodsKeys[3]];
+                        ?>
+                        <input 
+                            style="width: 80px;"
+                            type="number" 
+                            value="<?php 
+                                if(isset($variableData['value']))
+                                    echo $variableData['value'];
+                            ?>"
+                            step=".01"
+                            id="<?php echo $tagName; ?>"
+                        >
+                        <?php 
+                            $errorTags[] = TagLoader::loadInputErrorMessage($tagName, $variableData);
                         ?>
                     </td>
                 </form>
                 <script>
-                    var errorTags = <?php echo json_encode($data['form-data']); ?>;
+                    var errorTags = <?php echo json_encode($errorTags); ?>;
                     var rowCount = <?php echo json_encode($rowCount); ?>;
                     
                     $.each(errorTags, function(index, value) {
-                        $("#"+index+rowCount+"-alert").hide();
+                        $('#'+value).hide();
                     });
                 </script>
             </tr>
         <?php 
     }
-
     function loadUneditableRow (&$data, &$keys, &$rowCount) {
         ?>
             <tr id="editable-table-row-<?php echo $rowCount; ?>">

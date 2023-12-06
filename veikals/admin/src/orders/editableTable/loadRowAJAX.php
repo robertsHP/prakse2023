@@ -9,19 +9,24 @@
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['productsData']) && isset($_POST['rowCount'])) {
-            $data = json_decode($_POST['productsData'], true);
+            $productsData = json_decode($_POST['productsData'], true);
             $rowCount = json_decode($_POST['rowCount']);
             $id = json_decode($_POST['id']);
+            $orderID = json_decode($_POST['orderID']);
 
-            $rows = Database::getAllRowsFrom($data['table-name']);
-            $keys = array_keys($rows[0]);
+            include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/orders/data.php';
 
+            $editable = true;
             if($id != null) {
                 $row = getProductRow($id);
-                populateDataWithRow($data, $row);
+                populateProductDataWithRow($productsData, $row);
+                if($orderID != null) {
+                    populatePurchGoods($orderID, $id, $purchGoodsData);
+                }
+                $editable = false;
             }
 
-            loadEditableRow($data, $keys, $rowCount);
+            loadEditableRow($productsData, $purchGoodsData, $rowCount, $editable);
         }
     }
 ?>

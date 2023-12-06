@@ -21,6 +21,8 @@
                 <th></th>
                 <th>ID</th>
                 <?php loadProductColumns($productsData['form-data']); ?>
+                <th>Daudzums</th>
+                <th>Kopējā cena</th>
             </tr>
         </thead>
         <tbody>
@@ -30,11 +32,13 @@
 
                     if(count($rows) != 0) {
                         $tempProductsData = $productsData;
-                        $keys = array_keys($rows[0]);
                         
                         foreach ($rows as $row) {
-                            populateDataWithRow($tempProductsData, $row);
-                            loadEditableRow($tempProductsData, $keys, $rowCount);
+                            populateProductDataWithRow($tempProductsData, $row);
+                            if($data['id'] != null) {
+                                populatePurchGoods($data['id'], $row['product_id'], $purchGoodsData);
+                            }
+                            loadEditableRow($tempProductsData, $purchGoodsData, $rowCount, false);
                             $rowCount++;
                         }
                     }

@@ -40,6 +40,7 @@
         }
 
         function setErrorMessages (data, rowNumber) {
+            console.log(data);
             if(data != null) {
                 $.each(data['form-data'], function(index, value) {
                     var tagStart = "#"+index;
@@ -68,6 +69,25 @@
             .done(function(response) {
                 console.log('check = '+response.success);
                 setErrorMessages(response.data, response.rowNumber);
+                $('#result').html(response);
+            })
+            .fail(function(error) {
+                console.error("AJAX request failed:", error);
+            });
+            checkPromises.push(promise);
+        }
+        function callCheckDataPromiseForProducts (formData, url) {
+            var promise = $.ajax({
+                type: 'POST',
+                url: url,
+                contentType: false,
+                processData: false,
+                data: formData,
+            })
+            .done(function(response) {
+                console.log('check = '+response.success);
+                setErrorMessages(response.productsData, response.rowNumber);
+                setErrorMessages(response.purchGoodsData, response.rowNumber);
                 $('#result').html(response);
             })
             .fail(function(error) {
@@ -146,7 +166,9 @@
             });
             $('.editable-table-row-form').each(function() {
                 var productsData = <?php echo json_encode($productsData); ?>;
+                var purchGoodsData = <?php echo json_encode($purchGoodsData); ?>;
                 productsData['db-process-type'] = data['db-process-type'];
+                purchGoodsData['db-process-type'] = data['db-process-type'];
             
                 var formData = new FormData();
                 var rowNumber = null;
@@ -186,11 +208,11 @@
                         }
                     }
                 });
-
                 formData.append('^rowNumber', rowNumber);
-                formData.append('^data', JSON.stringify(productsData));
+                formData.append('^productsData', JSON.stringify(productsData));
+                formData.append('^purchGoodsData', JSON.stringify(purchGoodsData));
 
-                callCheckDataPromise(formData, '/veikals/admin/src/orders/editableTable/checkEditableTableData.php');
+                callCheckDataPromiseForProducts(formData, '/veikals/admin/src/orders/editableTable/checkEditableTableData.php');
                 rowNumber = null;
             });
 
@@ -218,15 +240,13 @@
                             orderID = data.orderID;
                             $.each(responses, function(index, response) {
                                 if (response.name == "editable-table") {
-                                    var purchaseData = response.data;
-                                    var purchGoodsData = <?php echo json_encode($purchGoodsData); ?>;
+                                    var productsData = response.productsData;
+                                    var purchGoodsData = response.purchGoodsData;
                                     var formData = createFormDataWithResponse(response);
 
-                                    console.log('orderID = '+orderID);
-
-                                    formData.set('purchGoodsData', JSON.stringify(purchGoodsData));
                                     formData.set('orderID', orderID);
-                                    formData.set('data', JSON.stringify(purchaseData));
+                                    formData.set('productsData', JSON.stringify(productsData));
+                                    formData.set('purchGoodsData', JSON.stringify(purchGoodsData));
                                     callSaveDataPromise(
                                         formData, 
                                         '/veikals/admin/src/orders/editableTable/saveEditableTableData.php');

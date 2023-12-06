@@ -1,14 +1,13 @@
 
 <?php
-    $formDataKeys = array_keys($data['form-data']);
-
-    $allowedFileFormats = $data['form-data'][$formDataKeys[2]]['allowed_file_formats'];
+    $allowedFileFormats = $productsData['form-data'][$productsKeys[2]]['allowed_file_formats'];
     $allowedFileFormatsStr = implode(', ', $allowedFileFormats);
 
     $inputTagName = $tagName.'-image-input';
     $imageTagName = $tagName.'-image';
 ?>
     <input 
+        <?php echo $editable ? '' : 'disabled' ?>
         type="file"  
         class="form-control-file" 
         name="<?php echo $inputTagName; ?>"
@@ -20,6 +19,7 @@
         ?>"
     >
     <img 
+        <?php echo $editable ? '' : 'disabled' ?>
         src="<?php 
             if(isset($variableData))
                 echo $variableData['value'];
@@ -28,6 +28,11 @@
         name="<?php echo $imageTagName; ?>"
         id="<?php echo $imageTagName; ?>"
     >
+
+<?php
+    // setTagState($inputTagName, $editable);
+    // setTagState($imageTagName, $editable);
+?>
 <script>
     //Bildes izvēlei
     $.getScript('/veikals/assets/js/imageSelectElement.js', function() {

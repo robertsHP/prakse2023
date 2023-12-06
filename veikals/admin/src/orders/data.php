@@ -75,6 +75,9 @@
                 'type' => FormDataType::NUMBER,
                 'db-var-type' => PDO::PARAM_INT,
                 'error-type' => FormErrorType::NONE,
+                'error-conditions' => [
+                    FormErrorType::EMPTY->value => 'Pasūtījuma ID nav norādīts'
+                ],
                 'required' => true
             ], 
             'product_id' => [
@@ -83,6 +86,9 @@
                 'type' => FormDataType::NUMBER,
                 'db-var-type' => PDO::PARAM_INT,
                 'error-type' => FormErrorType::NONE,
+                'error-conditions' => [
+                    FormErrorType::EMPTY->value => 'Preces ID nav norādīts'
+                ],
                 'required' => true
             ], 
             'amount' => [
@@ -91,6 +97,9 @@
                 'type' => FormDataType::NUMBER,
                 'db-var-type' => PDO::PARAM_INT,
                 'error-type' => FormErrorType::NONE,
+                'error-conditions' => [
+                    FormErrorType::EMPTY->value => 'Daudzums nav ievadīts'
+                ],
                 'required' => true
             ], 
             'total_price' => [
@@ -99,6 +108,9 @@
                 'type' => FormDataType::NUMBER,
                 'db-var-type' => PDO::PARAM_INT,
                 'error-type' => FormErrorType::NONE,
+                'error-conditions' => [
+                    FormErrorType::EMPTY->value => 'Cena nav ievadīta'
+                ],
                 'required' => true
             ]
         ]
