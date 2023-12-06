@@ -92,7 +92,7 @@
                 'required' => true
             ], 
             'amount' => [
-                'title' => 'Daudzums',
+                'title' => 'Pasūtītais daudzums',
                 'value' => null,
                 'type' => FormDataType::NUMBER,
                 'db-var-type' => PDO::PARAM_INT,

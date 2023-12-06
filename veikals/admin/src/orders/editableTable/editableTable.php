@@ -19,10 +19,7 @@
         <thead class="thead-custom">
             <tr>
                 <th></th>
-                <th>ID</th>
                 <?php loadProductColumns($productsData['form-data']); ?>
-                <th>Daudzums</th>
-                <th>Kopējā cena</th>
             </tr>
         </thead>
         <tbody>

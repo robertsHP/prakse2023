@@ -32,13 +32,6 @@
             echo "Error Code: " . $exception->getCode();
         }
         return $rows;
-        
-
-
-        $data['id'] = $row[$data['id-column-name']];
-        foreach ($data['form-data'] as $key => &$var) {
-            $var['value'] = $row[$key];
-        }
     }
     function getProductRow ($productID) {
         $row = null;
@@ -102,9 +95,13 @@
         return $rows;
     }
     function loadProductColumns ($formData) {
+        ?> <th>ID</th> <?php
         foreach ($formData as $column)
             if (isset($column['title']))
                 echo '<th>'.$column['title'].'</th>';
+        ?> <th>Pasūtītais daudzums</th> <?php
+        ?> <th>Kopējā cena</th> <?php
+        
     }
     function loadEditableRow (&$productsData, &$purchGoodsData, &$rowCount, $editable) {
         $productsKeys = array_keys($productsData['form-data']);
@@ -306,34 +303,35 @@
             </tr>
         <?php 
     }
-    function loadUneditableRow (&$data, &$keys, &$rowCount) {
+    function loadUneditableRow (&$productsData, &$purchGoodsData, &$rowCount) {
+        $productsKeys = array_keys($productsData['form-data']);
+        $purchGoodsKeys = array_keys($purchGoodsData['form-data']);
+
         ?>
             <tr id="editable-table-row-<?php echo $rowCount; ?>">
                 <td>
                     <?php
-                        if(isset($data['id']))
-                            echo $data['id'];
+                        if(isset($productsData['id']))
+                            echo $productsData['id'];
                     ?>
                 </td>
                 <td>
                     <?php
-                        print_r($data['form-data'][$keys[1]]['value']);
-
-                        if(isset($data['form-data'][$keys[1]]))
-                            echo $data['form-data'][$keys[1]]['value'];
+                        if(isset($productsData['form-data'][$productsKeys[0]]))
+                            echo $productsData['form-data'][$productsKeys[0]]['value'];
                     ?>
                 </td>
                 <td>
                     <?php
-                        if(isset($data['form-data'][$keys[2]]))
-                            echo $data['form-data'][$keys[2]]['value'];
+                        if(isset($productsData['form-data'][$productsKeys[1]]))
+                            echo $productsData['form-data'][$productsKeys[1]]['value'];
                     ?>
                 </td>
                 <td>
                     <img 
                         src="<?php 
-                            if(isset($data['form-data'][$keys[3]]))
-                                echo $data['form-data'][$keys[3]]['value'];
+                            if(isset($productsData['form-data'][$productsKeys[2]]))
+                                echo $productsData['form-data'][$productsKeys[2]]['value'];
                         ?>" 
                         name="photo_file_loc"
                         id="photo_file_loc"
@@ -342,25 +340,37 @@
                 </td>
                 <td>
                     <?php
-                        if(isset($data['form-data'][$keys[4]]))
-                            echo $data['form-data'][$keys[4]]['value'];
+                        if(isset($productsData['form-data'][$productsKeys[3]]))
+                            echo $productsData['form-data'][$productsKeys[3]]['value'];
                     ?>
                 </td>
                 <td>
                 <?php
-                        if(isset($data['form-data'][$keys[5]]))
-                            echo $data['form-data'][$keys[5]]['value'];
+                        if(isset($productsData['form-data'][$productsKeys[4]]))
+                            echo $productsData['form-data'][$productsKeys[4]]['value'];
                     ?>
                 </td>
                 <td>
                     <?php 
                         $catRow = Database::getRowWithID(
                             'product_categories', 
-                            $keys[6], 
-                            $data['form-data'][$keys[6]]['value']);
+                            $productsKeys[5], 
+                            $productsData['form-data'][$productsKeys[5]]['value']);
                         echo $catRow['name'];
                     ?>
 
+                </td>
+                <td>
+                    <?php
+                        if(isset($purchGoodsData['form-data'][$purchGoodsKeys[2]]))
+                            echo $purchGoodsData['form-data'][$purchGoodsKeys[2]]['value'];
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        if(isset($purchGoodsData['form-data'][$purchGoodsKeys[3]]))
+                            echo $purchGoodsData['form-data'][$purchGoodsKeys[3]]['value'];
+                    ?>
                 </td>
             </tr>
         <?php
