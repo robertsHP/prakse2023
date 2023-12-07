@@ -25,17 +25,25 @@
             <script>
                 $(document).ready(function () {
                     $('#api-button').click(function () {
+                        // $.ajax({
+                        //     type: 'POST',
+                        //     url: '/veikals/admin/src/api/refreshCall.php',
+                        // })
+                        // .done(function(response) {
+                        //     $('#result').html(response);
+                        // })
+                        // .fail(function(error) {
+                        //     console.error("AJAX request failed:", error);
+                        // });
                         $.ajax({
+                            url: '/veikals/admin/src/api/refreshCall.php',
                             type: 'POST',
-                            url: 'refreshCall.php',
-                            contentType: false,
-                            processData: false
-                        })
-                        .done(function(response) {
-                            $('#result').html(response);
-                        })
-                        .fail(function(error) {
-                            console.error("AJAX request failed:", error);
+                            success: function(response) {
+                                $('#result').html(response);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error("AJAX request failed:", error);
+                            }
                         });
                     });
                 });
