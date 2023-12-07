@@ -1,104 +1,103 @@
 <?php
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/Config.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/Database.php';
-?>
 
-<?php
-    function getAPIDataAsJSON ($resourceName) {
+    function GET ($resourceName, $index = null) {
         $token = Config::getValue('config', 'api', 'token');
         $apiAddress = Config::getValue('config', 'api', 'api_address');
+
+        $apiAddress = $apiAddress.'/'.$resourceName;
+        if($index != null) {
+            if($index >= 0)
+                $apiAddress.'?id='.$index;
+        }
         
-        /* Init cURL resource */
-        $ch = curl_init($apiAddress.'/'.$resourceName);
+        $ch = curl_init($apiAddress);
         
-        /* set the content type json */
         $headers = [];
         $headers[] = 'Content-Type:application/json';
         $headers[] = "Authorization: Bearer ".$token;
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            
-        /* set return type json */
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             
-        /* execute request */
         $result = curl_exec($ch);
-    
-        if($error = curl_error($ch)) {
-            echo $e;
-            $result = null;
+
+        $info = curl_getinfo($ch);
+        if ($info['http_code'] == 401) {
+            echo "False - not valid token<br>";
         } else {
             $result = json_decode($result, true);
         }
     
-        /* close cURL resource */
         curl_close($ch);
+
+        if($result == null) {
+            echo "False - no items found<br>";
+        }
 
         return $result;
     }
-    function refreshDBInfoFor ($apiTableName, $localTableName, $columns) {
-        $apiDataJSON = getAPIDataAsJSON($apiTableName);
+    function ifEmptyFields ($arr) {
+        $result = false;
 
-        // print_r($apiDataJSON);
-
-        $apiColumns = array_keys($columns);
-        $localColumns = array_values($columns);
-
-        try {
-            $conn = Database::openConnection();
-
-            $idColumnName = $localColumns[0];
-
-            foreach ($apiDataJSON as $apiData) {
-                $id = $apiData['id'];
-
-                //Pieprasa rindu no datubāzes
-                $stmt = $conn->prepare("SELECT * FROM $localTableName WHERE $idColumnName=:id");
-                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-                $stmt->execute();
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                //Pārbauda vai eksistē
-                if($row == false) {
-                    //Sagatavo visus nepieciešamos nosaukums parametru pievienošanai priekš SQL komandas
-                    $keysString = implode(', ', $localColumns);
-                    $valuesString = ':'.implode(', :', $localColumns);
-
-                    $stmt = $conn->prepare("INSERT INTO $localTableName ($keysString) VALUES ($valuesString)");
-                    //Vērtības pievieno atbilstošām kolonām
-                    for ($i = 0; $i < count($columns); $i++) {
-                        $stmt->bindParam(
-                            ':'.$localColumns[$i], 
-                            $apiData[$apiColumns[$i]]
-                        );
-                    }
-                    $stmt->execute();
-                } else {
-                    $idLessColumnNames = $localColumns;
-                    array_shift($idLessColumnNames); // pābīda masīvu lai nebūtu id
-
-                    //Sagatavo visus nepieciešamos nosaukums parametru pievienošanai priekš SQL komandas
-                    $keysString = $idLessColumnNames;
-                    foreach ($keysString as &$name)
-                        $name = $name.' = :'.$name;
-                    $setString = implode(', ', $keysString);
-
-                    $stmt = $conn->prepare("UPDATE $localTableName SET $setString WHERE $idColumnName = :id");
-                    //Vērtības pievieno atbilstošām kolonām
-                    for ($i = 1; $i < count($columns); $i++) {
-                        $stmt->bindParam(
-                            ':'.$localColumns[$i], 
-                            $apiData[$apiColumns[$i]]
-                        );
-                    }
-                    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-                    $stmt->execute();
+        foreach ($arr as $value) {
+            if(strstr($value, 'id')) {
+                if ($value == 0) {
+                    $result = true;
                 }
             }
-            
-            Database::closeConnection($conn);
-        } catch (PDOException $exception) {
-            echo "PDO Exception: " . $exception->getMessage();
-            echo "Error Code: " . $exception->getCode();
+            if (empty($value) || $value == '') {
+                $result = true;
+            }
         }
+        return $result;
+    }
+    function ifHasAllFields ($row, $columnNames) {
+        $result = true;
+
+        foreach ($columnNames as $colName) {
+            if(!array_key_exists($colName, $row)) {
+                $result = false;
+            }
+        }
+
+        return $result;
+    }
+    function POST ($resourceName, $row, $columnNames) {
+        $response = null;
+
+        if(ifHasAllFields($row, $columnNames)) {
+            if (!ifEmptyFields($row)) {
+                $token = Config::getValue('config', 'api', 'token');
+                $apiAddress = Config::getValue('config', 'api', 'api_address');
+                
+                $ch = curl_init($apiAddress.'/'.$resourceName);
+                
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'Content-Type:application/json',
+                    "Authorization: Bearer ".$token
+                ]);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($row));
+                
+                $response = curl_exec($ch);
+
+                $info = curl_getinfo($ch);
+                if ($info['http_code'] == 200) {
+                    echo "True - data inserted<br>";
+                } else if ($info['http_code'] == 401) {
+                    echo "False - not valid token<br>";
+                } else {
+                    echo "False - data not inserted<br>";
+                }
+
+                curl_close($ch);
+            } else {
+                echo "False - some fields are empty<br>";
+            }
+        } else {
+            echo "False - please add all fields<br>";
+        }
+        return $response;
     }
 ?>
