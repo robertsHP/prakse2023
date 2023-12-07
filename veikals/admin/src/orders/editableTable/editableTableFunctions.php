@@ -241,7 +241,7 @@
                             <?php
                                 $catRows = Database::getAllRowsFrom('product_categories');
                                 foreach ($catRows as $row) {
-                                    $selected = $row[$productsKeys[6]] == $variableData['value'] ? ' selected' : '';
+                                    $selected = $row[$productsKeys[5]] == $variableData['value'] ? ' selected' : '';
                                     echo $selected;
                                     echo '<option 
                                         value="'.$row['category_id'].'"

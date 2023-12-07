@@ -36,7 +36,6 @@
                 selectedValue = null;
             }
             clickCount++;
-            console.log(clickCount);
 
             formData.append("rowCount", JSON.stringify(clickCount));
             formData.append("id", JSON.stringify(selectedValue));
