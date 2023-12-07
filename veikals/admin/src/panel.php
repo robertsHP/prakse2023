@@ -53,6 +53,9 @@
                         </svg>
                         Klienti
                     </a>
+                    <a class="quicklink" href="/veikals/admin/src/api/syncData.php">
+                        Atjaunot datus
+                    </a>
                 </div>
             </div>
         </div>
