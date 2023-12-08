@@ -154,7 +154,7 @@
             });
         }
         function redirect () {
-            window.location.href = redirectPath;
+            // window.location.href = redirectPath;
         }
 
         $('#save-button').click(function () {
@@ -235,14 +235,25 @@
                         formData, 
                         '/veikals/admin/src/CRUD/savePageData.php');
 
-                    if($('#editable-table').length != 0) {
-                        $.when(ajaxCall).done(function (data) {
+                    $.when(ajaxCall).done(function (pageSaveResponse) {
+                        if (pageSaveResponse.postResponse != null) {
+                            $('#input-form-alert').text(pageSaveResponse.postResponse).show();
+                        }
+
+                        if($('#editable-table').length != 0) {
                             orderID = data.orderID;
+
                             $.each(responses, function(index, response) {
                                 if (response.name == "editable-table") {
                                     var productsData = response.productsData;
                                     var purchGoodsData = response.purchGoodsData;
                                     var formData = createFormDataWithResponse(response);
+
+                                    if (response.postResponse != null) {
+                                        $('#input-form-alert')
+                                            .text(response.postResponse)
+                                            .show();
+                                    }
 
                                     formData.set('orderID', orderID);
                                     formData.set('productsData', JSON.stringify(productsData));
@@ -278,16 +289,14 @@
                                 console.log('Errors:', errors);
                                 resetGlobalVariables();
                             });
-                        }).fail(function (error) {
-                            console.log('At least one AJAX request failed');
-                            console.log('Errors:', errors);
-                        });
-                    } else {
-                        $.when(ajaxCall).done(function (data) {
+                        } else {
                             resetGlobalVariables();
                             redirect();
-                        });
-                    }
+                        }
+                    }).fail(function (error) {
+                        console.log('At least one AJAX request failed');
+                        console.log('Errors:', errors);
+                    });
                 }
             })
             .catch(function(errors) {

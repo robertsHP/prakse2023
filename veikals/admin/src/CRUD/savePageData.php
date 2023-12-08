@@ -7,10 +7,13 @@
 
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/CRUDFunctions.php';
 
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/api/apiFunctions.php';
+
     // Create an associative array to hold variables
     $response = array(
         'orderID' => null,
         'success' => false,
+        'postResponse' => null
     );
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -18,9 +21,23 @@
 
         $response['orderID'] = $data['id'];
         if($data['db-process-type'] == 'create') {
-            $response['orderID'] = Database::insert(
+            $data['id'] = Database::insert(
                 $data['table-name'], 
                 $data['form-data']);
+            $response['orderID'] = $data['id'];
+
+            if($data['table-name'] != 'users') {
+                $tableName = $data['api-table-name'];
+                $formDataAsKeyArr = getRowDataAsKeyArray($data);
+                $apiColumns = getAPIColumnNamesFromData($data);
+
+                POST(
+                    $tableName, 
+                    $formDataAsKeyArr, 
+                    $apiColumns, 
+                    $response['postResponse']
+                );
+            }
             $response['success'] = true;
         } else if ($data['db-process-type'] == 'update') {
             Database::update(

@@ -36,9 +36,6 @@
 
         $purchGoodsData['form-data']['order_id']['value'] = $orderID;
 
-        // echo '<p>'.print_r($productsData).'</p>';
-        // echo '<p>'.print_r($purchGoodsData).'</p>';
-
         if($orderID != null) {
             //Situācijās kad vada pilnīgi no jauna tabulā
 
@@ -48,6 +45,12 @@
                     $productsData['table-name'], 
                     $productsData['form-data']
                 );
+
+                $formDataAsKeyArr = getRowDataAsKeyArray($productsData);
+                $apiColumns = getAPIColumnNamesFromData($productsData);
+    
+                POST($data['api-col'], $formDataAsKeyArr, $apiColumns);
+
                 //Piešķir produkta ID
                 $purchGoodsData['form-data']['product_id']['value'] = $productsData['id'];
                 $response['success'] = true;
@@ -75,9 +78,14 @@
             //Ievieto datubāzē purchased_goods savienojumu starp produktu un pasūtījumu 
             if($purchGoodsRow == null) {
                 //aprēķina total price
-                Database::insert(
+                $purchGoodsData['id'] = Database::insert(
                     $purchGoodsData['table-name'], 
                     $purchGoodsData['form-data']);
+
+                $formDataAsKeyArr = getRowDataAsKeyArray($purchGoodsData);
+                $apiColumns = getAPIColumnNamesFromData($purchGoodsData);
+    
+                POST($purchGoodsData['api-col'], $formDataAsKeyArr, $apiColumns);
             } else {
                 $purchGoodsData['id'] = $purchGoodsRow['purch_goods_id'];
                 Database::update(

@@ -1,40 +1,35 @@
 <?php
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/Config.php';
 
-    function GET ($resourceName, $index = null) {
-        $token = Config::getValue('config', 'api', 'token');
-        $apiAddress = Config::getValue('config', 'api', 'api_address');
+    function getRowDataAsKeyArray ($data) {
+        $newDataArr = [];
 
-        $apiAddress = $apiAddress.'/'.$resourceName;
-        if($index != null) {
-            if($index >= 0)
-                $apiAddress.'?id='.$index;
+        $newDataArr['id'] = $data['id'];
+        foreach ($data['form-data'] as $var) {
+            $newKey = $var['api-col'];
+            $value = $var['value'];
+
+            $newDataArr[$newKey] = $value;
         }
-        
-        $ch = curl_init($apiAddress);
-        
-        $headers = [];
-        $headers[] = 'Content-Type:application/json';
-        $headers[] = "Authorization: Bearer ".$token;
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            
-        $result = curl_exec($ch);
+        return $newDataArr;
+    }
+    function getAPIColumnNamesFromData ($data) {
+        $newArr = [];
 
-        $info = curl_getinfo($ch);
-        if ($info['http_code'] == 401) {
-            echo "False - not valid token<br>";
-        } else {
-            $result = json_decode($result, true);
+        $newArr[] = 'id';
+        foreach ($data['form-data'] as $var) {
+            $newKey = $var['api-col'];
+            $newArr[$newKey] = $var['api-col'];
         }
-    
-        curl_close($ch);
+        return $newArr;
+    }
 
-        if($result == null) {
-            echo "False - no items found<br>";
+    function swapLocalColNames ($arr, $columns) {
+        $newArr = [];
+        foreach ($columns as $apiColumn => $localColumn) {
+            $newArr[$apiColumn] = $arr[$localColumn];
         }
-
-        return $result;
+        return $newArr;
     }
     function ifEmptyFields ($arr) {
         $result = false;
@@ -62,8 +57,46 @@
 
         return $result;
     }
-    function POST ($resourceName, $row, $columnNames) {
+
+
+    function GET ($resourceName, $index = null) {
+        $token = Config::getValue('config', 'api', 'token');
+        $apiAddress = Config::getValue('config', 'api', 'api_address');
+
+        $apiAddress = $apiAddress.'/'.$resourceName;
+        if($index != null) {
+            if($index >= 0)
+                $apiAddress.'?id='.$index;
+        }
+        
+        $ch = curl_init($apiAddress);
+        
+        $headers = [];
+        $headers[] = 'Content-Type:application/json';
+        $headers[] = "Authorization: Bearer ".$token;
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            
+        $result = curl_exec($ch);
+
+        $info = curl_getinfo($ch);
+        if ($info['http_code'] == 401) {
+            echo "False - not valid token";
+        } else {
+            $result = json_decode($result, true);
+        }
+    
+        curl_close($ch);
+
+        if($result == null) {
+            echo "False - no items found";
+        }
+
+        return $result;
+    }
+    function POST ($resourceName, $row, $columnNames, &$postResponse) {
         $response = null;
+        $result = null;
 
         if(ifHasAllFields($row, $columnNames)) {
             if (!ifEmptyFields($row)) {
@@ -80,24 +113,26 @@
                 curl_setopt($ch, CURLOPT_POST, true);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($row));
                 
-                $response = curl_exec($ch);
+                $result = curl_exec($ch);
 
                 $info = curl_getinfo($ch);
                 if ($info['http_code'] == 200) {
-                    echo "True - data inserted<br>";
+                    $response = "True - data inserted";
                 } else if ($info['http_code'] == 401) {
-                    echo "False - not valid token<br>";
+                    $response = "False - not valid token";
                 } else {
-                    echo "False - data not inserted<br>";
+                    $response = "False - data not inserted";
                 }
 
                 curl_close($ch);
             } else {
-                echo "False - some fields are empty<br>";
+                $response = "False - some fields are empty";
             }
         } else {
-            echo "False - please add all fields<br>";
+            $response = "False - please add all fields";
         }
-        return $response;
+        $postResponse = $response;
+
+        return $result;
     }
 ?>
