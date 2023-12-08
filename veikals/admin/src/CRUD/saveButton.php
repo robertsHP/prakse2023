@@ -154,7 +154,9 @@
             });
         }
         function redirect () {
-            // window.location.href = redirectPath;
+            if (!$('#input-form-alert').text().includes('False')) {
+                window.location.href = redirectPath;
+            }
         }
 
         $('#save-button').click(function () {
@@ -229,19 +231,20 @@
                     }
                 });
                 console.log('Check success???? - '+success);
+                
                 if(success) {
                     var formData = createFormDataWithResponse(responses[0]);
                     var ajaxCall = saveDataDirectCall(
                         formData, 
                         '/veikals/admin/src/CRUD/savePageData.php');
 
-                    $.when(ajaxCall).done(function (pageSaveResponse) {
-                        if (pageSaveResponse.postResponse != null) {
-                            $('#input-form-alert').text(pageSaveResponse.postResponse).show();
+                    $.when(ajaxCall).done(function (saveResponse) {
+                        if (saveResponse.postResponse != null) {
+                            $('#input-form-alert').text(saveResponse.postResponse).show();
                         }
 
                         if($('#editable-table').length != 0) {
-                            orderID = data.orderID;
+                            orderID = saveResponse.orderID;
 
                             $.each(responses, function(index, response) {
                                 if (response.name == "editable-table") {
@@ -260,7 +263,8 @@
                                     formData.set('purchGoodsData', JSON.stringify(purchGoodsData));
                                     callSaveDataPromise(
                                         formData, 
-                                        '/veikals/admin/src/orders/editableTable/saveEditableTableData.php');
+                                        '/veikals/admin/src/orders/editableTable/saveEditableTableData.php'
+                                    );
                                 }
                             });
                             console.log('Check Successfull');
