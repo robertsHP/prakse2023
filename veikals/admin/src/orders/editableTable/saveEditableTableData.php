@@ -26,7 +26,8 @@
     }
 
     $response = array(
-        'success' => false
+        'success' => false,
+        'postResponse' => null
     );
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -41,15 +42,7 @@
 
             if($productsData['id'] == null) {
                 //Ievieto datubāzē produktu 
-                $productsData['id'] = Database::insert(
-                    $productsData['table-name'], 
-                    $productsData['form-data']
-                );
-
-                $formDataAsKeyArr = getRowDataAsKeyArray($productsData);
-                $apiColumns = getAPIColumnNamesFromData($productsData);
-    
-                POST($data['api-col'], $formDataAsKeyArr, $apiColumns);
+                $response['postResponse'] = CRUDFunctions::insertAndPOST($productsData);
 
                 //Piešķir produkta ID
                 $purchGoodsData['form-data']['product_id']['value'] = $productsData['id'];
@@ -77,15 +70,7 @@
 
             //Ievieto datubāzē purchased_goods savienojumu starp produktu un pasūtījumu 
             if($purchGoodsRow == null) {
-                //aprēķina total price
-                $purchGoodsData['id'] = Database::insert(
-                    $purchGoodsData['table-name'], 
-                    $purchGoodsData['form-data']);
-
-                $formDataAsKeyArr = getRowDataAsKeyArray($purchGoodsData);
-                $apiColumns = getAPIColumnNamesFromData($purchGoodsData);
-    
-                POST($purchGoodsData['api-col'], $formDataAsKeyArr, $apiColumns);
+                $response['postResponse'] = CRUDFunctions::insertAndPOST($purchGoodsData);
             } else {
                 $purchGoodsData['id'] = $purchGoodsRow['purch_goods_id'];
                 Database::update(
