@@ -14,6 +14,10 @@
 
         <div class="main-container">
             <h4> <?php echo isset($pageTitle) ? $pageTitle : ''; ?> </h4>
+            
+            <?php
+                include $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/CRUD/inputFormAlert.php';
+            ?>
 
             <form class="input-form" enctype="multipart/form-data">
                 <div class="row">

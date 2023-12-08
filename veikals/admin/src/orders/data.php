@@ -6,9 +6,11 @@
         'id' => null,
         'db-process-type' => null,
         'table-name' => 'orders',
+        'api-table-name' => 'orders',
         'id-column-name' => 'order_id',
         'form-data' => [
             'number' => [
+                'api-col' => 'number',
                 'title' => 'Numurs',
                 'value' => null,
                 'type' => FormDataType::NUMBER,
@@ -20,6 +22,7 @@
                 'required' => true
             ],
             'client_id' => [
+                'api-col' => 'client_id',
                 'title' => 'Klients',
                 'value' => null,
                 'type' => FormDataType::NUMBER,
@@ -31,6 +34,7 @@
                 'required' => true
             ],
             'date' => [
+                'api-col' => 'date',
                 'title' => 'Datums',
                 'value' => null,
                 'type' => FormDataType::DATE,
@@ -40,6 +44,7 @@
                 'required' => true
             ],
             'total_price' => [
+                'api-col' => 'total_sum',
                 'title' => 'Cena',
                 'value' => null,
                 'type' => FormDataType::NUMBER,
@@ -51,6 +56,7 @@
                 'required' => true
             ],
             'state_id' => [
+                'api-col' => 'state_id',
                 'title' => 'Pasūtījuma statuss',
                 'value' => null,
                 'type' => FormDataType::NUMBER,
@@ -67,9 +73,11 @@
         'id' => null,
         'db-process-type' => null,
         'table-name' => 'purchased_goods',
+        'api-table-name' => 'order_products',
         'id-column-name' => 'purch_goods_id',
         'form-data' => [
             'order_id' => [
+                'api-col' => 'order_id',
                 'title' => 'Pasūtījums',
                 'value' => null,
                 'type' => FormDataType::NUMBER,
@@ -81,6 +89,7 @@
                 'required' => true
             ], 
             'product_id' => [
+                'api-col' => 'product_id',
                 'title' => 'Produkts',
                 'value' => null,
                 'type' => FormDataType::NUMBER,
@@ -92,6 +101,7 @@
                 'required' => true
             ], 
             'amount' => [
+                'api-col' => 'count',
                 'title' => 'Pasūtītais daudzums',
                 'value' => null,
                 'type' => FormDataType::NUMBER,
@@ -103,6 +113,7 @@
                 'required' => true
             ], 
             'total_price' => [
+                'api-col' => 'total_sum',
                 'title' => 'Cena',
                 'value' => null,
                 'type' => FormDataType::NUMBER,

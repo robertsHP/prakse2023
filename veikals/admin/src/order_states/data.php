@@ -6,9 +6,11 @@
         'id' => null,
         'db-process-type' => null,
         'table-name' => 'order_states',
+        'api-table-name' => 'order_states',
         'id-column-name' => 'state_id',
         'form-data' => [
             'name' => [
+                'api-col' => 'name',
                 'title' => 'Nosaukums',
                 'value' => null,
                 'type' => FormDataType::TEXT,

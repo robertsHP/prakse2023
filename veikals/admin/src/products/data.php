@@ -6,9 +6,11 @@
         'id' => null,
         'db-process-type' => null,
         'table-name' => 'products',
+        'api-table-name' => 'products',
         'id-column-name' => 'product_id',
         'form-data' => [
             'name' => [
+                'api-col' => 'name',
                 'title' => 'Nosaukums',
                 'value' => null,
                 'type' => FormDataType::TEXT,
@@ -20,6 +22,7 @@
                 'required' => true
             ],
             'description' => [
+                'api-col' => 'description',
                 'title' => 'Apraksts',
                 'value' => null,
                 'type' => FormDataType::TEXT,
@@ -31,6 +34,7 @@
                 'required' => true
             ],
             'photo_file_loc' => [
+                'api-col' => 'image_path',
                 'title' => 'Bilde',
                 'value' => null,
                 'type' => FormDataType::FILE,
@@ -41,6 +45,7 @@
                 'required' => true
             ],
             'price' => [
+                'api-col' => 'price',
                 'title' => 'Cena',
                 'value' => null,
                 'type' => FormDataType::DECIMAL,
@@ -52,6 +57,7 @@
                 'required' => true
             ],
             'available_amount' => [
+                'api-col' => 'count_left',
                 'title' => 'Pieejamais daudzums',
                 'value' => null,
                 'type' => FormDataType::NUMBER,
@@ -63,6 +69,7 @@
                 'required' => true
             ],
             'category_id' => [
+                'api-col' => 'category_id',
                 'title' => 'Kategorija',
                 'value' => null,
                 'type' => FormDataType::NUMBER,

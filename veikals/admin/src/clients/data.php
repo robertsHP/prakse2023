@@ -6,9 +6,11 @@
         'id' => null,
         'db-process-type' => null,
         'table-name' => 'clients',
+        'api-table-name' => 'clients',
         'id-column-name' => 'client_id',
         'form-data' => [
             'name' => [
+                'api-col' => 'name',
                 'title' => 'Vārds/Nosaukums',
                 'value' => null,
                 'type' => FormDataType::TEXT,
@@ -20,6 +22,7 @@
                 'required' => true
             ],
             'email' => [
+                'api-col' => 'email',
                 'title' => 'E-pasts',
                 'value' => null,
                 'type' => FormDataType::EMAIL,
@@ -29,6 +32,7 @@
                 'required' => true
             ],
             'phone_number' => [
+                'api-col' => 'phone_number',
                 'title' => 'Telefona numurs',
                 'value' => null,
                 'type' => FormDataType::PHONE_NUMBER,
@@ -38,6 +42,7 @@
                 'required' => true
             ],
             'adress' => [
+                'api-col' => 'address',
                 'title' => 'Adrese',
                 'value' => null,
                 'type' => FormDataType::TEXT,

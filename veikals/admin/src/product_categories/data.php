@@ -6,9 +6,11 @@
         'id' => null,
         'db-process-type' => null,
         'table-name' => 'product_categories',
+        'api-table-name' => 'categories',
         'id-column-name' => 'category_id',
         'form-data' => [
             'name' => [
+                'api-col' => 'name',
                 'title' => 'Nosaukums',
                 'value' => null,
                 'type' => FormDataType::TEXT,
