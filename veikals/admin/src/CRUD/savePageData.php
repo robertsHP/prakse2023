@@ -19,14 +19,9 @@
         $response['orderID'] = $data['id'];
         if($data['db-process-type'] == 'create') {
             $response['postResponse'] = CRUDFunctions::insertAndPOST($data);
-            $response['orderID'] = $data['id'];
             $response['success'] = true;
         } else if ($data['db-process-type'] == 'update') {
-            Database::update(
-                $data['table-name'], 
-                $data['id-column-name'], 
-                $data['id'],
-                $data['form-data']);
+            $response['postResponse'] = CRUDFunctions::updateAndPUT($data);
             $response['success'] = true;
         }
     }
