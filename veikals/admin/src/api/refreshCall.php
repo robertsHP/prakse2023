@@ -1,12 +1,12 @@
 
 <?php
-    require_once 'apiFunctions.php';
+    require_once 'ApiFunctions.php';
 
     function refreshDBInfo ($data) {
         echo "------".$data['table-name']."/".$data['api-table-name']."------<br>";
         $response = null;
         // print_r(GET($data['api-table-name']));
-        saveAndUpdateToLocalDB($data, $response);
+        ApiFunctions::saveAndUpdateToLocalDB($data, $response);
         echo $response;
     }
 

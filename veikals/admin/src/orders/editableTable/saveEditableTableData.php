@@ -54,14 +54,8 @@
                     $productsData['id-column-name'], 
                     $productsData['id']);
                 if(!empty($productRow)) {
+                    $response['postResponse'] = CRUDFunctions::updateAndPUT($productsData);
                     $purchGoodsData['form-data']['product_id']['value'] = $productsData['id'];
-                    //Adjauno informāciju datubāzē
-                    Database::update(
-                        $productsData['table-name'], 
-                        $productsData['id-column-name'],
-                        $productsData['id'],
-                        $productsData['form-data']
-                    );
                 }
                 $response['success'] = true;
             }
@@ -73,12 +67,7 @@
                 $response['postResponse'] = CRUDFunctions::insertAndPOST($purchGoodsData);
             } else {
                 $purchGoodsData['id'] = $purchGoodsRow['purch_goods_id'];
-                Database::update(
-                    $purchGoodsData['table-name'], 
-                    $purchGoodsData['id-column-name'],
-                    $purchGoodsData['id'], 
-                    $purchGoodsData['form-data']
-                );
+                $response['postResponse'] = CRUDFunctions::updateAndPUT($purchGoodsData);
             }
         }
         $response['id'] = $productsData['id'];

@@ -5,7 +5,7 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/enums/FormErrorType.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/global/enums/FormDataType.php';
 
-    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/api/apiFunctions.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/api/ApiFunctions.php';
 
     class CRUDFunctions {
         public static function assignAndProcessFormData (&$formData, &$data) {
@@ -65,7 +65,7 @@
         public static function insert ($data, $withID) {
             $id = null;
             try {
-                $arr = getRowDataAsValueArrayWithKeys($data, $withID);
+                $arr = ApiFunctions::getRowDataAsValueArrayWithKeys($data, $withID);
     
                 $tableName = $data['table-name'];
     
@@ -96,13 +96,13 @@
         public static function insertAndPOST (&$data) {
             $response = null;
             if($data['table-name'] != 'users') {
-                saveAndUpdateToLocalDB($data, $response);
+                ApiFunctions::saveAndUpdateToLocalDB($data, $response);
 
                 $tableName = $data['api-table-name'];
-                $formDataAsKeyArr = getRowDataAsKeyArray($data);
-                $apiColumns = getAPIColumnNamesFromData($data);
+                $formDataAsKeyArr = ApiFunctions::getRowDataAsKeyArray($data);
+                $apiColumns = ApiFunctions::getAPIColumnNamesFromData($data);
 
-                $result = POST(
+                $result = ApiFunctions::POST(
                     $tableName, 
                     $formDataAsKeyArr, 
                     $apiColumns, 
@@ -123,6 +123,60 @@
             if ($data['id'] == null) {
                 $data['id'] = $id;
             }
+            return $response;
+        }
+        public static function update ($data) {
+            try {
+                $arr = ApiFunctions::getRowDataAsValueArrayWithKeys($data, true);
+    
+                $keys = array_keys($arr);
+
+                $tableName = $data['table-name'];
+                $idColumnName = $data['id-column-name'];
+
+                foreach ($keys as &$key)
+                    $key = $key.' = :'.$key;
+                $setString = implode(', ', $keys);
+
+                $conn = Database::openConnection();
+
+                    $stmt = $conn->prepare("UPDATE $tableName SET $setString WHERE $idColumnName = :id");
+                    foreach ($arr as $key => &$value) {
+                        $stmt->bindParam( ':'.$key, $value);
+                    }
+                    $stmt->bindParam(':id', $data['id'], PDO::PARAM_INT);
+                    $stmt->execute();
+
+                Database::closeConnection($conn);
+            } catch (PDOException $exception) {
+                echo "PDO Exception: " . $exception->getMessage();
+                echo "Error Code: " . $exception->getCode();
+            }
+        }
+        public static function updateAndPUT (&$data) {
+            $response = null;
+            if($data['table-name'] != 'users') {
+                ApiFunctions::saveAndUpdateToLocalDB($data, $response);
+
+                $tableName = $data['api-table-name'];
+                $formDataAsKeyArr = ApiFunctions::getRowDataAsKeyArray($data, true);
+                $apiColumns = ApiFunctions::getAPIColumnNamesFromData($data, true);
+
+                $result = ApiFunctions::PUT(
+                    $tableName, 
+                    $formDataAsKeyArr, 
+                    $apiColumns, 
+                    $response
+                );
+                $result = json_decode($result, true);
+
+                if(!empty($result)) {
+                    $data['id'] = $result['id'];
+                }
+            }
+
+            CRUDFunctions::update($data);
+
             return $response;
         }
     }
