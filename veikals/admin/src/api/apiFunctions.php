@@ -76,7 +76,7 @@
             return $result;
         }
 
-        public static function saveAndUpdateToLocalDB ($data, &$response) {
+        public static function saveAndUpdateLocalDB ($data, &$response) {
             $apiDataJSON = ApiFunctions::GET($data['api-table-name'], $response);
 
             if($apiDataJSON != null) {
@@ -115,9 +115,13 @@
                                     $apiData[$apiColumns[$i]]
                                 );
                             }
-                            $stmt->execute();
+                            $success = $stmt->execute();
 
-                            $response = "True - saved successfully<br>";
+                            if($success) {
+                                $response = "True - saved successfully<br>";
+                            } else {
+                                $response = "True - save not successful<br>";
+                            }
                         } else {
                             $apiColumns = ApiFunctions::getAPIColumnNamesFromData($data);
                             $localColumns = array_keys($data['form-data']);
@@ -137,9 +141,13 @@
                                 );
                             }
                             $stmt->bindParam(':id', $apiID, PDO::PARAM_INT);
-                            $stmt->execute();
+                            $success = $stmt->execute();
 
-                            $response = "True - updated successfully<br>";
+                            if($success) {
+                                $response = "True - updated successfully<br>";
+                            } else {
+                                $response = "False - update not successful<br>";
+                            }
                         }
                     }
                     
@@ -150,50 +158,6 @@
                 }
             }
         }
-        // public static function sendToAPI ($data) {
-        //     $apiDataJSON = GET($data['api-table-name']);
-
-        //     if($apiDataJSON != null) {
-        //         $apiColumns = array_keys($data['columns']);
-        //         $localColumns = array_values($data['columns']);
-        //         $localTableName = $data['table-name'];
-
-        //         try {
-        //             $conn = Database::openConnection();
-
-        //             $idColumnName = $localColumns[0];
-
-        //             $stmt = $conn->prepare("SELECT * FROM $localTableName");
-        //             $stmt->execute();
-        //             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        //             for ($i = 0; $i < count($rows); $i++) {
-        //                 if(!array_key_exists($i, $apiDataJSON)) {
-        //                     $row = $rows[$i];
-        //                     $rowSwapped = swapLocalColNames($rows[$i], $data['columns']);
-        //                     POST($data['api-table-name'], $rowSwapped, $apiColumns);
-        //                     // if(!empty($response)) {
-        //                     //     $responseData = json_decode($response, true);
-        //                     //     if(isset($responseData['id'])) {
-        //                     //         $stmt = $conn->prepare(
-        //                     //             "UPDATE $localTableName SET $idColumnName = :new_id WHERE $idColumnName = :old_id"
-        //                     //         );
-        //                     //         $stmt->bindParam(':new_id', $responseData['id']);
-        //                     //         $stmt->bindParam(':old_id', $row[$idColumnName]);
-        //                     //         $stmt->execute();
-        //                     //     }
-        //                     // }
-        //                 }
-        //             }
-        //             Database::closeConnection($conn);
-        //         } catch (PDOException $exception) {
-        //             echo "PDO Exception: " . $exception->getMessage();
-        //             echo "Error Code: " . $exception->getCode();
-        //         }
-        //     }
-        // }
-
-
         public static function GET ($resourceName, &$response, $index = null) {
             $token = Config::getValue('config', 'api', 'token');
             $apiAddress = Config::getValue('config', 'api', 'api_address');
@@ -313,6 +277,49 @@
                 }
             } else {
                 $response = "False - please add all fields";
+            }
+
+            return $result;
+        }
+        public static function DELETE ($resourceName, $id, &$response) {
+            $result = null;
+
+            if($id != null) {
+                $apiDataJSON = ApiFunctions::GET($resourceName, $response, $id);
+
+                if ($apiDataJSON != null) {
+                    $token = Config::getValue('config', 'api', 'token');
+                    $apiAddress = Config::getValue('config', 'api', 'api_address');
+                    
+                    $ch = curl_init($apiAddress.'/'.$resourceName);
+                    
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                        'Content-Type:application/json',
+                        "Authorization: Bearer ".$token
+                    ]);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+                        'id' => $id
+                    ]));
+                    
+                    $result = curl_exec($ch);
+
+                    $info = curl_getinfo($ch);
+                    if ($info['http_code'] == 200) {
+                        $response = "True - data deleted";
+                    } else if ($info['http_code'] == 401) {
+                        $response = "False - not valid token";
+                    } else {
+                        $response = "False - data not deleted";
+                    }
+
+                    curl_close($ch);
+                } else {
+                    $response = "False - no items found";
+                }
+            } else {
+                $response = "False - no id sent";
             }
 
             return $result;

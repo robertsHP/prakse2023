@@ -22,30 +22,26 @@
             $conn = Database::openConnection();
 
             $stmt = $conn->prepare(
-                "SELECT product_id FROM purchased_goods WHERE order_id=:order_id"
+                "SELECT * FROM purchased_goods WHERE order_id=:order_id"
             );
             $stmt->bindParam(':order_id', $orderID, PDO::PARAM_INT);
             $stmt->execute();
-            $productsFromDB = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $purchGoodsLinks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            foreach ($productsFromDB as $key => $product) {
+            foreach ($purchGoodsLinks as $key => $link) {
                 foreach ($rowIDArr as $rowID) {
-                    if($product['product_id'] == $rowID) {
-                        unset($productsFromDB[$key]);
+                    if($link['product_id'] == $rowID) {
+                        unset($purchGoodsLinks[$key]);
                     }
                 }
             }
 
-            if(count($productsFromDB) != 0) {
-                foreach ($productsFromDB as $product) {
-                    $id = $product['product_id'];
-
-                    $stmt = $conn->prepare(
-                        "DELETE FROM purchased_goods WHERE order_id=:order_id AND product_id=:product_id"
-                    );
-                    $stmt->bindParam(':order_id', $orderID, PDO::PARAM_INT);
-                    $stmt->bindParam(':product_id', $id, PDO::PARAM_INT);
-                    $stmt->execute();
+            if(count($purchGoodsLinks) != 0) {
+                foreach ($purchGoodsLinks as $link) {
+                    require_once $_SERVER['DOCUMENT_ROOT'].'/veikals/admin/src/orders/data.php';
+                    
+                    $purchGoodsData['id'] = $link['purch_goods_id'];
+                    CRUDFunctions::deleteAndDELETE($purchGoodsData);
                 }
             }
 

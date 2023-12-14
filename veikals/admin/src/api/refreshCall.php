@@ -6,7 +6,7 @@
         echo "------".$data['table-name']."/".$data['api-table-name']."------<br>";
         $response = null;
         // print_r(GET($data['api-table-name']));
-        ApiFunctions::saveAndUpdateToLocalDB($data, $response);
+        ApiFunctions::saveAndUpdateLocalDB($data, $response);
         echo $response;
     }
 

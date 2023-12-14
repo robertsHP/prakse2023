@@ -96,7 +96,7 @@
         public static function insertAndPOST (&$data) {
             $response = null;
             if($data['table-name'] != 'users') {
-                ApiFunctions::saveAndUpdateToLocalDB($data, $response);
+                ApiFunctions::saveAndUpdateLocalDB($data, $response);
 
                 $tableName = $data['api-table-name'];
                 $formDataAsKeyArr = ApiFunctions::getRowDataAsKeyArray($data);
@@ -111,7 +111,8 @@
                 $result = json_decode($result, true);
 
                 if(!empty($result)) {
-                    $data['id'] = $result['id'];
+                    if(isset($result['id']))
+                        $data['id'] = $result['id'];
                 }
             }
 
@@ -156,7 +157,7 @@
         public static function updateAndPUT (&$data) {
             $response = null;
             if($data['table-name'] != 'users') {
-                ApiFunctions::saveAndUpdateToLocalDB($data, $response);
+                ApiFunctions::saveAndUpdateLocalDB($data, $response);
 
                 $tableName = $data['api-table-name'];
                 $formDataAsKeyArr = ApiFunctions::getRowDataAsKeyArray($data, true);
@@ -171,12 +172,53 @@
                 $result = json_decode($result, true);
 
                 if(!empty($result)) {
-                    $data['id'] = $result['id'];
+                    if(isset($result['id']))
+                        $data['id'] = $result['id'];
                 }
             }
 
             CRUDFunctions::update($data);
 
+            return $response;
+        }
+        public static function delete ($data) {
+            try {
+                $conn = Database::openConnection();
+
+                $tableName = $data['table-name'];
+                $idColumnName = $data['id-column-name'];
+                $id = $data['id'];
+
+                $stmt = $conn->prepare("DELETE FROM $tableName WHERE $idColumnName = :id");
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                Database::closeConnection($conn);
+            } catch (PDOException $exception) {
+                echo "PDO Exception: " . $exception->getMessage();
+                echo "Error Code: " . $exception->getCode();
+            }
+        }
+        public static function deleteAndDELETE (&$data) {
+            $response = null;
+            if($data['table-name'] != 'users') {
+                ApiFunctions::saveAndUpdateLocalDB($data, $response);
+                
+                $tableName = $data['api-table-name'];
+
+                $result = ApiFunctions::DELETE(
+                    $tableName, 
+                    $data['id'],
+                    $response
+                );
+                $result = json_decode($result, true);
+
+                if(!empty($result)) {
+                    if(isset($result['id']))
+                        $data['id'] = $result['id'];
+                }
+            }
+            CRUDFunctions::delete($data);
             return $response;
         }
     }
